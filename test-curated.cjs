@@ -17,12 +17,12 @@ const root=path.join(__dirname,'docs');
     OsakaCurated45.assign(day,route);
     const unknown=route.stops.filter(x=>!P.allItems.has(x.id)).map(x=>x.id);
     const metric=C.scheduleFor(day,P.state,id=>P.allItems.get(id),OSAKA_VNEXT_DATA,P.suggestedTransit);
-    out.push({day,id:route.id,unknown,end:metric.end,warnings:metric.warnings.filter(w=>w.level==='danger'),first:route.stops[0],aquarium:route.stops.some(x=>x.id==='kaiyukan'), missing:(D.requiredByDay[day]||[]).filter(id=>!route.stops.some(x=>x.id===id))});
+    out.push({day,id:route.id,unknown,end:metric.end,warnings:metric.warnings.filter(w=>w.level==='danger'),first:route.stops[0],excluded:['sun','mon'].includes(day)?route.stops.filter(x=>['dotonbori-night-v3','hozenji-v3','shinsaibashi47','amerikamura-attraction-v5','fukutaro','marufuku','uranamba-v3','denden','shinsekai','daruma-v3','rest-hotel45','daiki-sushi-v4'].includes(x.id)).map(x=>x.id):[],aquarium:route.stops.some(x=>x.id==='kaiyukan'), missing:(D.requiredByDay[day]||[]).filter(id=>!route.stops.some(x=>x.id===id))});
    }
    Object.assign(P.state,saved);return out;
   });
   console.log(JSON.stringify(audit,null,2));assert.equal(audit.length,13);
-  for(const x of audit){assert.deepEqual(x.unknown,[]);assert.deepEqual(x.warnings,[],JSON.stringify(x));assert.deepEqual(x.missing,[]);if(x.day==='mon')assert.ok(x.aquarium);if(x.day==='mon')assert.ok(x.end<=780);if(x.day==='sat')assert.equal(x.first.time,'17:00');}
+  for(const x of audit){assert.deepEqual(x.unknown,[]);assert.deepEqual(x.warnings,[],JSON.stringify(x));assert.deepEqual(x.missing,[]);assert.deepEqual(x.excluded,[]);if(x.day==='mon')assert.ok(x.aquarium);if(x.day==='mon')assert.ok(x.end<=780);if(x.day==='sat')assert.equal(x.first.time,'17:00');}
   await page.evaluate(()=>OsakaPlannerV3.showGuidePanel('itinerary-v11'));
   assert.equal(await page.locator('[data-curated-day]').count(),3);assert.equal(await page.locator('[data-curated-option]').count(),6);
   assert.ok((await page.locator('.curated-order').allTextContents()).some(t=>t.includes('기본 라멘')));
