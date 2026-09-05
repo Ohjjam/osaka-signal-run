@@ -36,7 +36,7 @@
     const a = C.AREAS[area] || C.AREAS.namba;
     return { coords: area === 'hotel' && C.coords(P.selectedHotel()?.coords) ? P.selectedHotel().coords : a.coords, name: a.name, actual: false };
   }
-  function allItems() { return [...P.allItems.values()]; }
+  function allItems() { return [...P.allItems.values()].filter(item => !item.planningOnly); }
   function operation(item, day) { return V.operationFor(item, D, day || 'sat'); }
   function directions(item, mode = 'walking') {
     const query = new URLSearchParams({ api: '1', destination: item.address || (C.coords(item.coords) && item.precision !== 'area' ? item.coords.join(',') : `${item.jp || item.name} Osaka`), travelmode: mode });

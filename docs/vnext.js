@@ -10,9 +10,9 @@
   const dayNames = { sat: '토요일', sun: '일요일', mon: '월요일' };
   const mealSlotLabels = { auto: '자동 추천', breakfast: '아침', lunch: '점심', snack: '간식', dinner: '저녁', late: '야식' };
   const variantNotes = {
-    base: '균형 동선 · 월요일 난바 5곳',
-    goods: '가챠·굿즈 강화 · 니혼바시 추가',
-    view: '전망 강화 · 하루카스 300 추가'
+    base: '내가 저장한 일정',
+    goods: '기존 쇼핑 비교안',
+    view: '기존 전망 비교안'
   };
   const voteLabels = { want: '가고 싶음', neutral: '상관없음', skip: '제외' };
   const reservationLabels = { none: '불필요', needed: '예약 필요', booked: '예약 완료' };
@@ -252,7 +252,7 @@
     syncActiveVariant();
     const active = state.variants.find(variant => variant.id === state.activeVariantId);
     document.querySelector('#vnext-variant-bar').innerHTML = `
-      <div class="vnext-section-head"><div><p>PLAN A/B/C</p><h3>일정안 비교</h3></div><button type="button" data-vnext-clone ${state.variants.length >= 3 ? 'disabled' : ''}>현재 일정 복제</button></div>
+      <div class="vnext-section-head"><div><p>MY SAVED PLANS</p><h3>내 저장안</h3></div><button type="button" data-vnext-clone ${state.variants.length >= 3 ? 'disabled' : ''}>현재 일정 복제</button></div>
       <div class="vnext-variants">${state.variants.map(variant => {
         const metric = variantMetrics(variant);
         return `<button type="button" data-vnext-variant="${variant.id}" class="${variant.id === state.activeVariantId ? 'is-active' : ''}"><strong>${esc(variant.label)}</strong><span>${metric.count}곳 · 필수 ${state.mustVisit.length} · 추가 ${metric.extras}</span><em>${esc(variantNotes[variant.id] || '직접 편집한 비교안')}</em><small>토 ${Core.minutesToTime(metric.ends[0])} · 일 ${Core.minutesToTime(metric.ends[1])} · 월 ${Core.minutesToTime(metric.ends[2])}</small></button>`;
@@ -347,23 +347,19 @@
     const metric = playbackMetric(day);
     const hotel = Planner.selectedHotel();
     const hotelCoords = Array.isArray(hotel?.coords) ? hotel.coords : [34.6656, 135.5012];
-    const points = day === 'sat'
-      ? [
-        { id: '', name: '간사이국제공항 도착', coords: [34.4347, 135.2441], kind: 'airport', time: '15:00' },
-        { id: '', name: `${hotel?.name || '난바 숙소'} 체크인`, coords: hotelCoords, kind: 'hotel', time: '17:30', legOverride: { mode: '입국·수하물·난카이', minutes: 150 } }
-      ]
-      : [{ id: '', name: hotel?.name || '난바 숙소', coords: hotelCoords, kind: 'hotel', time: state.starts[day] }];
+    const points = metric.entries[0]?.id === 'leave-hotel45' ? []
+      : [{ id: '', name: `${hotel?.name || '난바 숙소'} 출발`, coords: hotelCoords, kind: 'hotel', time: day === 'sat' ? '17:00' : state.starts[day] }];
     metric.entries.forEach(entry => {
       const item = lookupItem(entry.id);
       if (!Array.isArray(item?.coords)) return;
       const mealSlot = state.mealSlots?.[entry.id] || (item.category === 'food' ? Core.mealSlotOptions(item, state)[0] : '');
       const mealLabel = mealSlot ? mealSlotLabels[mealSlot] : '';
-      points.push({ id: entry.id, name: item.name, coords: item.coords, kind: mealSlot ? 'meal' : 'place', time: Core.minutesToTime(entry.start), mealLabel });
+      points.push({ id: entry.id, name: item.name, coords: item.coords, kind: /hotel45|checkout45/.test(entry.id) ? 'hotel' : mealSlot ? 'meal' : 'place', time: Core.minutesToTime(entry.start), mealLabel });
     });
     if (points.length > 1 && day === 'mon') {
-      points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 짐 회수`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end + 25), legOverride: { mode: '도보·짐 회수', minutes: 25 } });
+      if (!metric.entries.some(entry => entry.id === 'train45')) points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 짐 회수`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end + 25), legOverride: { mode: '도보·짐 회수', minutes: 25 } });
       points.push({ id: '', name: '간사이국제공항 도착 목표', coords: [34.4347, 135.2441], kind: 'airport', time: '14:00', legOverride: { mode: '난카이·공항 이동', minutes: 60 } });
-    } else if (points.length > 1) {
+    } else if (points.length > 1 && points.at(-1)?.id !== 'back-hotel45') {
       points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 복귀`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end) });
     }
     return points.map((point, index, list) => ({
@@ -427,7 +423,7 @@
     const points = autoRoutePoints(autoRouteDay);
     renderAutoRouteLegs();
     if (!points.length) return;
-    autoRouteMap = window.L.map(canvas, { zoomControl: true, keyboard: true, preferCanvas: true, scrollWheelZoom: false }).setView(points[0].coords, 13);
+    autoRouteMap = window.L.map(canvas, { zoomControl: true, keyboard: true, preferCanvas: false, scrollWheelZoom: false }).setView(points[0].coords, 13);
     window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 19, crossOrigin: true }).addTo(autoRouteMap);
     autoRouteLayer = window.L.layerGroup().addTo(autoRouteMap);
     const coords = points.map(point => point.coords);
@@ -483,7 +479,7 @@
         <p class="vnext-auto-copy">아래 시간표에 저장된 순서를 지도에서 그대로 따라갑니다. 날짜를 고른 뒤 자동 재생하거나 원하는 이동 구간을 직접 누르세요.</p>
         <section class="vnext-auto-map">
           <header><div><small>LIVE ITINERARY PLAYER</small><strong>공항·숙소부터 마지막 복귀까지 순차 재생</strong></div><nav>${Core.DAYS.map(day => `<button type="button" data-vnext-auto-map-day="${day}" aria-selected="${day === autoRouteDay}">${dayNames[day]} ${schedule(day).entries.length}</button>`).join('')}</nav></header>
-          <div class="vnext-auto-map-stage"><div id="vnext-auto-map-canvas" aria-label="현재 추천 일정을 순차 재생하는 오사카 지도"></div><aside><span id="vnext-auto-map-status">ROUTE READY</span><strong id="vnext-auto-map-title">토요일은 KIX 15:00부터</strong><small id="vnext-auto-map-detail">날짜를 고르고 동선을 재생하세요.</small><a id="vnext-auto-map-directions" href="#" target="_blank" rel="noopener" hidden>이 구간 실제 길찾기 ↗</a></aside></div>
+          <div class="vnext-auto-map-stage"><div id="vnext-auto-map-canvas" aria-label="현재 추천 일정을 순차 재생하는 오사카 지도"></div><aside><span id="vnext-auto-map-status">ROUTE READY</span><strong id="vnext-auto-map-title">토요일 17:00 숙소 출발</strong><small id="vnext-auto-map-detail">날짜를 고르고 동선을 재생하세요.</small><a id="vnext-auto-map-directions" href="#" target="_blank" rel="noopener" hidden>이 구간 실제 길찾기 ↗</a></aside></div>
           <div class="vnext-auto-map-controls"><button type="button" data-vnext-auto-play>▶ 처음부터 자동 재생</button><button type="button" class="is-secondary" data-vnext-auto-next>다음 이동</button><button type="button" class="is-map-tool" data-vnext-auto-zoom-out aria-label="지도 축소">－ 축소</button><button type="button" class="is-map-tool" data-vnext-auto-zoom-in aria-label="지도 확대">＋ 확대</button><button type="button" class="is-map-tool is-fit" data-vnext-auto-fit>◎ 전체 보기</button><span>일정의 좌표와 저장된 이동시간을 사용 · 실제 열차·도보 경로는 구간별 Google Maps에서 확인</span></div>
           <div class="vnext-auto-leg-list" id="vnext-auto-leg-list"></div>
         </section>
@@ -913,6 +909,12 @@
     }
   });
 
+  document.addEventListener('osaka:curated-day', event => {
+    if (!dayNames[event.detail?.day]) return;
+    autoRouteDay = event.detail.day;
+    autoRoutePreview = null;
+    renderAutoRoute();
+  });
   injectWorkbench();
   ensureState();
   renderAll();

@@ -168,6 +168,14 @@
     const source = restaurants.find(restaurant => restaurant.id === item.id);
     Object.assign(item, source);
   });
+  (window.OSAKA_CURATED_V45?.places || []).forEach(source => {
+    const item = { ...source, validDays: DAYS, operation: { hoursStatus: 'unknown', reservationPolicy: 'unknown', official: source.official || '', verifiedAt: '' } };
+    allItems.set(item.id, item);
+    if (item.category === 'food' && !item.planningOnly) {
+      restaurants.push(item);
+      restaurantItems.push(item);
+    }
+  });
   const builtInRestaurantIds = new Set(restaurants.map(item => item.id));
   const builtInHotelIds = new Set(HOTELS.map(item => item.id));
   const builtInPlannerIds = new Set(allItems.keys());
@@ -817,7 +825,7 @@
     const photo = venuePhoto(item, 'restaurant');
     return `<article class="restaurant-card-v3">${photo}<div class="restaurant-body-v3">
       <div class="restaurant-top-v3"><div><span class="food-group-tag-v3">${foodGroups[item.group]}</span><h3>${item.name}</h3><small>${item.jp} · ${item.areaLabel} · ${item.genreLabel}</small></div>${score}</div>
-      <p class="restaurant-meta-v3">${review}1인 약 ${yen(item.price)} · ${item.duration}분<br>${locationNote}</p><p class="menu-v3"><strong>대표 메뉴</strong> ${item.menu}</p><p class="review-note-v3">${item.note}</p>
+      <p class="restaurant-meta-v3">${review}${item.price > 0 ? `1인 약 ${yen(item.price)}` : (item.priceText || '메뉴판 가격 확인')} · ${item.duration}분<br>${locationNote}</p><p class="menu-v3"><strong>대표 메뉴</strong> ${item.menu}</p><p class="review-note-v3">${item.note}</p>
       <div class="restaurant-actions-v3"><a href="${item.tabelog}" target="_blank" rel="noopener">리뷰·평점 ↗</a><a href="${item.menuUrl}" target="_blank" rel="noopener">메뉴 ↗</a><a href="${mapSearch(item.name)}" target="_blank" rel="noopener">지도 ↗</a>${dayButtons(item.id)}</div><div data-vnext-vote="${item.id}" data-vnext-kind="food"></div>
     </div></article>`;
   }
