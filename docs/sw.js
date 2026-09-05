@@ -1,5 +1,6 @@
-const CACHE = 'osaka-guide-local-v45';
+const CACHE = 'osaka-guide-local-v46';
 const SHELL = [
+  './stay-private.js?v=46', './stay-private.css?v=46',
   './curated-ui.js?v=45', './curated-v45.js?v=45', './curated.css?v=45',
   './move.js?v=44', './move-core.js?v=44', './move.css?v=44',
   './', './guide.html', './local-store.js?v=1', './manifest.webmanifest?v=40',

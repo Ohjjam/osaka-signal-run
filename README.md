@@ -8,6 +8,7 @@ Open: https://ohjjam.github.io/osaka-signal-run/
 - Empty days get the A recommendations once. Existing plans stay untouched until a day/all-days Apply action. A device-local snapshot supports undo. Changes do not alter another browser's itinerary.
 - Arrival-first navigation: current-location routing, airport express/Rapi:t comparison, T2 shuttle, step-by-step travel and payment guidance. Live departures remain in Google Maps; on-site dotted segments are explicitly schematic, not street routing.
 - Each browser saves its own changes. No shared server or login.
+- v46: private stay fields live only in a separate browser key, excluded from itinerary exports. A private `stay46` fragment is consumed and removed before application scripts run. Never commit real room/access/Wi-Fi values or private guest links. Private import links contain secrets and must only be shared with intended travel companions.
 - Local revision history and JSON export are retained; clearing browser data deletes local saves.
 - Old-domain browser storage does not transfer automatically. No passport documents or private access codes are included.
 - Map tiles, directions and external sources need an internet connection.
