@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#161b22">
+  <meta name="description" content="2026년 9월 5일부터 7일까지, 성인 3명 오사카 여행 일정">
+  <title>오사카 여행</title>
+  <link rel="icon" href="data:,">
+  <link rel="manifest" href="manifest.webmanifest?v=40">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="styles.css?v=40">
+  <link rel="stylesheet" href="experience.css?v=40">
+  <link rel="stylesheet" href="planner-v3.css?v=40">
+  <link rel="stylesheet" href="vnext.css?v=40">
+  <link rel="stylesheet" href="guide-theme.css?v=42">
+  <link rel="stylesheet" href="today.css?v=43">
+  <script src="local-store.js?v=1"></script>
+  <script>
+    window.__osakaRuntimeErrors = [];
+    const recordOsakaRuntimeError = message => {
+      window.__osakaRuntimeErrors.push(String(message));
+      document.documentElement.dataset.runtimeErrors = String(window.__osakaRuntimeErrors.length);
+    };
+    window.addEventListener('error', event => {
+      const target = event.target;
+      recordOsakaRuntimeError(target && target !== window ? `resource:${target.currentSrc || target.src || target.href || target.tagName}` : event.message || 'window:error');
+    }, true);
+    window.addEventListener('unhandledrejection', event => recordOsakaRuntimeError(event.reason?.message || event.reason || 'unhandledrejection'));
+    document.documentElement.dataset.runtimeErrors = '0';
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#today-v41">지금 할 일로 바로가기</a>
+
+  <aside class="experience-portal" id="experience-portal" aria-label="오사카 여행 안내" hidden>
+    <div class="portal-scene" id="portal-scene" aria-hidden="true">
+      <div class="portal-photo portal-photo-a"></div>
+      <div class="portal-photo portal-photo-b"></div>
+      <div class="portal-grid"></div>
+      <div class="portal-light"></div>
+    </div>
+    <div class="portal-ui">
+      <div class="portal-topline"><span>오사카 여행</span><span id="portal-input-status">토·일·월</span></div>
+      <div class="portal-copy">
+        <h2>2026년 9월 5–7일</h2>
+        <p id="portal-chapter-copy">토요일 15:00 KIX 도착</p>
+      </div>
+      <div class="portal-ring" id="portal-ring" role="tablist" aria-label="여행 장면 선택">
+        <button type="button" role="tab" aria-selected="true" data-portal-day="sat"><span>01</span><strong>토요일</strong><small>15:00 도착</small></button>
+        <button type="button" role="tab" aria-selected="false" data-portal-day="sun"><span>02</span><strong>일요일</strong><small>종일</small></button>
+        <button type="button" role="tab" aria-selected="false" data-portal-day="mon"><span>03</span><strong>월요일</strong><small>16:00 출발</small></button>
+      </div>
+      <div class="portal-actions">
+        <button class="button portal-enter" id="portal-enter" type="button">가이드 입장 <span>↘</span></button>
+        <button class="portal-sound" id="portal-sound" type="button" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>AMBIENT OFF</strong></button>
+        <button class="portal-skip" id="portal-skip" type="button">바로 일정 보기</button>
+      </div>
+    </div>
+  </aside>
+
+  <header class="site-header" id="top">
+    <a class="wordmark" href="#today-v41" aria-label="오사카 여행 홈">
+      <span class="wordmark-city" lang="ja">大阪</span><span>오사카 여행</span>
+    </a>
+    <nav class="main-nav" aria-label="주요 메뉴">
+      <a href="#today-v41">지금</a>
+      <a href="#hotel-search-v3">숙소</a>
+      <a href="#food-map-v41">밥 지도</a>
+      <a href="#itinerary-v11">내 일정</a>
+      <a href="#catalog-attractions-v3">목록</a>
+      <a href="#travel-tips-v12">팁</a>
+    </nav>
+    <button class="icon-button" id="saved-button" type="button" aria-label="저장한 장소 보기">
+      <span aria-hidden="true">♡</span><span id="saved-count">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-image" src="assets/osaka-hero.png" alt="아침의 오사카성과 밤의 도톤보리, 음식과 열차를 겹쳐 표현한 오사카 여행 일러스트">
+      <div class="hero-wash" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">2026.09.05–07 · 성인 3명</p>
+        <h1 id="hero-title">오사카 여행</h1>
+        <p class="hero-lead">토요일 15:00 KIX 도착 · 월요일 16:00 출발</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#prep-v3">여행 준비</a>
+          <button class="button button-glass" id="random-preset" type="button">추천안 무작위 보기</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="guide-v3" id="guide-v3">
+      <nav class="guide-index-v3" aria-label="여행 가이드 메뉴">
+        <button type="button" data-guide-panel="today-v41" aria-selected="true"><span>지금</span></button>
+        <button type="button" data-guide-panel="food-map-v41" aria-selected="false"><span>밥 지도</span></button>
+        <button type="button" data-guide-panel="prep-v3" aria-selected="false"><b>01</b><span>출발 전</span></button>
+        <button type="button" data-guide-panel="hotel-search-v3" aria-selected="false"><b>02</b><span>숙소</span></button>
+        <button type="button" data-guide-panel="restaurant-search-v3" aria-selected="false"><b>03</b><span>음식점</span></button>
+        <button type="button" data-guide-panel="itinerary-v11" aria-selected="false"><b>04</b><span>내 일정</span></button>
+        <button type="button" data-guide-panel="catalog-attractions-v3" aria-selected="false"><b>05</b><span>관광지</span></button>
+        <button type="button" data-guide-panel="catalog-goods-v3" aria-selected="false"><b>06</b><span>살거리</span></button>
+        <button type="button" data-guide-panel="catalog-nightlife-v3" aria-selected="false"><b>07</b><span>유흥가</span></button>
+        <button type="button" data-guide-panel="travel-tips-v12" aria-selected="false"><b>08</b><span>여행 팁</span></button>
+        <button type="button" class="guide-map-open-v3" id="open-map-v3"><b>MAP</b><span>지도</span></button>
+      </nav>
+
+      <div class="shared-sync-v8 is-connecting" id="shared-sync-v8" role="status" aria-live="polite">
+        <i aria-hidden="true"></i>
+        <strong>이 기기에 저장</strong>
+        <span>수정은 각자의 브라우저에만 저장됩니다</span>
+        <em id="custom-entry-count-v10">내 추가 0개</em>
+      </div>
+
+      <section class="v3-section now-panel" id="today-v41" aria-labelledby="now-title">
+        <div class="now-heading"><h2 id="now-title">지금 갈 곳</h2><div class="now-clock" id="now-clock">--:--<small>일본 시각</small></div></div>
+        <div class="now-loc"><label>지금 있는 곳<select id="now-area" aria-label="현재 동네"><option value="">동네 선택</option></select></label><button type="button" data-now-action="locate">◎ 내 위치</button><button type="button" class="now-quiet" data-now-action="refresh">↻ 새로 추천</button></div>
+        <p class="now-status" id="now-location-status" role="status">위치 권한 없이도 동네를 선택하면 됩니다.</p>
+        <div class="now-moods" aria-label="지금 하고 싶은 것"><button type="button" data-now-mood="auto" aria-pressed="true">추천</button><button type="button" data-now-mood="food" aria-pressed="false">식사</button><button type="button" data-now-mood="see" aria-pressed="false">구경</button><button type="button" data-now-mood="rest" aria-pressed="false">휴식</button><button type="button" data-now-action="rain" aria-pressed="false">비</button></div>
+        <div class="now-context" id="now-context"></div>
+        <div id="now-decision" aria-live="polite" aria-atomic="false"><div class="now-empty">지금 갈 만한 곳을 고르는 중…</div></div>
+        <div class="now-tools"><button type="button" data-today-nav="food-map-v41"><span>⌖</span>밥 지도</button><button type="button" data-today-nav="itinerary-v11"><span>↗</span>오늘 일정</button><button type="button" data-today-nav="hotel-search-v3"><span>⌂</span>숙소·출입</button><button type="button" data-today-nav="prep-v3"><span>✓</span>준비 확인</button></div>
+        <details class="now-help now-divider"><summary>추천 기준 · 오프라인 사용</summary><p>일본 시각, 선택한 동네, 식사 시간, 필수·보관함·오늘 일정, 방문 완료 여부를 함께 봅니다. 가까운 후보를 우선하며 예약과 월요일 공항 이동 여유를 남깁니다. 지도 거리는 직선거리이고 길찾기의 실제 이동과 다릅니다.</p><p>영업시간은 저장된 참고 정보입니다. 임시 휴무·대기·실시간 열차는 출발 전에 가게 또는 길찾기에서 확인하세요. 다시 열면 자동 갱신하지만 사이트를 닫은 동안에는 알림을 보내지 않습니다. 위치는 버튼을 눌렀을 때만 확인하고 서버에 전송하지 않습니다.</p><p>한 번 열어둔 화면은 연결이 끊겨도 사용할 수 있습니다. 다만 지도 타일·새 길찾기는 인터넷이 필요하며, 방문 기록은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우면 삭제되므로 일정의 JSON 백업을 이용하세요. 중요한 QR·숙소 출입 안내는 별도 스크린샷으로 보관하세요.</p></details>
+      </section>
+
+      <section class="v3-section now-panel" id="food-map-v41" aria-labelledby="food-map-title" hidden>
+        <div class="now-heading"><h2 id="food-map-title">음식점 지도</h2><button type="button" class="now-quiet" data-today-nav="today-v41">← 지금</button></div>
+        <div class="food-controls"><label>어디 근처?<select id="food-area" aria-label="음식점 지도 동네"></select></label><label>먹고 싶은 것<select id="food-group" aria-label="음식 종류"></select></label></div>
+        <details class="now-help food-advanced"><summary>검색 · 거리 · 보관함 필터</summary><div class="food-controls"><label>찾을 범위<select id="food-radius"><option value="0.8">800m 근처</option><option value="2" selected>2km 근처</option><option value="5">5km 근처</option><option value="0">오사카 전체</option></select></label><label class="food-search">가게·음식 검색<input type="search" id="food-query" placeholder="라멘, 타코야키, 가게 이름…" autocomplete="off"></label><label class="food-check"><input type="checkbox" id="food-saved">보관한 곳만</label></div></details>
+        <div class="food-map-toolbar"><div class="now-actions" style="margin-top:0"><button type="button" data-now-action="locate">◎ 내 위치</button><button type="button" data-now-action="map-center">지도 중심에서 찾기</button><button type="button" data-now-action="add-food">＋ 가게 추가</button></div></div>
+        <p id="food-map-status" class="now-status" role="status"></p>
+        <div class="food-map-layout"><div><div id="food-map-frame"><div class="food-map-view-tools"><label class="food-check"><input type="checkbox" id="food-map-labels" checked>메뉴·평점 표시</label><button type="button" id="food-map-expand" data-now-action="map-expand" aria-haspopup="dialog">지도 크게 ↗</button><button type="button" id="food-map-close" data-now-action="map-close" hidden>지도 닫기 ×</button></div><div id="food-map-canvas" aria-label="음식점 위치와 대표 메뉴 지도"></div><p class="now-note" id="food-map-note">겹치는 메뉴 라벨은 자동으로 줄어듭니다. 핀을 누르면 가게명·메뉴·평점을 볼 수 있어요. 평점은 타베로그의 저장된 참고값이며 실시간이 아닙니다.</p></div></div><div id="food-map-list" class="food-map-side"></div></div>
+        <dialog id="food-map-dialog" class="food-map-dialog" aria-labelledby="food-map-dialog-title"><header><h2 id="food-map-dialog-title">음식점 지도</h2><span>선택한 동네·음식 필터 유지</span></header><div id="food-map-dialog-content"></div></dialog>
+        <p class="now-note now-divider">직선거리 기준 정렬 · 일부 위치는 지역 단위의 참고 좌표입니다. 핀만 믿고 건물로 이동하지 말고 가게 이름 길찾기에서 지점·영업시간을 확인하세요.</p>
+        <div class="now-actions"><a id="food-google-nearby" class="now-btn now-quiet" href="https://www.google.com/maps/search/?api=1&amp;query=restaurants+Osaka" target="_blank" rel="noopener noreferrer">등록되지 않은 근처 가게 찾기 ↗</a><button type="button" data-today-nav="restaurant-search-v3">음식점 전체 카드</button></div>
+      </section>
+
+      <section class="v3-section v3-prep" id="prep-v3" aria-labelledby="prep-v3-title" hidden>
+        <div class="v3-number">01</div>
+        <div class="v3-heading">
+          <h2 id="prep-v3-title">출발 전</h2>
+        </div>
+        <div class="prep-grid-v3">
+          <article class="prep-flight-card">
+            <span>도착</span><strong>토 15:00 KIX</strong><p>입국·수하물 60~90분 예상</p>
+            <a href="https://www.kansai-airport.or.jp/en/access/train" target="_blank" rel="noopener">KIX 교통 공식 안내 ↗</a>
+          </article>
+          <article class="prep-flight-card is-return">
+            <span>출발</span><strong>월 16:00 KIX</strong><p>14:00 공항 도착 목표</p>
+            <a href="#itinerary-v11">월요일 마감선 보기 ↓</a>
+          </article>
+          <article class="prep-checks-v3">
+            <h3>준비 체크</h3>
+            <label><input type="checkbox" data-check="vjw"> Visit Japan Web 3명 각자 QR</label>
+            <label><input type="checkbox" data-check="qr"> 라피트·항공권 QR 오프라인 저장</label>
+            <label><input type="checkbox" data-check="ic"> ICOCA·모바일 결제 잔액</label>
+            <label><input type="checkbox" data-check="cash"> 현금과 동전 지갑</label>
+            <label><input type="checkbox" data-check="heat"> 우산·물·보조배터리</label>
+            <label><input type="checkbox" data-check="bags"> 면세·굿즈 수하물 공간</label>
+            <label><input type="checkbox" data-check="terminal"> KIX 터미널 재확인</label>
+          </article>
+        </div>
+      </section>
+
+      <section class="v3-section" id="hotel-search-v3" aria-labelledby="hotel-v3-title" hidden>
+        <div class="v3-number">02</div>
+        <div class="v3-heading">
+          <h2 id="hotel-v3-title">예약 숙소</h2>
+          <span>9월 5–7일 · 성인 3명 · 1객실</span>
+        </div>
+        <div id="booked-hotel-v18" class="booked-hotel-v18" aria-label="예약 완료 숙소"></div>
+        <section class="stay-map-card-v21" aria-labelledby="stay-map-title-v21">
+          <header>
+            <div><span>LIVE MAP · 宿</span><h3 id="stay-map-title-v21">숙소 주변 지도</h3></div>
+            <strong>다이코쿠초역 도보 3–4분</strong>
+          </header>
+          <div id="stay-map-v21" role="application" aria-label="LIVIN Osaka Nanbaminami 주변 확대·축소 지도"></div>
+          <footer><span id="stay-map-status-v21">지도를 불러오는 중</span><b>LIVIN Osaka Nanbaminami</b></footer>
+        </section>
+      </section>
+
+      <section class="v3-section" id="restaurant-search-v3" aria-labelledby="restaurant-v3-title" hidden>
+        <div class="v3-number">03</div>
+        <div class="v3-heading">
+          <h2 id="restaurant-v3-title">음식점 79곳</h2>
+          <span>지역·종류·평점으로 찾기</span>
+          <button type="button" class="section-add-v11" data-custom-open="restaurant">+ 음식점 직접 추가</button>
+        </div>
+        <div class="restaurant-tools-v3">
+          <label>검색<input id="restaurant-text-v3" type="search" placeholder="가게·메뉴·동네"></label>
+          <label>지역<select id="restaurant-area-v3"><option value="all">전체 지역</option><option value="custom">직접 추가</option><option value="namba">난바·도톤보리</option><option value="shinsaibashi">신사이바시</option><option value="nipponbashi">니혼바시·구로몬</option><option value="umeda">우메다</option><option value="tenma">텐마</option><option value="fukushima">후쿠시마·노다</option><option value="shinsekai">신세카이</option><option value="abeno">덴노지·아베노</option><option value="honmachi">혼마치</option><option value="kitahama">키타하마·나카노시마</option><option value="kyobashi">쿄바시</option><option value="south">타마데·남부</option></select></label>
+          <label>종류<select id="restaurant-genre-v3"><option value="all">전체 음식</option><option value="custom">직접 추가</option><option value="rice">밥·덮밥</option><option value="snack">길거리·간식</option><option value="noodle">우동·소바·면</option><option value="ramen">라멘·츠케멘</option><option value="konamon">오코노미야키·코나몬</option><option value="fried">튀김·돈카쓰</option><option value="meat">야키니쿠·고기</option><option value="seafood">스시·해산물</option><option value="alcohol">술·이자카야</option><option value="dessert">디저트·빵</option><option value="drink">커피·차·주스</option><option value="breakfast">아침·브런치</option><option value="special">오사카 별미</option></select></label>
+          <label>세부<select id="restaurant-type-v3"><option value="all">전체 세부</option></select></label>
+          <label>정렬<select id="restaurant-sort-v3"><option value="rating">평점 높은 순</option><option value="reviews">리뷰 많은 순</option><option value="price">가격 낮은 순</option></select></label>
+        </div>
+        <div class="food-chips-v3" id="restaurant-group-chips-v3" aria-label="음식 종류 빠른 선택"></div>
+        <div class="restaurant-results-v3" id="restaurant-results-v3"></div>
+        <nav class="results-pager-v3" id="restaurant-pager-v3" aria-label="음식점 결과 페이지"></nav>
+      </section>
+
+      <dialog class="v3-map-workspace" id="map-workspace-v3" aria-label="지도">
+        <div class="v3-map-copy">
+          <h2>지도</h2>
+          <button type="button" id="close-map-v3" aria-label="지도 닫기">닫기</button>
+        </div>
+        <div class="v3-map-tabs" id="v3-map-tabs" role="tablist" aria-label="지도 일정 선택">
+          <button type="button" role="tab" aria-selected="true" data-v3-map-day="sat">토요일</button>
+          <button type="button" role="tab" aria-selected="false" data-v3-map-day="sun">일요일</button>
+          <button type="button" role="tab" aria-selected="false" data-v3-map-day="mon">월요일</button>
+          <button type="button" id="v3-map-fit">전체 보기</button>
+          <button type="button" id="reset-planner-v3">일정 전체 초기화</button>
+        </div>
+        <div class="v3-map-shell">
+          <div id="route-map-v3" aria-label="내가 고른 오사카 일정의 OpenStreetMap 지도"></div>
+          <aside><strong id="v3-map-count">후보</strong><ol id="v3-map-list"></ol><p id="v3-map-status">지도 불러오는 중</p></aside>
+        </div>
+      </dialog>
+
+      <section class="v3-section itinerary-v11" id="itinerary-v11" aria-labelledby="itinerary-v11-title" hidden>
+        <div class="v3-number">04</div>
+        <div class="v3-heading">
+          <h2 id="itinerary-v11-title">토·일·월 전체 일정</h2>
+          <span>장소를 추가하고 시간을 바꾸세요.</span>
+        </div>
+        <div class="itinerary-days-v11">
+          <article class="day-panel-v11" data-plan-day="sat" aria-labelledby="day-sat-v11-title">
+            <header class="day-panel-head-v11"><div><h3 id="day-sat-v11-title">토요일</h3></div><button type="button" data-custom-open="place" data-custom-day="sat">+ 직접 추가</button></header>
+            <div class="day-frame-v3"><span>고정 출발</span><strong>KIX 15:00 → 숙소 체크인 17:30</strong><label>시내 일정 <input id="day-start-sat" type="time" value="17:30"></label><em>권장 마감 23:00</em></div>
+            <div class="day-builder-grid-v3"><div><h3>내 토요일</h3><ol class="plan-list-v3" id="plan-list-sat"></ol><p class="plan-summary-v3" id="plan-summary-sat"></p></div><aside><h3>빠른 후보</h3><div id="day-candidates-sat" class="quick-candidates-v3"></div></aside></div>
+          </article>
+          <article class="day-panel-v11" data-plan-day="sun" aria-labelledby="day-sun-v11-title">
+            <header class="day-panel-head-v11"><div><h3 id="day-sun-v11-title">일요일</h3></div><button type="button" data-custom-open="place" data-custom-day="sun">+ 직접 추가</button></header>
+            <div class="day-frame-v3"><span>종일</span><strong>08:00부터 시작 가능</strong><label>시작 <input id="day-start-sun" type="time" value="08:00"></label><em>권장 마감 22:00</em></div>
+            <div class="day-builder-grid-v3"><div><h3>내 일요일</h3><ol class="plan-list-v3" id="plan-list-sun"></ol><p class="plan-summary-v3" id="plan-summary-sun"></p></div><aside><h3>빠른 후보</h3><div id="day-candidates-sun" class="quick-candidates-v3"></div></aside></div>
+          </article>
+          <article class="day-panel-v11" data-plan-day="mon" aria-labelledby="day-mon-v11-title">
+            <header class="day-panel-head-v11"><div><h3 id="day-mon-v11-title">월요일</h3></div><button type="button" data-custom-open="place" data-custom-day="mon">+ 직접 추가</button></header>
+            <div class="day-frame-v3"><span>출국</span><strong>13:00 난바 출발 → KIX 14:00</strong><label>시작 <input id="day-start-mon" type="time" value="08:00"></label><em>13:00 뒤 추가 불가</em></div>
+            <div class="day-builder-grid-v3"><div><h3>내 월요일</h3><ol class="plan-list-v3" id="plan-list-mon"></ol><p class="plan-summary-v3" id="plan-summary-mon"></p></div><aside><h3>빠른 후보</h3><div id="day-candidates-mon" class="quick-candidates-v3"></div></aside></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="v3-section catalog-v3" id="catalog-attractions-v3" aria-labelledby="catalog-attractions-title" hidden>
+        <div class="v3-number">05</div><div class="v3-heading"><h2 id="catalog-attractions-title">관광지</h2></div><div class="food-chips-v3" id="attraction-chips-v5"></div><div class="catalog-grid-v3" id="attraction-catalog-v3"></div><nav class="results-pager-v3" id="attraction-pager-v5" aria-label="관광지 목록 페이지"></nav>
+      </section>
+      <section class="v3-section catalog-v3" id="catalog-goods-v3" aria-labelledby="catalog-goods-title" hidden>
+        <div class="v3-number">06</div><div class="v3-heading"><h2 id="catalog-goods-title">살거리</h2><span>가챠·오리파·TCG·게임센터·굿즈·선물</span></div><aside class="chance-notice-v7 is-oripa"><strong>오리파</strong><span>랜덤 상품 · 예산 상한 권장</span></aside><div class="food-chips-v3" id="goods-chips-v5"></div><div class="catalog-grid-v3" id="goods-catalog-v3"></div><nav class="results-pager-v3" id="goods-pager-v5" aria-label="살거리 목록 페이지"></nav>
+      </section>
+      <section class="v3-section catalog-v3" id="catalog-nightlife-v3" aria-labelledby="catalog-nightlife-title" hidden>
+        <div class="v3-number">07</div><div class="v3-heading"><h2 id="catalog-nightlife-title">유흥가</h2><span>술·야경·성인 구역·공영경기·파친코</span></div><aside class="chance-notice-v7 is-betting"><strong>연령 제한</strong><span>공영경기 20세 이상 · 파친코 18세 이상</span></aside><div class="food-chips-v3" id="nightlife-chips-v5"></div><div class="catalog-grid-v3 nightlife-grid-v3" id="nightlife-catalog-v3"></div><nav class="results-pager-v3" id="nightlife-pager-v5" aria-label="유흥가 목록 페이지"></nav>
+      </section>
+      <section class="v3-section travel-tips-v12" id="travel-tips-v12" aria-labelledby="travel-tips-v12-title" hidden>
+        <div class="v3-number">08</div>
+        <div class="v3-heading">
+          <h2 id="travel-tips-v12-title">오사카 여행 팁</h2>
+          <span>필요한 항목만 눌러 확인</span>
+        </div>
+        <div class="tip-essentials-v12" aria-label="꼭 기억할 숫자">
+          <span><b>14:00</b>월요일 KIX 도착 목표</span>
+          <span><b>110</b>경찰</span>
+          <span><b>119</b>구급·소방</span>
+          <span><b>3장</b>ICOCA는 1인 1장</span>
+        </div>
+        <div class="tip-filter-v12" role="group" aria-label="여행 팁 종류">
+          <button type="button" data-tip-group="all" aria-pressed="true">전체</button>
+          <button type="button" data-tip-group="arrival" aria-pressed="false">입국</button>
+          <button type="button" data-tip-group="discount" aria-pressed="false">할인·패스</button>
+          <button type="button" data-tip-group="transport" aria-pressed="false">교통</button>
+          <button type="button" data-tip-group="food" aria-pressed="false">음식</button>
+          <button type="button" data-tip-group="money" aria-pressed="false">결제·쇼핑</button>
+          <button type="button" data-tip-group="comfort" aria-pressed="false">날씨·짐</button>
+          <button type="button" data-tip-group="safety" aria-pressed="false">안전·매너</button>
+          <button type="button" data-tip-group="departure" aria-pressed="false">출국</button>
+        </div>
+        <div class="tips-grid-v12">
+          <details class="tip-card-v12 arrival-tip-v40" data-tip-card="arrival" open>
+            <summary><span>00 · 입국 준비</span><strong>Visit Japan Web — 앱 설치 없이 3명 각자 QR</strong><b>＋</b></summary>
+            <div>
+              <div class="vjw-alert-v40"><strong>무료 공식 웹서비스</strong><span>카드번호·결제 요구는 가짜 사이트입니다.</span></div>
+              <p>일본 입국심사와 세관 신고를 출발 전에 작성해 하나의 2D 코드(QR)를 만드는 서비스입니다. 별도 앱을 설치하지 말고 <strong>vjw.digital.go.jp</strong>만 이용하세요. 친구 3명은 각자 계정에서 자기 여권·신고를 완료하고 각자의 코드를 준비하는 방식이 가장 확실합니다.</p>
+              <section class="vjw-fill-v40" aria-label="이번 여행 입력값">
+                <header><span>THIS TRIP · 그대로 입력</span><strong>이번 오사카 여행 기본값</strong></header>
+                <article><small>입국일</small><b>2026.09.05</b></article>
+                <article><small>도착 공항</small><b>KANSAI / KIX</b></article>
+                <article><small>방문 목적</small><b>TOURISM</b></article>
+                <article><small>체류 기간</small><b>3 DAYS / 2 NIGHTS</b></article>
+                <article class="is-wide"><small>일본 내 숙소</small><b>LIVIN OSAKA NANBAMINAMI</b></article>
+                <article class="is-wide"><small>우편번호 · 주소</small><b>5560013 · 1-8-13 EBISUHONMACHI, NANIWA-KU, OSAKA</b></article>
+                <article class="is-note"><small>항공사 · 편명</small><b>전자항공권에서 각자 복사</b></article>
+                <article class="is-note"><small>일본 내 전화번호</small><b>Agoda 예약확인서의 숙소 번호 입력</b></article>
+              </section>
+              <ol class="vjw-flow-v40" aria-label="Visit Japan Web 등록과 이용 순서">
+                <li><b>01</b><strong>각자 계정 생성</strong><span>여권 정보·직업·거주 국가와 도시</span></li>
+                <li><b>02</b><strong>입국 예정 등록</strong><span>날짜·KIX·편명·목적·체류기간·숙소</span></li>
+                <li><b>03</b><strong>입국·세관 작성</strong><span>질문과 휴대품·별송품 신고까지 완료</span></li>
+                <li><b>04</b><strong>3명 코드 확인</strong><span>출발 전에 각자 휴대폰에서 표시되는지 확인</span></li>
+              </ol>
+              <div class="vjw-airport-v40"><b>KIX 도착 후</b><span>안내에 따라 여권과 2D 코드를 입국 KIOSK/심사에서 사용 → 수하물 수취 → 세관 전자신고 단말기에서 여권과 같은 코드를 스캔 → e-Gate 통과</span></div>
+              <ul><li>전자 신고를 해도 세관 직원이 수하물을 검사할 수 있습니다.</li><li>휴대폰 문제에 대비해 여권과 기내에서 받은 종이 세관신고서도 버리지 마세요. 종이 신고도 계속 사용할 수 있습니다.</li><li>입력 완료 뒤 이름·여권번호·편명·숙소를 세 사람이 서로 한 번씩 대조하세요.</li></ul>
+              <a href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener">Visit Japan Web 공식 사이트 ↗</a><a href="https://www.digital.go.jp/en/policies/visit_japan_web" target="_blank" rel="noopener">일본 디지털청 안내 ↗</a><a href="https://www.customs.go.jp/english/passenger/declaration/declaration_app.html" target="_blank" rel="noopener">일본 세관 이용 순서 ↗</a>
+            </div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="transport">
+            <summary><span>01 · 공항 이동</span><strong>KIX ↔ 난바는 난카이로 단순하게</strong><b>＋</b></summary>
+            <div><p>공식 기준 KIX에서 난바까지 라피트는 약 34–39분, 공항급행은 약 43분입니다. 좌석이 필요한 날은 라피트, 시간 유연성이 중요하면 공항급행을 먼저 비교하세요.</p><ul><li>간사이공항역은 터미널 1과 에어로플라자 2층에 연결됩니다.</li><li>터미널 2라면 무료 셔틀 이동시간 7–9분을 추가합니다.</li></ul><a href="https://www.kansai-airport.or.jp/en/access/train" target="_blank" rel="noopener">KIX 공식 교통 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="transport">
+            <summary><span>02 · 시내 교통</span><strong>ICOCA 3장 + 패스는 그날 비교</strong><b>＋</b></summary>
+            <div><p>ICOCA는 열차·버스와 IC 마크 가맹점에서 쓸 수 있지만 한 장으로 여러 사람의 운임을 결제할 수 없습니다. 성인 3명이 각각 한 장씩 준비하세요.</p><ul><li>Osaka Metro 역에서 현금 충전 가능, 최대 잔액은 ¥20,000입니다.</li><li>토·일에는 Metro·City Bus 1일권 가격과 그날 이동 횟수를 비교하세요.</li></ul><a href="https://www.westjr.co.jp/global/en/howto/icoca/" target="_blank" rel="noopener">JR-West ICOCA 안내 ↗</a><a href="https://subway.osakametro.co.jp/en/guide/fare/card_tickets/benri-joshaken.php" target="_blank" rel="noopener">Osaka Metro 승차권 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="food">
+            <summary><span>03 · 음식점</span><strong>3명은 대기·좌석·주문 규칙 먼저</strong><b>＋</b></summary>
+            <div><p>작은 라멘·스시·이자카야는 3명이 나란히 앉기 어려울 수 있습니다. 입장 전에 “3명 함께” 대기시간과 분리 착석 가능 여부를 확인하세요.</p><ul><li>인기점은 오픈 직전이나 14–17시 사이를 노립니다.</li><li>이자카야는 1인 1음료, 오토시·테이블 차지가 있는지 주문 전에 확인합니다.</li><li>팁 문화는 없으므로 영수증 금액만 결제하면 됩니다.</li></ul><a href="https://www.japan.travel/en/faq/" target="_blank" rel="noopener">JNTO 여행 FAQ ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="money">
+            <summary><span>04 · 결제</span><strong>카드 하나만 믿지 말고 현금 분산</strong><b>＋</b></summary>
+            <div><p>교통카드·신용카드·현금을 나눠 들고, 작은 식당·오리파·가챠·게임센터용 동전을 별도로 둡니다. 3명 공용비는 한 사람이 결제하고 즉시 메모하면 정산이 가장 빠릅니다.</p><ul><li>가챠·오리파·파친코는 체험 상한을 출발 전에 정합니다.</li><li>현금 추가 인출은 합의 없이 하지 않는 규칙이 실용적입니다.</li></ul></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="money">
+            <summary><span>05 · 면세·쇼핑</span><strong>여권 원본과 수하물 공간을 같이 계산</strong><b>＋</b></summary>
+            <div><p>이번 여행일은 2026년 11월 1일 제도 변경 전이므로 참여 매장에서 여권을 제시하는 현행 즉시 면세 방식입니다. 매장별 당일 세전 ¥5,000 이상 여부와 봉인·반출 조건을 확인하세요.</p><ul><li>직접 국제우편으로 보낸 물품은 2025년 4월부터 면세 대상이 아닙니다.</li><li>가격표 사진, 영수증, 카드 슬립은 출국까지 보관합니다.</li></ul><a href="https://www.japan.travel/en/plan/japans-tax-exemption/" target="_blank" rel="noopener">JNTO 면세 안내 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="comfort">
+            <summary><span>06 · 9월 날씨</span><strong>더위·습도·태풍을 같은 날 확인</strong><b>＋</b></summary>
+            <div><p>오사카의 9월은 더위와 습도가 남고 태풍 가능성도 있는 시기입니다. 출발 전날과 매일 아침 기상·철도 운행을 다시 확인하세요.</p><ul><li>목마르기 전에 물을 마시고 염분을 보충합니다.</li><li>정오에는 지하상가·Metro·쇼핑몰을 이동 동선으로 활용합니다.</li><li>작은 우산, 얇은 겉옷, 보조배터리를 한 가방에 둡니다.</li></ul><a href="https://osaka-info.jp/en/special/coolosaka/en/summer/" target="_blank" rel="noopener">COOL OSAKA 공식 안내 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="comfort">
+            <summary><span>07 · 짐</span><strong>월요일은 체크아웃 즉시 맡기기</strong><b>＋</b></summary>
+            <div><p>호텔 보관 가능 시간을 먼저 확인하고, 안 되면 난바역 보관소나 코인락커를 사용합니다. 대형 락커는 빨리 차므로 오전에 확보하세요.</p><ul><li>귀중품·깨지는 물건은 락커에 넣지 않습니다.</li><li>짐 보관 서비스의 보험·보상 조건은 업체별로 다릅니다.</li></ul><a href="https://osaka-info.jp/en/handsfreetravel-osaka/" target="_blank" rel="noopener">Hands-Free Osaka ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="safety">
+            <summary><span>08 · 매너·안전</span><strong>호객은 지나가고 흡연은 지정 장소만</strong><b>＋</b></summary>
+            <div><p>오사카시는 길거리 흡연이 금지되어 있고, 2025년 4월부터 객석 30㎡ 초과 음식점은 원칙적으로 실내 금연입니다. 흡연실 표지를 확인하세요.</p><ul><li>호객이 안내하는 술집·카지노는 따라가지 않습니다.</li><li>토비타신치 등 성인 구역에서는 촬영하지 않습니다.</li><li>경찰 110, 구급·소방 119, JNTO 24시간 핫라인 050-3816-2787.</li></ul><a href="https://www.pref.osaka.lg.jp/o100070/kenkozukuri/judoukitsuen/index.html" target="_blank" rel="noopener">오사카부 흡연 규칙 ↗</a><a href="https://www.japan.travel/en/plan/emergencies/" target="_blank" rel="noopener">JNTO 긴급 안내 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="departure">
+            <summary><span>09 · 월요일 출국</span><strong>13:00 난바 출발선을 넘기지 않기</strong><b>＋</b></summary>
+            <div><p>이 가이드의 안전선은 난바 13:00 출발, KIX 14:00 도착, 16:00 국제선 출발입니다. 일정 카드의 종료 예상이 13:00을 넘으면 장소를 빼거나 시작 시각을 당기세요.</p><ul><li>아침에 항공사·터미널·열차 운행을 재확인합니다.</li><li>면세품·수하물 정리가 많으면 난바 출발을 더 당깁니다.</li><li>터미널 2 항공편은 셔틀 이동시간을 별도로 확보합니다.</li></ul><a href="https://www.kansai-airport.or.jp/en/flight/route/egate" target="_blank" rel="noopener">KIX 출국 절차 ↗</a></div>
+          </details>
+          <details class="tip-card-v12 discount-tip-v14" data-tip-card="discount">
+            <summary><span>10 · 날짜별 결론</span><strong>할인은 일요일 하루에 몰아쓰기</strong><b>＋</b></summary>
+            <div>
+              <div class="discount-days-v14">
+                <article><span>9/5 토 · 15:00 도착</span><strong>관광 패스는 사지 않기</strong><p>라피트 디지털 티켓과 부대 쿠폰만 챙기고, 저녁 이동은 ICOCA로 처리합니다.</p></article>
+                <article class="is-best"><span>9/6 일 · 종일</span><strong>패스 검토일</strong><p>관광 3곳 이상이면 Osaka Amazing Pass, 가까운 시설 2곳 위주면 e-Pass+교통비를 비교합니다.</p></article>
+                <article><span>9/7 월 · 13:00 난바 출발</span><strong>개별 결제가 안전</strong><p>월요일 휴관 시설이 많고 오전만 쓸 수 있어 ICOCA와 개별 입장권이 대체로 낫습니다.</p></article>
+              </div>
+              <section class="discount-calculator-v14" aria-labelledby="discount-calculator-title-v14">
+                <header><span>9/6 일요일 · 성인 3명</span><strong id="discount-calculator-title-v14">오사카 주유패스 손익 계산</strong><small>교통비를 빼고도 이득인지 보수적으로 계산합니다.</small></header>
+                <fieldset>
+                  <legend>실제로 갈 곳만 체크</legend>
+                  <label><input type="checkbox" data-discount-price="2000" checked>우메다 스카이빌딩 <b>¥2,000</b><small>무료 입장은 15:00까지</small></label>
+                  <label><input type="checkbox" data-discount-price="1000" checked>HEP FIVE 관람차 <b>¥1,000</b></label>
+                  <label><input type="checkbox" data-discount-price="2000" checked>도톤보리 리버크루즈 <b>¥2,000</b><small>낮에 시간표 교환 권장</small></label>
+                  <label><input type="checkbox" data-discount-price="1200">오사카성 박물관 <b>¥1,200</b></label>
+                  <label><input type="checkbox" data-discount-price="900">오사카성 망루 특별 공개 <b>¥900</b><small>9/6 일요일 운영 대상</small></label>
+                  <label><input type="checkbox" data-discount-price="1500">쓰텐카쿠 전망대 <b>¥1,500</b><small>시간대 예약 필요</small></label>
+                </fieldset>
+                <output id="discount-output-v14" aria-live="polite"></output>
+                <p class="discount-caveat-v14">주유패스 1일권은 1인 ¥3,500입니다. 계산 결과에는 포함 노선 교통비와 음식·쇼핑 우대가 들어가지 않으므로 실제 절약액은 더 커질 수 있습니다.</p>
+              </section>
+            </div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>11 · 패스 비교</span><strong>주유패스·e-Pass·Metro 1일권은 역할이 다름</strong><b>＋</b></summary>
+            <div><p><strong>Osaka Amazing Pass</strong>는 1일 ¥3,500·연속 2일 ¥5,000으로 약 40개 시설과 대상 전철·버스를 묶습니다. <strong>Osaka e-Pass</strong>는 1일 ¥2,400·연속 2일 ¥3,000으로 25곳 이상을 이용하지만 교통은 별도입니다. <strong>Enjoy Eco Card</strong>는 시설 무료입장 없이 Metro·City Bus와 약 20개 시설 제시 할인을 제공합니다.</p><ul><li>9/6 일요일 Enjoy Eco Card는 1인 ¥620, 3명 ¥1,860입니다.</li><li>9/7 월요일은 평일가 1인 ¥820이지만 오전만 움직여 개별 결제가 유리할 가능성이 큽니다.</li><li>9/6에는 오사카성 망루가 특별 공개 대상입니다. 반대로 오사카 생활주택박물관은 9/1~12/28 휴관이라 계산에서 빼야 합니다.</li><li>주유패스의 우메다 스카이빌딩 무료입장은 15:00까지이며 이후에는 10% 할인만 적용됩니다.</li><li>e-Pass는 구매 후 취소할 수 없고, 시설 퇴장 후 다음 시설 입장까지 30분 이상 간격이 필요합니다.</li></ul><a href="https://osaka-amazing-pass.com/en/howto_about_1day.html" target="_blank" rel="noopener">주유패스 가격·범위 ↗</a><a href="https://osaka-amazing-pass.com/en/service_free.html" target="_blank" rel="noopener">9월 시설 운영 조건 ↗</a><a href="https://www.e-pass.osaka-info.jp/en/about/about.html" target="_blank" rel="noopener">Osaka e-Pass ↗</a><a href="https://subway.osakametro.co.jp/guide/page/enjoy-eco.php" target="_blank" rel="noopener">Enjoy Eco Card ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>12 · 공항 할인</span><strong>라피트 디지털 티켓은 쿠폰 교환까지</strong><b>＋</b></summary>
+            <div><p>난바↔KIX 라피트 디지털 티켓은 편도 레귤러석 1인 ¥1,410, 슈퍼석 ¥1,590입니다. 성인 3명은 편도 ¥4,230, 왕복 모두 레귤러석이면 ¥8,460입니다.</p><ul><li>승차일·열차·좌석을 지정하고 전용 QR 개찰구를 이용합니다.</li><li>티켓에는 난바 CITY·난바 파크스·난바 SkyO의 점포별 쇼핑·식당 할인 쿠폰 교환 혜택이 포함됩니다.</li><li>쿠폰은 지정 승차일 당일 난바 파크스 2층 또는 난바 CITY 본관 B2층 안내소에서 교환합니다.</li><li>비행 지연 가능성이 큰 도착편은 좌석 지정·변경·환불 조건을 확인하고 너무 이른 열차를 고정하지 않습니다.</li></ul><a href="https://www.nankai.co.jp/kr_railway/ticket/rapit" target="_blank" rel="noopener">난카이 한국어 티켓·쿠폰 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>13 · 쇼핑 할인</span><strong>5% 쿠폰을 먼저 받고 면세는 마지막에</strong><b>＋</b></summary>
+            <div><p>여권 원본을 들고 계산 전에 외국인 고객용 5% 카드를 먼저 받습니다. 할인 결제 후 같은 날 면세 카운터에서 처리하며, 할인과 면세를 단순히 ‘15% 할인’으로 더해서 계산하면 안 됩니다.</p><ul><li><strong>오사카 다카시마야:</strong> 세전 ¥3,000 이상 결제에 Shopper’s Card 5%. 시계·보석·명품 등 제외.</li><li><strong>다이마루 신사이바시:</strong> 본관 1층 안내소에서 여권 제시 후 5% 쿠폰. 식품·특가·일부 브랜드 제외.</li><li><strong>한큐 우메다:</strong> 5% Guest Coupon은 발급일 포함 7일간 반복 사용. 세전 ¥1,000 미만, 식품·식당·세일·일부 브랜드 제외.</li><li>다카시마야·한큐의 면세 처리 수수료는 면세 대상 세전 금액의 1.55%로 안내되어 있습니다. 결제 전 최종 실절약액을 확인하세요.</li></ul><a href="https://www.takashimaya.co.jp/store/special/shopperscard/index_en.html" target="_blank" rel="noopener">다카시마야 5% ↗</a><a href="https://www.daimaru.co.jp/shinsaibashi-store/e/service/" target="_blank" rel="noopener">다이마루 5% ↗</a><a href="https://website.hankyu-dept.co.jp/fl/korean/honten/service/" target="_blank" rel="noopener">한큐 우메다 5%·면세 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>14 · 1일권 제시 할인</span><strong>주유패스가 아니어도 입장료가 내려간다</strong><b>＋</b></summary>
+            <div><p><strong>Enjoy Eco Card</strong>는 9/6 일요일 1인 ¥620, 3인 ¥1,860입니다. 그날 Metro·City Bus를 무제한 이용하면서 아래 시설에서 실물 또는 디지털 승차권을 제시하면 추가 할인됩니다.</p><div class="discount-list-v15"><span><b>오사카성</b> ¥1,200 → ¥1,080</span><span><b>니시노마루 정원</b> ¥300 → ¥210</span><span><b>오사카 역사박물관</b> ¥600 → ¥540</span><span><b>오사카시립미술관</b> ¥500 → ¥400</span><span><b>SPAWORLD</b> 성인 ¥200 할인</span><span><b>하루카스 300</b> 당일권 10% 할인</span><span><b>아쿠아라이너</b> 관광 코스 10% 할인</span></div><ul><li>할인은 승차권 소지자 본인에게 이용 당일만 적용됩니다.</li><li>오사카성·니시노마루·역사박물관 세 곳만 3명이 써도 시설 할인 합계는 ¥810입니다.</li><li>입장료 무료가 아니라 할인입니다. 관광 3곳 이상이면 위의 주유패스 계산기와 다시 비교하세요.</li></ul><a href="https://subway.osakametro.co.jp/guide/fare/card_tickets/benri-joshaken.php" target="_blank" rel="noopener">Enjoy Eco Card 요금 ↗</a><a href="https://subway.osakametro.co.jp/en/guide/page/waribiki_ichiran.php" target="_blank" rel="noopener">2026 제시 할인 전체 ↗</a></div>
+          </details>
+          <details class="tip-card-v12 benefit-tip-v15" data-tip-card="discount">
+            <summary><span>15 · 주유패스 제시 우대</span><strong>무료입장 뒤에도 음식·체험·쇼핑 할인</strong><b>＋</b></summary>
+            <div><p>Osaka Amazing Pass 화면을 보여주면 받는 우대입니다. 아래 버튼으로 여행 동선에 맞는 것만 남겨 보세요.</p>
+              <div class="benefit-filter-v15" role="group" aria-label="주유패스 우대 종류"><button type="button" data-benefit-group-v15="all" aria-pressed="true">전체</button><button type="button" data-benefit-group-v15="food" aria-pressed="false">음식·술</button><button type="button" data-benefit-group-v15="experience" aria-pressed="false">체험·전망</button><button type="button" data-benefit-group-v15="shop" aria-pressed="false">쇼핑</button></div>
+              <div class="benefit-grid-v15">
+                <article data-benefit-v15="food"><b>대기수산 회전초밥</b><span>난바·도톤보리·신사이바시 등 음식 10%</span></article>
+                <article data-benefit-v15="food"><b>돈카츠 KYK</b><span>우메다·난바·텐노지 지점 음식 10%</span></article>
+                <article data-benefit-v15="food"><b>난바 라멘 이치자</b><span>라멘 1그릇 주문 시 토핑 서비스</span></article>
+                <article data-benefit-v15="food"><b>츠루하시 후게츠</b><span>도톤보리점 일부 메뉴 1품 서비스</span></article>
+                <article data-benefit-v15="food"><b>Time Out Market Osaka</b><span>바 음료 1잔 반값 · 병 제품 제외</span></article>
+                <article data-benefit-v15="food"><b>에도가와</b><span>난바·하루카스점 ¥3,300 이상 5%</span></article>
+                <article data-benefit-v15="food"><b>M.M.ya 흑모와규</b><span>모둠 주문 시 오사카 맥주 1병+갈비 80g</span></article>
+                <article data-benefit-v15="experience"><b>NINJA Trick House</b><span>EDION 난바 · ¥1,000 → ¥500</span></article>
+                <article data-benefit-v15="experience"><b>에비스 타워 관람차</b><span>도톤보리 돈키호테 · ¥100 할인</span></article>
+                <article data-benefit-v15="experience"><b>DesignPocket</b><span>식품 샘플 제작 체험 10%</span></article>
+                <article data-benefit-v15="experience"><b>하루카스 300</b><span>당일 입장료 10%</span></article>
+                <article data-benefit-v15="experience"><b>아사히 극장</b><span>오사카 대중연극 · ¥300 할인</span></article>
+                <article data-benefit-v15="shop"><b>Baisendo</b><span>우메다 매장 총 구매액 10%</span></article>
+                <article data-benefit-v15="shop"><b>GOTO-CHI 난바</b><span>오사카 기념품 결제액 5%</span></article>
+                <article data-benefit-v15="shop"><b>KAWAII OSAKA</b><span>상품 ¥8,000 이상 또는 1일 대여 10%</span></article>
+              </div>
+              <output id="benefit-count-v15" aria-live="polite">15개 우대 표시</output>
+              <p class="discount-caveat-v14">지점·최소 주문·1회 제시·다른 할인과의 중복 제한이 서로 다릅니다. 주문·결제 전에 패스를 먼저 보여주세요.</p><a href="https://osaka-amazing-pass.com/en/service_privilege.html" target="_blank" rel="noopener">공식 우대 전체·지도 ↗</a>
+            </div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>16 · 숙소별 공항 할인</span><strong>싼 티켓보다 숙소에 바로 가는 티켓</strong><b>＋</b></summary>
+            <div><p>숙소 권역을 누르면 2026년 9월에 성인 3명이 쓸 공식 외국인·디지털 편도권 총액을 표시합니다.</p>
+              <fieldset class="airport-choice-v15"><legend>숙소에서 가까운 역</legend><label><input type="radio" name="airport-choice-v15" data-airport-name="난바·신이마미야" data-airport-price="1410" data-airport-note="난카이 라피트 레귤러석 + 난바 쇼핑·식당 쿠폰" checked><b>난바</b><span>라피트 ¥1,410</span></label><label><input type="radio" name="airport-choice-v15" data-airport-name="텐노지" data-airport-price="1300" data-airport-note="JR-WEST HARUKA 지정석 이용 가능"><b>텐노지</b><span>HARUKA ¥1,300</span></label><label><input type="radio" name="airport-choice-v15" data-airport-name="오사카·우메다·신오사카" data-airport-price="1800" data-airport-note="JR-WEST HARUKA 오사카·신오사카 도착"><b>우메다·신오사카</b><span>HARUKA ¥1,800</span></label></fieldset>
+              <output id="airport-output-v15" aria-live="polite"></output>
+              <ul><li>HARUKA 편도권은 외국인 여행자용으로 여권을 지참하며, KIX↔텐노지 ¥1,300·오사카/신오사카 ¥1,800입니다.</li><li>라피트 디지털권은 같은 열차에 타는 3명 티켓을 한 번에 구매할 수 있지만 일부 인원만 따로 환불할 수 없습니다.</li><li>월요일 16:00 비행편은 가격보다 환승 수와 14:00 KIX 도착 가능성을 먼저 봅니다.</li></ul><a href="https://www.nankai.co.jp/kr_railway/ticket/rapit" target="_blank" rel="noopener">라피트 ¥1,410 ↗</a><a href="https://www.westjr.co.jp/travel-information/kr/tickets-passes/oneway/haruka/" target="_blank" rel="noopener">HARUKA 편도권 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>17 · 공항+관광 묶음</span><strong>츠텐카쿠와 소바까지 할 사람만 ¥4,260</strong><b>＋</b></summary>
+            <div><p><strong>Visit Tsutenkaku Rapi:t Ticket</strong>은 라피트 레귤러석 편도, 츠텐카쿠 일반·특별 야외 전망대, 특대 튀김 소바 또는 우동을 묶은 1인 ¥4,260 상품입니다. 3명 총액은 <strong>¥12,780</strong>입니다.</p><ul><li>라피트만 필요하면 1인 ¥1,410 디지털 티켓이 훨씬 단순합니다.</li><li>라피트·츠텐카쿠·난카이 소바 바우처는 서로 분리되고 유효기간도 다릅니다.</li><li>츠텐카쿠는 날짜·시간 예약이 필요하며, 구매자 사정의 취소·변경은 불가합니다.</li><li>도착 토요일보다 신세카이 일정과 공항 이동을 함께 확정했을 때만 고릅니다.</li></ul><a href="https://www.nankai.co.jp/kr_railway/ticket/vtrt" target="_blank" rel="noopener">공식 구성·구매 조건 ↗</a></div>
+          </details>
+          <details class="tip-card-v12" data-tip-card="discount">
+            <summary><span>18 · 전자·드럭·굿즈</span><strong>난바·텐노지 쿠폰은 계산 전에 열기</strong><b>＋</b></summary>
+            <div><p>면세만 받지 말고 매장 자체 방문객 쿠폰도 먼저 확인합니다. 퍼센트가 수시로 바뀌는 쿠폰은 가이드에 숫자를 고정하지 않고 공식 페이지를 바로 엽니다.</p><ul><li><strong>아베노 하루카스 긴테츠:</strong> 여권을 보여 5% 쿠폰 발급. 세전 ¥2,000 이상, 식품·식당·세일·일부 점포 제외. 대상 상품 ¥30,000이면 ¥1,500 절약.</li><li><strong>EDION 난바:</strong> 공식 인바운드 쿠폰을 결제 전에 제시. 가전뿐 아니라 게임기·완구·프라모델·기념품이 있고 1–8층 면세를 안내합니다.</li><li><strong>돈키호테:</strong> 공식 면세 쿠폰을 결제 전에 제시. 계산 뒤 쿠폰을 보여 소급 할인할 수 없고, 매장별 적용 여부를 먼저 확인해야 합니다.</li><li>면세는 한 사람이 3명 물건을 대표 결제하는 방식이 거절될 수 있습니다. 여권 원본과 결제수단 명의를 각자 맞추세요.</li></ul><a href="https://abeno-harukas.d-kintetsu.co.jp/" target="_blank" rel="noopener">긴테츠 5% 안내 ↗</a><a href="https://www.edion.com/ito/contents/special/lp/edion_inbound/taxfree/en.html" target="_blank" rel="noopener">EDION 공식 쿠폰 ↗</a><a href="https://www.donki.com/en/tax_free/" target="_blank" rel="noopener">돈키호테 면세·쿠폰 ↗</a></div>
+          </details>
+        </div>
+        <p class="tips-source-v12">요금·운행·규정은 출발 직전에 재확인</p>
+      </section>
+      <nav class="panel-pager-v3" aria-label="가이드 페이지 이동"><button type="button" id="guide-prev-v3">← 이전</button><strong id="guide-progress-v3">01 / 8</strong><button type="button" id="guide-next-v3">다음 →</button></nav>
+    </div>
+
+    <section class="trip-desk section-shell" id="trip-desk" aria-labelledby="trip-desk-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow dark">TRIP DESK · 旅の現実</p>
+          <h2 id="trip-desk-title">숙소·음식·가격을<br>한 장부에서 움직인다</h2>
+        </div>
+        <p>객실은 ‘1실 1박’, 음식은 ‘인분·판·세트’ 단위입니다. 참고 범위와 실제 결제액을 섞지 않고 따로 계산합니다.</p>
+      </div>
+
+      <div class="trip-parameters" aria-label="여행 계산 기준">
+        <label>여행 인원<input id="party-size" type="number" inputmode="numeric" min="1" max="8" value="3"><small>명</small></label>
+        <label>객실 수<input id="room-count" type="number" inputmode="numeric" min="1" max="4" value="1"><small>실</small></label>
+        <label>숙박 수<input id="night-count" type="number" inputmode="numeric" min="1" max="7" value="2"><small>박</small></label>
+        <div class="price-contract"><strong>가격 기준</strong><span>2026-08-22 조사 · JPY · 세금/날짜별 변동 가능</span></div>
+      </div>
+
+      <div class="desk-layout">
+        <div class="hotel-lab">
+          <div class="desk-title"><span>01 · BASE</span><h3>예약 숙소</h3><p>LIVIN Osaka Nanbaminami를 일정과 지도의 고정 기준점으로 사용합니다.</p></div>
+          <div class="hotel-grid" id="hotel-grid" role="radiogroup" aria-label="숙소 선택"></div>
+          <div class="hotel-impact" id="hotel-impact" aria-live="polite"></div>
+          <label class="actual-price">실제 예약 총액
+            <span><b>¥</b><input id="hotel-actual" type="number" inputmode="numeric" min="0" step="100" placeholder="결제 후 입력"><small>전체 객실·전체 숙박</small></span>
+          </label>
+        </div>
+
+        <div class="food-lab">
+          <div class="desk-title"><span>02 · TASTE</span><h3>먹을 만큼만 담기</h3><p>−/+로 수량을 바꾸면 음식 합계와 지도 마커가 즉시 바뀝니다.</p></div>
+          <div class="food-builder" id="food-builder"></div>
+        </div>
+      </div>
+
+      <div class="budget-console" id="budget-console">
+        <div class="budget-head"><div><span>03 · 예산</span><h3>여행 총예산</h3></div><div class="budget-total"><small>참고 전형값</small><strong id="budget-typical">¥0</strong><span id="budget-range">¥0—¥0</span></div></div>
+        <div class="budget-lines" id="budget-lines"></div>
+        <div class="actual-budget">
+          <strong>실제 금액으로 덮어쓰기</strong><span>빈칸은 참고 전형값을 사용합니다.</span>
+          <label>교통 ¥<input type="number" min="0" step="100" data-actual-category="transit" placeholder="자동"></label>
+          <label>관광 ¥<input type="number" min="0" step="100" data-actual-category="attractions" placeholder="자동"></label>
+          <label>음식 ¥<input type="number" min="0" step="100" data-actual-category="food" placeholder="자동"></label>
+          <label>굿즈 ¥<input type="number" min="0" step="100" data-actual-category="goods" placeholder="0"></label>
+          <div><small>예상 결제 총액</small><strong id="budget-actual-total">¥0</strong></div>
+        </div>
+        <p class="budget-note" id="budget-note">항공권은 제외됩니다. ‘쇼핑별/날짜별’ 가격은 실제 입력 전까지 0원 또는 참고 범위로 표시합니다.</p>
+      </div>
+    </section>
+
+    <section class="intro-strip" aria-label="가이드 특징">
+      <p><span>01</span> 08:00부터 시작 가능</p>
+      <p><span>02</span> 폭염·비 즉시 전환</p>
+      <p><span>03</span> 줄이 길면 백업 표시</p>
+      <p><span>04</span> 마지막 날 공항 역산</p>
+    </section>
+
+    <section class="planner section-shell" id="planner" aria-labelledby="planner-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow dark">ROUTE ATELIER · 旅程を組む</p>
+          <h2 id="planner-title">내 방식대로 순서를 고른다</h2>
+        </div>
+        <p>한 번 정한 일정에 끌려가지 말 것. 취향·속도·날씨를 바꾸면 동선과 식당, 실내 대체안이 함께 바뀐다.</p>
+      </div>
+
+      <form class="route-controls" id="route-controls">
+        <fieldset>
+          <legend>무엇을 가장 진하게?</legend>
+          <div class="segmented" id="preset-controls">
+            <label><input type="radio" name="preset" value="classic" checked><span>첫 오사카</span></label>
+            <label><input type="radio" name="preset" value="food"><span>먹방 골목</span></label>
+            <label><input type="radio" name="preset" value="goods"><span>굿즈 헌팅</span></label>
+            <label><input type="radio" name="preset" value="retro"><span>레트로 밤</span></label>
+            <label><input type="radio" name="preset" value="indoor"><span>실내 피난</span></label>
+            <label><input type="radio" name="preset" value="bay"><span>가이유칸</span></label>
+            <label><input type="radio" name="preset" value="usj"><span>USJ 올인</span></label>
+          </div>
+        </fieldset>
+
+        <div class="control-grid">
+          <label class="select-field">일요일 출발
+            <select id="start-time" name="startTime">
+              <option value="8" selected>08:00 · 아침을 길게</option>
+              <option value="9">09:00 · 균형형</option>
+              <option value="10">10:00 · 느긋하게</option>
+            </select>
+          </label>
+          <label class="select-field">걷는 속도
+            <select id="pace" name="pace">
+              <option value="slow">여유 · 줄 30분 상한</option>
+              <option value="balanced" selected>균형 · 대표 코스</option>
+              <option value="full">촘촘 · 한 곳 더</option>
+            </select>
+          </label>
+          <label class="select-field">현장 날씨
+            <select id="weather" name="weather">
+              <option value="clear" selected>맑음 · 기본 동선</option>
+              <option value="heat">폭염 · 낮에는 실내</option>
+              <option value="rain">비 · 실내 중심</option>
+            </select>
+          </label>
+        </div>
+      </form>
+
+      <div class="route-summary" aria-live="polite">
+        <div><span>선택한 여행</span><strong id="route-name">첫 오사카</strong></div>
+        <div><span>예상 현장비</span><strong id="route-budget">¥18,400</strong></div>
+        <div><span>하루 평균</span><strong id="route-load">6곳 · 보통</strong></div>
+        <p id="route-note">성곽의 아침, 우메다의 노을, 난바의 밤을 가장 안정적으로 잇는 첫 방문용 구성.</p>
+      </div>
+
+      <div class="day-tabs" role="tablist" aria-label="요일별 일정">
+        <button type="button" role="tab" aria-selected="true" aria-controls="day-panel" id="tab-sat" data-day="sat">
+          <small>SAT</small><strong>도착과 네온</strong><span>15:00—23:00</span>
+        </button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="day-panel" id="tab-sun" data-day="sun">
+          <small>SUN</small><strong>도시를 깊게</strong><span>08:00—21:30</span>
+        </button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="day-panel" id="tab-mon" data-day="mon">
+          <small>MON</small><strong>난바와 출국</strong><span>08:00—16:00</span>
+        </button>
+      </div>
+
+      <div class="field-mode-entry">
+        <div><span>ON THE STREET · 現地モード</span><strong>길 위에서는 다음 한 곳만 크게.</strong></div>
+        <button class="button button-field" id="field-mode-launch" type="button">현장 모드 열기</button>
+      </div>
+
+      <div class="day-panel" id="day-panel" role="tabpanel" aria-labelledby="tab-sat">
+        <div class="day-visual" id="day-visual">
+          <div class="day-visual-copy">
+            <span id="day-kicker">SATURDAY · 第一幕</span>
+            <h3 id="day-title">비행기에서 내려<br>네온 속으로</h3>
+            <p id="day-description">입국 지연을 일정에 흡수하고, 호텔부터 도톤보리까지 한 방향으로만 걷는다.</p>
+          </div>
+          <div class="weather-chip" id="weather-chip">☀ 기본 동선</div>
+        </div>
+        <ol class="timeline" id="timeline" aria-live="polite"></ol>
+      </div>
+    </section>
+
+    <section class="city-compass section-shell" aria-labelledby="compass-title">
+      <div class="compass-copy">
+        <p class="eyebrow dark">CITY COMPASS · 街の方角</p>
+        <h2 id="compass-title">하루에 한 축만.<br>도시를 지그재그로<br>횡단하지 않는다.</h2>
+        <p>난바를 베이스로 보면 오사카가 단순해진다. 점을 눌러 이동 성격과 연결하기 좋은 장소를 확인하고, 실제 길찾기는 지도 버튼으로 연다.</p>
+        <div class="compass-detail" id="compass-detail" aria-live="polite">
+          <span>NORTH · 약 18~25분</span><h3>우메다</h3>
+          <p>굿즈·쇼핑을 한낮에 처리하고 우메다 스카이빌딩 일몰로 마무리하는 수직 도시.</p>
+          <a href="https://www.google.com/maps/dir/?api=1&origin=Nankai+Namba+Station&destination=Osaka+Station&travelmode=transit" target="_blank" rel="noopener">난바에서 길찾기 ↗</a>
+        </div>
+      </div>
+      <div class="compass-map" aria-label="난바를 기준으로 한 오사카 주요 지역의 개략적 방향도">
+        <svg viewBox="0 0 700 560" role="img" aria-label="베이, 우메다, 오사카성, 미나미, 신세카이를 잇는 개략 노선">
+          <path class="river-line" d="M82 420 C185 365 225 430 330 366 S495 250 625 208"></path>
+          <path class="route-line" d="M350 460 L350 346 L342 220 L315 88"></path>
+          <path class="route-line secondary" d="M350 346 L506 245"></path>
+          <path class="route-line secondary" d="M350 460 L325 525"></path>
+          <path class="route-line secondary" d="M350 346 L112 355"></path>
+          <circle cx="350" cy="346" r="132" class="time-ring"></circle>
+          <circle cx="350" cy="346" r="228" class="time-ring outer"></circle>
+        </svg>
+        <span class="compass-label north">N</span><span class="compass-label bay">OSAKA BAY</span>
+        <button type="button" class="map-node node-umeda is-active" data-cluster="umeda" aria-pressed="true"><strong>우메다</strong><small>梅田</small></button>
+        <button type="button" class="map-node node-castle" data-cluster="castle" aria-pressed="false"><strong>오사카성</strong><small>大阪城</small></button>
+        <button type="button" class="map-node node-minami" data-cluster="minami" aria-pressed="false"><strong>난바</strong><small>なんば · BASE</small></button>
+        <button type="button" class="map-node node-retro" data-cluster="retro" aria-pressed="false"><strong>신세카이</strong><small>新世界</small></button>
+        <button type="button" class="map-node node-bay" data-cluster="bay" aria-pressed="false"><strong>베이</strong><small>海遊館</small></button>
+        <div class="map-legend"><span>얇은 선은 방향도</span><strong>실제 축척 아님</strong></div>
+      </div>
+    </section>
+
+    <section class="live-map-section section-shell" id="live-map-section" aria-labelledby="live-map-title">
+      <div class="section-heading map-heading">
+        <div><p class="eyebrow dark">LIVE ROUTE MAP · 動く地図</p><h2 id="live-map-title">일정을 바꾸면<br>지도도 다시 그려진다</h2></div>
+        <p>선택한 요일의 모든 일정, 숙소, 담은 음식을 실제 좌표에 표시합니다. 선은 길찾기 경로가 아니라 <strong>방문 순서 연결선</strong>입니다.</p>
+      </div>
+      <div class="map-toolbar">
+        <div role="tablist" aria-label="지도 요일" id="map-day-tabs">
+          <button type="button" role="tab" aria-selected="true" data-map-day="sat">토요일</button>
+          <button type="button" role="tab" aria-selected="false" data-map-day="sun">일요일</button>
+          <button type="button" role="tab" aria-selected="false" data-map-day="mon">월요일</button>
+        </div>
+        <button type="button" id="map-mode-toggle">폴백 지도 보기</button>
+        <span id="map-status" role="status">지도 준비 중</span>
+      </div>
+      <div class="live-map-shell">
+        <div id="live-map" aria-label="선택 일정의 OpenStreetMap 지도"></div>
+        <div id="fallback-map" class="fallback-map" aria-label="오프라인 일정 지도" hidden></div>
+        <aside class="map-itinerary"><div><span id="map-day-label">SAT · ARRIVAL</span><strong id="map-count">0곳</strong></div><ol id="map-place-list"></ol><p>지도 타일 © OpenStreetMap contributors</p></aside>
+      </div>
+      <p class="map-support" id="map-support">HTTPS/localhost 권장. file:// 또는 네트워크 실패 시 폴백 지도로 자동 전환됩니다.</p>
+    </section>
+
+    <section class="media-cinema" id="media-cinema" aria-labelledby="media-title">
+      <div class="media-copy">
+        <h2 id="media-title">영상·소리</h2>
+        <p>32초 영상 · 직접 눌러야 재생</p>
+        <div class="media-chapters" id="media-chapters" role="tablist" aria-label="영상 챕터">
+          <button type="button" role="tab" aria-selected="true" data-seek="0" data-media-day="sat"><span>00:00</span>토요일</button>
+          <button type="button" role="tab" aria-selected="false" data-seek="8" data-media-day="sun"><span>00:08</span>아침</button>
+          <button type="button" role="tab" aria-selected="false" data-seek="16" data-media-day="sun"><span>00:16</span>도시</button>
+          <button type="button" role="tab" aria-selected="false" data-seek="24" data-media-day="mon"><span>00:24</span>월요일</button>
+        </div>
+        <button class="ambient-master" id="ambient-toggle" type="button" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><strong>배경음 끔</strong><small>눌러서 재생</small></span></button>
+        <p class="media-status" id="media-status" aria-live="polite">영상·사운드 모두 정지 상태입니다.</p>
+      </div>
+      <div class="video-frame">
+        <video id="city-film" controls playsinline preload="metadata" poster="assets/osaka-film-poster.jpg">
+          <source src="assets/osaka-58-hours.mp4" type="video/mp4">
+          <track kind="captions" srclang="ko" label="한국어" src="assets/osaka-58-hours.ko.vtt" default>
+          이 브라우저는 HTML5 영상을 지원하지 않습니다. 아래 일정과 이미지는 그대로 이용할 수 있습니다.
+        </video>
+        <div class="video-fallback" id="video-fallback" hidden><img src="assets/osaka-film-poster.jpg" alt="오사카 여행 영상 포스터"><strong>영상을 불러오지 못했습니다.</strong></div>
+      </div>
+      <audio id="osaka-ambient" preload="none" loop src="assets/osaka-ambient.m4a"></audio>
+    </section>
+
+    <section class="route-theatre" aria-labelledby="theatre-title">
+      <div class="route-theatre-image" role="img" aria-label="네온이 비치는 도톤보리 강변의 야경"></div>
+      <div class="route-theatre-copy">
+        <p class="eyebrow">THE OSAKA RULE</p>
+        <h2 id="theatre-title">오사카는 ‘무엇’보다<br>‘언제’가 중요하다.</h2>
+        <blockquote>성은 문 열 때, 시장은 오전에, 굿즈는 품절 전에, 도톤보리는 불이 켜진 뒤에.</blockquote>
+        <p>같은 장소도 시간을 바꾸면 전혀 다른 도시가 된다. 이 가이드는 명소를 나열하지 않고 가장 좋은 표정이 나타나는 시간에 배치한다.</p>
+      </div>
+    </section>
+
+    <section class="neighborhoods section-shell" id="neighborhoods" aria-labelledby="neighborhood-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow dark">FOUR FACES · 四つの顔</p>
+          <h2 id="neighborhood-title">동네의 성격부터 읽기</h2>
+        </div>
+        <p>카드를 열면 ‘왜 가는지’와 그 동네에서 시간을 쓰는 방식이 나온다.</p>
+      </div>
+      <div class="district-grid">
+        <article class="district-card district-minami">
+          <div class="district-photo"><img src="assets/dotonbori-night.jpg" alt="밤의 도톤보리 강변"></div>
+          <div class="district-front">
+            <span>01 · MINAMI</span><h3>미나미</h3><p>먹고, 사고, 늦게까지 걷는 도시</p>
+            <button type="button" class="text-button district-reveal">동네의 결 보기</button>
+          </div>
+          <div class="district-secret" hidden>
+            <p>도톤보리의 과장된 간판과 호젠지의 젖은 돌바닥이 몇 분 간격으로 붙어 있다. 화려함보다 이 급격한 대비가 미나미의 진짜 매력이다.</p>
+            <strong>좋은 시간 19:00—22:30</strong>
+            <button type="button" class="district-hide" aria-label="미나미 설명 닫기">설명 닫기 ×</button>
+          </div>
+        </article>
+        <article class="district-card district-castle">
+          <div class="district-photo"><img src="assets/osaka-castle-night.jpg" alt="해질 무렵 조명이 켜진 오사카성"></div>
+          <div class="district-front">
+            <span>02 · CASTLE</span><h3>오사카성</h3><p>권력의 상징보다 거대한 도시 공원</p>
+            <button type="button" class="text-button district-reveal">동네의 결 보기</button>
+          </div>
+          <div class="district-secret" hidden>
+            <p>현재 천수각 내부는 현대식 역사박물관이다. 진짜 감탄은 해자와 거석, 나무 사이로 성이 모습을 바꾸는 접근 과정에서 시작된다.</p>
+            <strong>좋은 시간 08:30—10:30</strong>
+            <button type="button" class="district-hide" aria-label="오사카성 설명 닫기">설명 닫기 ×</button>
+          </div>
+        </article>
+        <article class="district-card district-umeda">
+          <div class="district-photo district-photo-pattern" aria-hidden="true"></div>
+          <div class="district-front">
+            <span>03 · KITA</span><h3>우메다</h3><p>열차와 빌딩이 겹친 수직 도시</p>
+            <button type="button" class="text-button district-reveal">동네의 결 보기</button>
+          </div>
+          <div class="district-secret" hidden>
+            <p>지하에서는 길을 잃고, 173m 위에서는 도시 전체를 되찾는다. 굿즈 쇼핑과 전망대를 붙이면 이동 손실 없이 낮과 밤을 연결할 수 있다.</p>
+            <strong>좋은 시간 13:00—20:00</strong>
+            <button type="button" class="district-hide" aria-label="우메다 설명 닫기">설명 닫기 ×</button>
+          </div>
+        </article>
+        <article class="district-card district-retro">
+          <div class="district-photo"><img src="assets/shinsekai.jpg" alt="밤의 신세카이와 쓰텐카쿠 거리"></div>
+          <div class="district-front">
+            <span>04 · RETRO SOUTH</span><h3>신세카이</h3><p>복고가 아니라 아직 작동하는 생활극장</p>
+            <button type="button" class="text-button district-reveal">동네의 결 보기</button>
+          </div>
+          <div class="district-secret" hidden>
+            <p>낮에는 장기판과 정식집, 밤에는 번쩍이는 쓰텐카쿠와 쿠시카쓰 냄새가 전면에 나온다. 관광지이지만 골목의 속도는 여전히 로컬이다.</p>
+            <strong>좋은 시간 16:00—20:30</strong>
+            <button type="button" class="district-hide" aria-label="신세카이 설명 닫기">설명 닫기 ×</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="food-story" id="food" aria-labelledby="food-title">
+      <img src="assets/osaka-food.png" alt="오사카 철판 카운터의 오코노미야키와 다코야키, 쿠시카쓰와 커피">
+      <div class="food-story-copy">
+        <p class="eyebrow">KONAMON, STEAM & SAUCE</p>
+        <h2 id="food-title">한 끼를 크게 먹지 말고<br>도시를 여러 번 맛보기.</h2>
+        <p>오코노미야키 다음에 다코야키 8알을 혼자 먹으면 그날의 다음 가게가 사라진다. 다코야키는 6알을 나누고, 시장은 2~3개만 맛보고, 카페를 쉼표로 쓴다.</p>
+        <div class="food-passport" id="food-passport">
+          <button type="button" data-food="okonomiyaki"><span>お好み焼き</span><strong>오코노미야키</strong><small>토요일 첫 저녁</small></button>
+          <button type="button" data-food="takoyaki"><span>たこ焼き</span><strong>다코야키</strong><small>6알을 둘이 나눠</small></button>
+          <button type="button" data-food="kushikatsu"><span>串カツ</span><strong>쿠시카쓰</strong><small>신세카이 저녁</small></button>
+          <button type="button" data-food="kissaten"><span>喫茶店</span><strong>킷사텐</strong><small>열기 식히는 45분</small></button>
+        </div>
+        <div class="passport-detail" id="passport-detail" aria-live="polite">
+          <strong>味乃家 / 福太郎</strong><p>예약 확정이 필요하면 맛노야 공식 FastPass, 비행 지연 가능성이 크면 예약 없는 후쿠타로를 쓴다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="goods section-shell" aria-labelledby="goods-title">
+      <div class="goods-copy">
+        <p class="eyebrow dark">TREASURE RADAR · 掘り出し物</p>
+        <h2 id="goods-title">굿즈는 ‘한 층 압축’과<br>‘골목 발굴’을 나눈다.</h2>
+        <div class="goods-choice" role="tablist" aria-label="굿즈 쇼핑 방식">
+          <button type="button" role="tab" aria-selected="true" data-goods="compact">한 층에서 끝내기</button>
+          <button type="button" role="tab" aria-selected="false" data-goods="hunt">중고·절판 발굴</button>
+          <button type="button" role="tab" aria-selected="false" data-goods="local">오사카다운 실용품</button>
+        </div>
+        <div class="goods-result" id="goods-result" aria-live="polite">
+          <span>UMEDA · 10:00—20:00</span><h3>LUCUA SOUTH 13F</h3>
+          <p>Nintendo OSAKA, Pokémon Center, ONE PIECE, Tomica/Plarail, Capcom을 한 층에서 처리한다. 일요일 오후 2시간을 쓰는 가장 효율적인 선택.</p>
+          <a href="https://www.lucua.jp/floormap/southshop.html" target="_blank" rel="noopener">공식 층별 안내 ↗</a>
+        </div>
+      </div>
+      <img src="assets/osaka-goods.png" alt="오사카의 캡슐토이와 오리지널 캐릭터 소품, 천과 여행 지도">
+    </section>
+
+    <section class="field-kit section-shell" id="field-kit" aria-labelledby="field-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow dark">FIELD KIT · 旅の道具</p>
+          <h2 id="field-title">현장에서 정말 쓰는 것</h2>
+        </div>
+        <p>출국 역산, 줄 포기 기준, 짐 보관, 짧은 일본어를 한곳에 모았다.</p>
+      </div>
+
+      <div class="kit-grid">
+        <article class="departure-card">
+          <span class="card-index">01</span>
+          <h3>KIX 출국 역산기</h3>
+          <p>라피트 승차 시각을 ‘감’이 아니라 비행기에서 거꾸로 계산한다.</p>
+          <div class="departure-form">
+            <label>비행기 출발
+              <input id="flight-time" type="time" value="16:00">
+            </label>
+            <label>터미널
+              <select id="terminal"><option value="1">T1</option><option value="2">T2 · 셔틀 추가</option></select>
+            </label>
+            <label class="check-row"><input id="checked-bag" type="checkbox" checked> 위탁수하물 있음</label>
+          </div>
+          <div class="departure-result" id="departure-result" aria-live="polite">
+            <span>난카이 난바 개찰 목표</span><strong>12:50—13:10</strong><p>KIX에는 약 14:00 도착. 정확한 열차와 터미널은 출발 전 재확인.</p>
+          </div>
+        </article>
+
+        <article class="kit-card">
+          <span class="card-index">02</span><h3>줄이 길 때의 규칙</h3>
+          <ul class="rule-list">
+            <li><strong>30분</strong><span>식당 대기 상한. 넘으면 백업으로.</span></li>
+            <li><strong>15분</strong><span>맛노야 FastPass 지각 시 무효 가능.</span></li>
+            <li><strong>75분 전</strong><span>전망대는 일몰보다 먼저 입장.</span></li>
+          </ul>
+        </article>
+
+        <article class="kit-card phrase-card">
+          <span class="card-index">03</span><h3>짧고 쓸모 있는 말</h3>
+          <button type="button" class="phrase" data-copy="予約していません。三人です。"><span>予約していません。三人です。</span><small>예약 안 했어요. 세 명입니다.</small></button>
+          <button type="button" class="phrase" data-copy="これは持ち帰れますか？"><span>これは持ち帰れますか？</span><small>이거 포장할 수 있나요?</small></button>
+          <button type="button" class="phrase" data-copy="いちばん人気はどれですか？"><span>いちばん人気はどれですか？</span><small>제일 인기 있는 건 무엇인가요?</small></button>
+          <p class="copy-status" id="copy-status" aria-live="polite">문장을 누르면 복사됩니다.</p>
+        </article>
+
+        <article class="kit-card checklist-card">
+          <span class="card-index">04</span><h3>출발 전 7개</h3>
+          <label><input type="checkbox" data-check="vjw"> Visit Japan Web 3명 각자 QR</label>
+          <label><input type="checkbox" data-check="qr"> 라피트 QR 화면 캡처</label>
+          <label><input type="checkbox" data-check="ic"> ICOCA 잔액 확인</label>
+          <label><input type="checkbox" data-check="cash"> 작은 가게용 현금</label>
+          <label><input type="checkbox" data-check="heat"> 양산·물·손수건</label>
+          <label><input type="checkbox" data-check="bags"> 면세품 수하물 공간</label>
+          <label><input type="checkbox" data-check="terminal"> KIX 터미널 재확인</label>
+        </article>
+      </div>
+    </section>
+
+    <section class="truth-strip" aria-label="가이드의 현실적인 원칙">
+      <p>「全部見る」보다 「ちゃんと味わう」</p>
+      <strong>전부 보는 것보다, 제대로 맛보는 여행.</strong>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><strong>오사카 여행</strong><p>2026년 9월 5–7일 · 성인 3명</p></div>
+    <div class="footer-links">
+      <a href="https://osaka-info.jp/en/information/area-map-download/" target="_blank" rel="noopener">공식 오사카 지도</a>
+      <a href="https://www.kansai-airport.or.jp/en/access/train" target="_blank" rel="noopener">KIX 교통</a>
+      <button type="button" id="credits-button">이미지·정보 출처</button>
+    </div>
+  </footer>
+
+  <dialog class="place-dialog" id="place-dialog">
+    <button class="dialog-close" type="button" aria-label="닫기">×</button>
+    <div id="place-dialog-content"></div>
+  </dialog>
+
+  <dialog class="saved-dialog" id="saved-dialog">
+    <button class="dialog-close" type="button" aria-label="닫기">×</button>
+    <h2>저장한 장소</h2>
+    <div id="saved-list"></div>
+  </dialog>
+
+  <dialog class="custom-entry-dialog-v10" id="custom-entry-dialog-v10">
+    <button class="dialog-close" type="button" aria-label="닫기">×</button>
+    <div class="custom-entry-head-v10">
+      <h2>직접 추가</h2>
+      <span>추가한 항목은 이 브라우저에만 저장됩니다.</span>
+    </div>
+    <div class="custom-entry-layout-v10">
+      <form id="custom-entry-form-v10">
+        <label>종류
+          <select id="custom-kind-v10" name="kind">
+            <option value="place">일정 장소</option>
+            <option value="restaurant">음식점</option>
+          </select>
+        </label>
+        <label>이름 <input id="custom-name-v10" name="name" maxlength="100" required placeholder="예: 오사카 시립 동양도자미술관"></label>
+        <label>지역·주소 <input id="custom-area-v10" name="area" maxlength="100" placeholder="예: 나카노시마·요도야바시"></label>
+        <label>설명·메뉴·객실
+          <textarea id="custom-detail-v10" name="detail" maxlength="240" rows="3" placeholder="왜 가는지, 대표 메뉴나 객실 조건"></textarea>
+        </label>
+        <div class="custom-entry-pair-v10">
+          <label>예상 체류시간 <span><input id="custom-duration-v10" name="duration" type="number" min="15" max="480" step="5" value="60">분</span></label>
+          <label>예상 가격 <span><input id="custom-price-v10" name="price" type="number" min="0" max="100000000" step="100" value="0"><b id="custom-price-unit-v10">¥</b></span></label>
+        </div>
+        <label>Google 지도·공식·예약 링크 <input id="custom-url-v10" name="url" type="url" maxlength="1200" placeholder="https://maps.google.com/... 또는 공식 링크"></label>
+        <div class="custom-google-link-v23"><a id="custom-google-search-v23" href="https://www.google.com/maps/search/?api=1&amp;query=Osaka" target="_blank" rel="noopener">Google 지도에서 장소 찾기 ↗</a><small>지도에서 찾은 장소의 공유 링크를 위 칸에 붙여넣으면 내 목록에 저장됩니다.</small></div>
+        <label id="custom-day-row-v10">등록 후 일정에도 추가
+          <select id="custom-day-v10" name="day"><option value="">가고 싶은 곳에 저장</option><option value="sat">토요일</option><option value="sun">일요일</option><option value="mon">월요일</option></select>
+        </label>
+        <label>중요도
+          <select id="custom-priority-v25" name="priority"><option value="optional">선택</option><option value="must">필수</option></select>
+        </label>
+        <fieldset class="custom-location-v10">
+          <legend>지도 위치</legend>
+          <p id="custom-location-status-v10">지도를 눌러 위치를 지정하세요. 위치 없이도 등록할 수 있습니다.</p>
+          <div id="custom-location-map-v10" aria-label="직접 추가 장소 위치 선택 지도"></div>
+          <button type="button" id="custom-location-clear-v10">위치 지우기</button>
+        </fieldset>
+        <button class="custom-submit-v10" type="submit">내 목록에 저장</button>
+      </form>
+      <section class="custom-entry-list-v10" aria-labelledby="custom-entry-list-title-v10">
+        <h3 id="custom-entry-list-title-v10">내가 추가한 항목</h3>
+        <div id="custom-entry-list-v10"></div>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog class="field-dialog" id="field-dialog">
+    <button class="dialog-close" type="button" aria-label="닫기">×</button>
+    <div class="field-dialog-head">
+      <h2>현장 모드</h2>
+      <div class="field-day-switch" role="tablist" aria-label="현장 모드 요일">
+        <button type="button" role="tab" aria-selected="true" data-field-day="sat">토</button>
+        <button type="button" role="tab" aria-selected="false" data-field-day="sun">일</button>
+        <button type="button" role="tab" aria-selected="false" data-field-day="mon">월</button>
+      </div>
+      <div class="field-progress-copy"><span id="field-progress-label">0 / 6 완료</span><strong id="field-progress-percent">0%</strong></div>
+      <div class="field-progress" role="progressbar" aria-label="오늘 일정 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="field-progress-bar"></span></div>
+    </div>
+    <div class="field-current" id="field-current" aria-live="polite"></div>
+    <div class="field-navigation">
+      <button type="button" id="field-prev">← 이전</button>
+      <button type="button" id="field-done">이 장소 완료</button>
+      <button type="button" id="field-next">다음 →</button>
+    </div>
+    <ol class="field-mini-route" id="field-mini-route" aria-label="오늘의 전체 순서"></ol>
+  </dialog>
+
+  <dialog class="credits-dialog" id="credits-dialog">
+    <button class="dialog-close" type="button" aria-label="닫기">×</button>
+    <p class="eyebrow dark">CREDITS & SOURCES</p><h2>이미지와 정보 출처</h2>
+    <div class="credits-copy">
+      <p>장소가 확인된 사진만 카드에 표시합니다. 정확한 장소 사진을 자유 이용 조건으로 확인하지 못한 가게·상점은 범용 음식 사진으로 대체하지 않고, 카드에서 Google 지도 사진을 바로 열도록 표시했습니다.</p>
+      <ul>
+        <li>도톤보리 야경 — Cristian O. Arone, <a href="https://commons.wikimedia.org/wiki/File:Dotonbori_at_night.JPG" target="_blank" rel="noopener">CC BY-SA 3.0</a></li>
+        <li>오사카성 야경 — Manishprabhune, <a href="https://commons.wikimedia.org/wiki/File:Osaka_Castle_-_Japan.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></li>
+        <li>난바 야사카 신사 — Immanuelle, <a href="https://commons.wikimedia.org/wiki/File:Namba-Yasaka-Shrine-entrance_with_the_lions_head_theater_visible_in_the_background.jpg" target="_blank" rel="noopener">CC BY 4.0</a></li>
+        <li>우메다 스카이빌딩 — Chris 73, <a href="https://commons.wikimedia.org/wiki/File:Umeda_Sky_building_01.jpg" target="_blank" rel="noopener">CC BY-SA 3.0</a></li>
+        <li>신세카이·쓰텐카쿠 — Sakai Yayoi, <a href="https://commons.wikimedia.org/wiki/File:Shinsekai_and_Tsutenkaku_Tower.jpg" target="_blank" rel="noopener">CC0</a></li>
+      </ul>
+      <p>장소별 영업시간·요금·휴무·지도와 공식 사이트는 각 상세 카드에서 확인할 수 있습니다. 실제 방문 전 공식 페이지의 날짜별 공지를 우선하세요.</p>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <nav class="mobile-dock" aria-label="모바일 빠른 메뉴">
+    <button type="button" data-today-nav="today-v41"><span aria-hidden="true">◎</span>지금</button>
+    <button type="button" data-today-nav="food-map-v41"><span aria-hidden="true">⌖</span>밥 지도</button>
+    <button type="button" data-today-nav="itinerary-v11"><span aria-hidden="true">旅</span>일정 <small id="dock-saved-count" hidden>0</small></button>
+    <button type="button" data-today-nav="hotel-search-v3"><span aria-hidden="true">⌂</span>숙소</button>
+  </nav>
+  <script src="experience-data.js?v=40"></script>
+  <script src="app.js"></script>
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="experience.js?v=40"></script>
+  <script src="osaka-expansion-v4.js"></script>
+  <script src="osaka-expansion-v5.js"></script>
+  <script src="osaka-chance-expansion-v7.js"></script>
+  <script src="osaka-hotels-live-v6.js?v=40"></script>
+  <script src="osaka-photo-manifest-v13.js"></script>
+  <script src="osaka-vnext-data.js?v=40"></script>
+  <script src="vnext-core.js?v=40"></script>
+  <script src="planner-v3.js?v=42"></script>
+  <script src="vnext.js?v=40"></script>
+  <script src="today-core.js?v=43"></script>
+  <script src="today.js?v=43"></script>
+</body>
+</html>

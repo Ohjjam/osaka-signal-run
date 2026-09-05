@@ -1,0 +1,11 @@
+{
+  "name": "오사카 여행",
+  "short_name": "오사카 여행",
+  "description": "각자의 기기에 저장하는 2026년 9월 5~7일 오사카 여행 운영 가이드",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3ecdf",
+  "theme_color": "#112c40"
+}

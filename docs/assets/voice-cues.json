@@ -1,0 +1,65 @@
+{
+  "engine": "VOICEVOX Nemo",
+  "credit": "VOICEVOX: Nemo",
+  "voice": "女声2",
+  "speaker": 10007,
+  "audibleTest": false,
+  "cues": [
+    {
+      "index": 0,
+      "file": "voice-00.ogg",
+      "text": "城壁を破って、都市信号へ。",
+      "speaker": 10007,
+      "duration": 2.784
+    },
+    {
+      "index": 1,
+      "file": "voice-01.ogg",
+      "text": "大阪の記号が、前方を横切る。",
+      "speaker": 10007,
+      "duration": 2.827
+    },
+    {
+      "index": 2,
+      "file": "voice-02.ogg",
+      "text": "水面すれすれ、道頓堀へ。",
+      "speaker": 10007,
+      "duration": 2.72
+    },
+    {
+      "index": 3,
+      "file": "voice-03.ogg",
+      "text": "光の塔を、垂直に駆け上がる。",
+      "speaker": 10007,
+      "duration": 2.741
+    },
+    {
+      "index": 4,
+      "file": "voice-04.ogg",
+      "text": "深海信号。巨大影、接近。",
+      "speaker": 10007,
+      "duration": 3.563
+    },
+    {
+      "index": 5,
+      "file": "voice-05.ogg",
+      "text": "光の線路で、空中庭園へ。",
+      "speaker": 10007,
+      "duration": 2.731
+    },
+    {
+      "index": 6,
+      "file": "voice-06.ogg",
+      "text": "狙った味を、信号に保存して。",
+      "speaker": 10007,
+      "duration": 2.773
+    },
+    {
+      "index": 7,
+      "file": "voice-07.ogg",
+      "text": "全ルート接続。好きな場所へ。",
+      "speaker": 10007,
+      "duration": 2.677
+    }
+  ]
+}

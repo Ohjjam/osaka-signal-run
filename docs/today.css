@@ -1,0 +1,132 @@
+/* Day-of tools share the original guide palette. Layout only lives here. */
+.now-panel { color:var(--ink); background:transparent; }
+.now-panel[hidden] { display:none!important; }
+.now-panel h2,.now-panel h3,.now-panel p { margin:0; }
+.now-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:22px; }
+.now-heading > button { flex-shrink:0; }
+.now-panel h3 { font:650 22px/1.4 var(--sans); letter-spacing:-.025em; color:var(--indigo); }
+.now-clock { text-align:right; color:var(--indigo); font:500 28px/1.1 var(--sans); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.now-clock small { display:block; margin-top:5px; color:var(--muted); font:400 12px/1.5 var(--sans); }
+.now-kicker,.now-badge { display:block; margin-bottom:8px; color:var(--vermilion); font:600 12px/1.5 var(--sans); letter-spacing:0; }
+.now-note,.now-status { color:var(--muted); font:400 12px/1.6 var(--sans); }
+.now-note { margin-top:10px!important; }
+.now-status { min-height:20px; margin-top:6px!important; }
+.now-panel label { display:grid; gap:6px; font-size:14px; color:var(--muted); }
+.now-panel select,.now-panel input { width:100%; min-width:0; padding:10px 12px; border:1px solid var(--line); border-radius:var(--guide-radius); color:var(--ink); background:var(--cream); }
+.now-panel button,.now-panel a.now-btn { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:44px; padding:10px 14px; border:1px solid var(--line); border-radius:var(--guide-radius); color:var(--indigo); background:var(--cream); text-decoration:none; font:600 14px/1.4 var(--sans); cursor:pointer; touch-action:manipulation; }
+.now-panel button:hover,.now-panel a.now-btn:hover { border-color:var(--indigo); background:var(--paper-deep); }
+.now-panel .now-primary { color:var(--cream); background:var(--vermilion); border-color:var(--vermilion); }
+.now-panel .now-primary:hover { color:var(--cream); background:var(--vermilion-dark); border-color:var(--vermilion-dark); }
+.now-panel .now-quiet { background:transparent; }
+.now-panel button:disabled { opacity:.5; cursor:wait; }
+.now-loc { display:flex; flex-wrap:wrap; align-items:end; gap:8px; margin-bottom:6px; }
+.now-loc label { flex:1; min-width:160px; }
+.now-moods { display:flex; flex-wrap:wrap; gap:0; margin:18px 0 22px; padding:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.now-moods button { flex:1 1 auto; border:0; border-radius:0; background:transparent; font-size:14px; padding:10px 12px; }
+.now-moods button[aria-pressed="true"] { color:var(--vermilion); background:transparent; box-shadow:inset 0 -2px var(--vermilion); }
+.now-moods button[data-now-action="rain"] { flex:0 0 auto; border-left:1px solid var(--line); }
+.now-context { padding:10px 14px; margin-bottom:18px; border-left:3px solid var(--vermilion); background:var(--cream); color:var(--ink); font-size:14px; line-height:1.65; }
+.now-context:empty { display:none; }
+.now-feature { position:relative; display:grid; grid-template-columns:minmax(0,1fr) 220px; border:1px solid var(--line); border-left:4px solid var(--vermilion); border-radius:var(--guide-radius); background:var(--cream); overflow:hidden; }
+.now-feature-copy { padding:clamp(20px,3vw,30px); min-width:0; }
+.now-feature h3 { max-width:700px; font:600 clamp(24px,2.7vw,34px)/1.3 var(--serif); letter-spacing:-.035em; }
+.now-feature .now-desc { max-width:620px; margin-top:12px; color:var(--muted); font-size:16px; line-height:1.65; overflow-wrap:anywhere; }
+.now-feature-photo { margin:0; min-width:0; align-self:stretch; border-left:1px solid var(--line); }
+.now-feature-photo img { width:100%; height:100%; min-height:220px; object-fit:cover; }
+.now-feature-photo figcaption { position:absolute; right:8px; bottom:8px; padding:2px 6px; color:var(--cream); background:var(--indigo); font-size:12px; }
+.now-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+.now-subtitle { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:28px 0 10px; }
+.now-subtitle h3 { font-size:16px; }
+.now-alts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.now-card { min-width:0; padding:18px 0; border-top:1px solid var(--line); }
+.now-card h3 { font-size:18px; }
+.now-card p { margin-top:6px; color:var(--muted); font-size:14px; line-height:1.6; overflow-wrap:anywhere; }
+.now-card .now-kicker { color:var(--vermilion); font-size:12px; }
+.now-card .now-actions { margin-top:12px; }
+.now-tools { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:28px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.now-tools button { border:0; border-right:1px solid var(--line); border-radius:0; background:transparent; padding:16px 8px; }
+.now-tools button:last-child { border-right:0; }
+.now-tools button span { display:none; }
+.now-divider { margin-top:22px; padding-top:12px; border-top:1px solid var(--line); }
+.now-help summary { display:flex; align-items:center; min-height:44px; color:var(--muted); font-size:14px; cursor:pointer; }
+.now-help summary::before { content:'+'; display:inline-block; width:20px; color:var(--vermilion); }
+.now-help[open] summary::before { content:'−'; }
+.now-help p { max-width:760px; margin:8px 0; color:var(--muted); font-size:14px; line-height:1.7; }
+.now-toast { position:fixed; bottom:84px; left:50%; transform:translateX(-50%); max-width:calc(100% - 28px); padding:12px 18px; border-left:3px solid var(--vermilion); border-radius:3px; color:var(--cream); background:var(--indigo); font-size:14px; line-height:1.5; z-index:10010; pointer-events:none; }
+.now-empty { padding:24px; border:1px dashed var(--line); color:var(--muted); font-size:16px; line-height:1.7; }
+.food-controls { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0 8px; }
+.food-controls .food-search { grid-column:1/-1; }
+.food-advanced { margin-bottom:10px; }
+.food-check { display:flex!important; align-items:center; gap:8px!important; }
+.food-check input { width:18px; height:18px; min-height:18px; accent-color:var(--vermilion); }
+.food-map-toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
+.food-map-layout { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr); gap:24px; align-items:start; margin-top:8px; }
+#food-map-canvas { height:540px; border:1px solid var(--line); border-radius:var(--guide-radius); background:var(--paper-deep); z-index:1; isolation:isolate; }
+.food-map-side { max-height:540px; padding-right:6px; overflow-y:auto; overscroll-behavior:contain; }
+.food-map-side .now-card { margin:0; padding:18px 12px; border-bottom:1px solid var(--line); border-top:0; }
+.food-map-side .now-card.is-selected { border-left:3px solid var(--vermilion); background:var(--cream); }
+.food-map-side .now-badge { margin-bottom:6px; }
+.food-pin { border:2px solid var(--cream); border-radius:50%; color:var(--cream); background:var(--indigo); font:650 12px/28px var(--sans); text-align:center; box-shadow:0 2px 5px #152d4233; }
+.food-pin.is-selected { background:var(--vermilion); z-index:10!important; }
+.food-origin { border:3px solid var(--cream); border-radius:50%; background:var(--vermilion); box-shadow:0 0 0 5px #bf2f2520; }
+.now-panel .leaflet-control-zoom a { color:var(--indigo); background:var(--cream); }
+.now-panel .leaflet-popup-content-wrapper { border-radius:3px; color:var(--ink); background:var(--cream); }
+.now-panel .leaflet-popup-tip { background:var(--cream); }
+.now-panel .leaflet-popup-close-button { color:var(--indigo); }
+.food-popup { min-width:180px; font-size:14px; line-height:1.6; }
+.food-popup button { margin-top:10px; }
+.food-popup p { margin-top:8px; }
+.food-popup-menu { padding:9px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:16px; }
+.food-rating { color:var(--indigo); font-size:14px; }
+.food-rating a.now-btn { display:inline; min-height:0; padding:0; border:0; border-radius:0; color:var(--indigo); background:transparent; font-size:14px; line-height:1.6; text-decoration:underline; text-underline-offset:3px; }
+.food-rating small { display:block; margin-top:4px; font-size:12px; color:var(--muted); }
+.food-map-view-tools { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; padding:10px 0; }
+.food-map-view-tools label { font-size:14px; }
+.leaflet-tooltip.food-map-label { box-sizing:border-box; width:170px; height:74px; padding:6px 9px; border:1px solid var(--line); border-radius:3px; color:var(--indigo); background:var(--cream); box-shadow:0 2px 5px #152d421a; white-space:normal; pointer-events:none; }
+.food-map-label strong,.food-map-label span,.food-map-label small { display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; line-height:20px; }
+.food-map-label strong { font-size:14px; font-weight:700; }
+.food-map-label span { font-size:12px; color:var(--muted); }
+.food-map-label small { font-size:12px; color:var(--vermilion); }
+.food-map-label.leaflet-tooltip-right::before { border-right-color:var(--cream); }
+.food-map-label.leaflet-tooltip-left::before { border-left-color:var(--cream); }
+body.food-map-expanded { overflow:hidden; }
+.food-map-dialog { width:100%; max-width:none; height:100dvh; max-height:100dvh; inset:0; margin:0; padding:16px max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left)); border:0; color:var(--ink); background:var(--paper); }
+.food-map-dialog[open] { display:flex; flex-direction:column; }
+.food-map-dialog::backdrop { background:var(--paper); }
+.food-map-dialog > header { display:flex; align-items:center; justify-content:space-between; gap:10px; flex:0 0 auto; }
+.food-map-dialog > header h2 { font:600 22px/1.3 var(--serif); color:var(--indigo); }
+.food-map-dialog > header span { font-size:12px; color:var(--muted); }
+#food-map-dialog-content { flex:1; min-height:0; }
+.food-map-dialog #food-map-frame { display:flex; flex-direction:column; height:100%; min-height:0; }
+.food-map-dialog #food-map-canvas { flex:1; min-height:0; height:auto; }
+.food-map-dialog #food-map-note { flex:0 0 auto; margin-top:6px!important; }
+@media(max-width:760px) {
+ .now-heading { gap:14px; margin-bottom:20px; }
+ .now-clock { font-size:25px; }
+ .now-loc label { min-width:160px; }
+ .now-loc > [data-now-action="refresh"] { display:none; }
+ .now-panel select,.now-panel input { font-size:16px; }
+ .now-moods { margin:16px 0 20px; }
+ .now-moods button { flex:1 1 20%; padding:10px 4px; white-space:nowrap; }
+ .now-moods button[data-now-action="rain"] { flex:1 1 20%; }
+ .now-feature { display:block; }
+ .now-feature-copy { padding:20px; }
+ .now-feature h3 { font-size:26px; }
+ .now-feature .now-desc { font-size:16px; line-height:1.55; }
+ .now-feature-photo { display:none; }
+ .now-actions > * { flex:1 1 auto; }
+ .now-alts { grid-template-columns:1fr; gap:0; }
+ .now-tools { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .now-tools button { border-bottom:1px solid var(--line); }
+ .now-tools button:nth-child(2) { border-right:0; }
+ .now-tools button:nth-child(n+3) { border-bottom:0; }
+ .food-map-layout { grid-template-columns:1fr; gap:18px; }
+ #food-map-canvas { height:350px; }
+ .food-map-side { max-height:none; padding-right:0; overflow:visible; }
+ .food-map-side .now-card { padding:18px 4px; }
+ .food-map-toolbar .now-actions { width:100%; gap:6px; }
+ .food-map-toolbar button { padding:10px 8px; }
+ #food-map-v41 .now-heading { align-items:center; }
+ #food-map-v41 .now-heading > button { padding:10px; }
+}
+@media(prefers-reduced-motion:reduce) { .now-panel * { scroll-behavior:auto!important; transition:none!important; } }
