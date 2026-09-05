@@ -21,10 +21,15 @@ const root=path.join(__dirname,'docs');
    }
    Object.assign(P.state,saved);return out;
   });
-  console.log(JSON.stringify(audit,null,2));assert.equal(audit.length,9);
+  console.log(JSON.stringify(audit,null,2));assert.equal(audit.length,18);
   for(const x of audit){assert.deepEqual(x.unknown,[]);assert.deepEqual(x.warnings,[],JSON.stringify(x));if(x.day==='sun')assert.ok(x.aquarium);if(x.day==='mon')assert.ok(x.end<=780);if(x.day==='sat')assert.equal(x.first.time,'17:00');}
   await page.evaluate(()=>OsakaPlannerV3.showGuidePanel('itinerary-v11'));
-  assert.equal(await page.locator('[data-curated-day]').count(),3);assert.equal(await page.locator('[data-curated-option]').count(),3);
+  assert.equal(await page.locator('[data-curated-day]').count(),3);assert.equal(await page.locator('[data-curated-option]').count(),6);
+  assert.ok((await page.locator('.curated-order').allTextContents()).some(t=>t.includes('아지타마')));
+  assert.ok((await page.locator('.curated-stop-why').allTextContents()).some(t=>t.includes('돈코쓰')));
+  await page.locator('[data-curated-day="sun"]').click();await page.locator('[data-curated-option="3"]').click();
+  assert.match(await page.locator('.curated-ticket').innerText(),/11:30/);
+  assert.match(await page.locator('.curated-timeline').innerText(),/내부 박물관 입장은 제외/);
   const satBefore=await page.evaluate(()=>JSON.stringify(OsakaPlannerV3.state.plans.sat));
   await page.locator('[data-curated-day="sun"]').click();await page.locator('[data-curated-option="1"]').click();await page.locator('[data-curated-apply]').click();
   await page.waitForFunction(()=>!OsakaCurated45.busy&&OsakaPlannerV3.state.plans.sun.includes('sky'));
@@ -51,6 +56,6 @@ const root=path.join(__dirname,'docs');
   assert.deepEqual(await page.evaluate(()=>OsakaPlannerV3.state.plans.sat),['yasaka']);
   assert.ok(await page.evaluate(()=>OsakaPlannerV3.state.plans.sun.includes('sky')));
   assert.deepEqual(errors,[]);
-  console.log('PASS: nine schedules, aquarium all Sundays, Monday deadline, day-only and all-day apply, undo, map sync, user edit preserved, mobile fits, no JS errors.');
+  console.log('PASS: 18 schedules, rich menu/reasons, per-route aquarium time, all Sundays mandatory, Monday deadline, apply/undo/map/reload, mobile fits, no JS errors.');
  } finally {if(browser)await browser.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});
