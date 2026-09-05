@@ -71,7 +71,11 @@
     const order=detail.order||item.menu||'';
     const url=detail.source||item.official||item.menuUrl;
     const map=item.map||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((item.jp||item.name||'')+' Osaka');
-    return `<li><time>${s.time}</time><div><strong>${esc(item.name||s.id)}</strong>${s.slot?`<b>${meals[s.slot]}</b>`:''}<small>${s.duration}분${s.id==='kaiyukan'?' · 필수 관람':''}${i<route.stops.length-1?` · 다음 이동 약 ${s.leg}분`:''}</small><p class="curated-stop-why"><em>${logistics?'이 순서인 이유':'어떤 곳?'}</em>${esc(why)}</p>${order?`<p class="curated-order"><em>${item.category==='food'?'추천 주문':'꼭 볼 것'}</em>${esc(order)}</p>`:''}${s.note?`<p class="curated-stop-tip">${esc(s.note)}</p>`:''}<details class="curated-stop-more"><summary>현장 팁·지도${url?'·출처':''}</summary><p>${esc(detail.tip||item.caution||'체류시간에는 예상 대기가 포함됩니다. 줄이 길면 뒤의 선택 일정을 줄이고, 운영 여부는 방문 전에 확인하세요.')}</p><a href="${esc(map)}" target="_blank" rel="noopener">장소 지도 ↗</a>${url?` · <a href="${esc(url)}" target="_blank" rel="noopener">메뉴·장소 정보 ↗</a>`:''}</details></div></li>`;
+    const next=route.stops[i+1],leg=next?window.OsakaLegs48?.describe(s.id,next.id,s.leg):null;
+    const destination=next?P.allItems.get(next.id):null;
+    const directions=next?'https://www.google.com/maps/dir/?'+new URLSearchParams({api:'1',origin:item.coords?.join(',')||item.name,destination:destination?.coords?.join(',')||destination?.name||next.id,travelmode:leg?.travelmode||'transit'}):'';
+    const transport=leg?`<aside class="curated-leg48"><strong>↓ ${esc(leg.mode)} · 약 ${s.leg}분</strong><p>${esc(leg.route)}</p><a href="${esc(directions)}" target="_blank" rel="noopener">${leg.travelmode==='walking'?'도보':'대중교통'} 길찾기 ↗</a></aside>`:'';
+    return `<li><time>${s.time}</time><div><strong>${esc(item.name||s.id)}</strong>${s.slot?`<b>${meals[s.slot]}</b>`:''}<small>${s.duration}분${s.id==='kaiyukan'?' · 필수 관람':''}${i<route.stops.length-1?` · 다음 이동 약 ${s.leg}분`:''}</small><p class="curated-stop-why"><em>${logistics?'이 순서인 이유':'어떤 곳?'}</em>${esc(why)}</p>${order?`<p class="curated-order"><em>${item.category==='food'?'추천 주문':'꼭 볼 것'}</em>${esc(order)}</p>`:''}${s.note?`<p class="curated-stop-tip">${esc(s.note)}</p>`:''}<details class="curated-stop-more"><summary>현장 팁·지도${url?'·출처':''}</summary><p>${esc(detail.tip||item.caution||'체류시간에는 예상 대기가 포함됩니다. 줄이 길면 뒤의 선택 일정을 줄이고, 운영 여부는 방문 전에 확인하세요.')}</p><a href="${esc(map)}" target="_blank" rel="noopener">장소 지도 ↗</a>${url?` · <a href="${esc(url)}" target="_blank" rel="noopener">메뉴·장소 정보 ↗</a>`:''}</details>${transport}</div></li>`;
   }
   function render() {
     const root=document.getElementById('curated45'); if(!root)return;
@@ -86,6 +90,7 @@
       ${cover?.image?`<figure class="curated-cover"><img src="${esc(cover.image)}" alt="${esc(cover.name)} 참고 이미지" loading="lazy"><figcaption>${esc(route.label)} · 장소 분위기 참고</figcaption></figure>`:''}
       <p class="curated-why">${esc(route.why)}</p>
       ${aqua?`<p class="curated-ticket">필수 · 가이유칸 ${aqua.time} 입장 목표 / 아직 예매된 일정이 아닙니다. <a href="https://www.kaiyukan.com/info/ticket/kaiyukan/" target="_blank" rel="noopener">공식 시간 지정권 확인 ↗</a></p>`:''}
+      <p class="curated-footnote">구간별 추천 이동수단 · 현재 코스는 도보·지하철 중심으로 버스 탑승 없음. 시간은 보행·환승·대기 여유를 포함한 계획값이며 실제 배차·운휴는 길찾기에서 확인.</p>
       <ol class="curated-timeline">${route.stops.map((s,i)=>stopMarkup(s,i,route)).join('')}</ol>
       <p class="curated-note">${esc(route.note)}</p><p class="curated-footnote">이동·대기 포함 예상 일정 · 음식점은 현장에서 교체 가능 · 운영·좌석 상황은 방문 전 확인</p>
       <footer><button type="button" class="curated-primary" data-curated-apply ${busy?'disabled':''}>${applied?'적용 중 · 다시 적용':labels[day]+' 일정에 적용'}</button><button type="button" data-curated-map>저장한 일정 지도 ↓</button>${localStorage.getItem(BACKUP)?'<button type="button" data-curated-undo>직전 적용 되돌리기</button>':''}</footer>

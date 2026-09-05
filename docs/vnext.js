@@ -334,11 +334,13 @@
     const minutes = from.id && to.id && lookupItem(from.id) && lookupItem(to.id)
       ? savedMinutes || Number(Planner.suggestedTransit(from.id, to.id)?.minutes) || Math.round(8 + distance * 4.2)
       : Math.round(8 + distance * 4.2);
+    const detail = window.OsakaLegs48?.describe(from.id || (from.kind === 'hotel' ? 'hotel-anchor48' : ''), to.id, minutes);
+    if (detail) return {distance, ...detail};
     const mode = distance <= 1.2 ? '도보' : distance <= 4.5 ? '지하철·도보' : '전철';
     return { distance, minutes: Math.max(8, Math.min(75, minutes)), mode };
   }
   function fixedLeg(from, to, override) {
-    return { distance: Core.distanceKm(from.coords, to.coords), ...override };
+    return { distance: Core.distanceKm(from.coords, to.coords), ...(to.kind === 'airport' ? window.OsakaLegs48?.describe(from.id, 'airport48', override.minutes) : {}), ...override };
   }
   function playbackMetric(day) {
     return autoRoutePreview ? autoRoutePreview.metrics[day] : schedule(day);
@@ -368,7 +370,7 @@
     }));
   }
   function legDirectionsUrl(from, to) {
-    const params = new URLSearchParams({ api: '1', origin: from.coords.join(','), destination: to.coords.join(','), travelmode: 'transit' });
+    const params = new URLSearchParams({ api: '1', origin: from.coords.join(','), destination: to.coords.join(','), travelmode: to.leg?.travelmode || 'transit' });
     return `https://www.google.com/maps/dir/?${params}`;
   }
   function autoRouteIcon(point, index) {
@@ -402,7 +404,7 @@
     }
     if (status) status.textContent = moving ? `LEG ${step + 1}/${points.length - 1} · MOVING` : `LEG ${step + 1}/${points.length - 1} · READY`;
     if (title) title.textContent = `${from.name} → ${to.name}`;
-    if (detail) detail.textContent = `${to.leg.mode} 약 ${to.leg.minutes}분 · 직선 ${to.leg.distance.toFixed(1)}km${to.mealLabel ? ` · ${to.mealLabel} ${to.time}` : ` · ${to.time} 도착`}`;
+    if (detail) detail.textContent = `${to.leg.mode} 약 ${to.leg.minutes}분 · ${to.time} 도착 · ${to.leg.route || '실제 경로는 길찾기에서 확인'}`;
     if (link) { link.hidden = false; link.href = legDirectionsUrl(from, to); }
   }
   function renderAutoRouteLegs() {
