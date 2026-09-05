@@ -456,8 +456,9 @@
     goods: { group: 'all', page: 1, pageSize: 6 },
     nightlife: { group: 'all', page: 1, pageSize: 6 }
   };
-  const guidePanels = ['today-v41', 'food-map-v41', 'prep-v3', 'hotel-search-v3', 'restaurant-search-v3', 'itinerary-v11', 'catalog-attractions-v3', 'catalog-goods-v3', 'catalog-nightlife-v3', 'travel-tips-v12'];
+  const guidePanels = ['today-v41', 'food-map-v41', 'move-v44', 'hotel-search-v3', 'itinerary-v11', 'catalog-attractions-v3', 'restaurant-search-v3', 'travel-tips-v12', 'catalog-goods-v3', 'catalog-nightlife-v3'];
   const legacyGuidePanels = {
+    'prep-v3': 'today-v41',
     'day-sat-v3': 'itinerary-v11',
     'day-sun-v3': 'itinerary-v11',
     'day-mon-v3': 'itinerary-v11',

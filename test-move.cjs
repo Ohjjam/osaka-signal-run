@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict'),C=require('./docs/move-core.js'),T=require('./docs/today-core.js');
+const hotel={id:'booked-livin-nanbaminami',name:'LIVIN',address:'大阪市浪速区恵美須本町1-8-13',coords:[34.6544118,135.4997683]};
+const airport={...C.stops.kix1,actual:true,accuracy:20};
+const routes=C.routes(hotel,airport,'auto');
+assert.equal(routes[0].fare,970);assert.equal(routes[1].fare,1410);assert.equal(routes[0].steps.length,3);
+assert.equal(C.routes(hotel,null,'kix2')[0].steps[0].title.includes('무료 셔틀'),true);
+assert.equal(C.routes(hotel,{...C.stops.namba,manual:true},'namba')[0].id,'walk');
+assert.equal(C.routes(hotel,null,'auto')[0].fare,null);
+assert.equal(C.classify(C.stops.kix1.coords,3000),'');
+assert.equal(C.classify([NaN,135]),'');
+const unknown=new URL(C.directions(hotel,null));assert.equal(unknown.searchParams.has('origin'),false);assert.equal(unknown.searchParams.get('destination'),hotel.address);
+const segment=new URL(C.directions(routes[0].steps[1].to,routes[0].steps[1].from,'transit'));assert.equal(segment.searchParams.get('origin'),C.stops.kix1.coords.join(','));
+const live=new URL(C.directions(hotel,airport));assert.equal(live.searchParams.get('origin'),airport.coords.join(','));
+assert.notEqual(T.gate({date:'2026-09-05',day:'sat',minutes:600},''),'departure');
+assert.equal(T.gate({date:'2026-09-05',day:'sat',minutes:900},'namba'),'explore');
+assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:780},'namba'),'airport');
+const back=C.routes({id:'kix-return',...C.stops.kix1},{...hotel,actual:true});assert.equal(back[0].fare,970);assert.match(back[0].steps[1].detail,/和歌山/);
+console.log('PASS: airport variants, T2 shuttle, city walking, unknown origin, bad GPS, exact destination, station origins, arrival mode, return buffer');

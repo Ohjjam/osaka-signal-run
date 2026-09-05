@@ -10,6 +10,7 @@
   const button = (action, label, id = '', primary = false) => `<button type="button" data-now-action="${action}" ${id ? `data-id="${esc(id)}"` : ''} class="${primary ? 'now-primary' : 'now-quiet'}">${label}</button>`;
   const link = (href, label, primary = false) => `<a class="now-btn ${primary ? 'now-primary' : 'now-quiet'}" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   const nav = (panel, label) => `<button type="button" data-today-nav="${panel}">${label}</button>`;
+  const move = (item, label='현재 위치에서 이동', from='') => `<button type="button" class="now-primary" data-move-open="${esc(item?.id || 'hotel')}" ${from ? `data-move-from="${from}"` : ''}>${label} →</button>`;
   const options = Object.entries(C.AREAS).map(([key,a]) => `<option value="${key}">${a.name}</option>`).join('');
   $('#now-area').insertAdjacentHTML('beforeend', options);
   $('#food-area').innerHTML = options;
@@ -38,9 +39,9 @@
   function allItems() { return [...P.allItems.values()]; }
   function operation(item, day) { return V.operationFor(item, D, day || 'sat'); }
   function directions(item, mode = 'walking') {
-    const query = new URLSearchParams({ api: '1', destination: `${item.jp || item.name} Osaka`, travelmode: mode });
+    const query = new URLSearchParams({ api: '1', destination: item.address || (C.coords(item.coords) && item.precision !== 'area' ? item.coords.join(',') : `${item.jp || item.name} Osaka`), travelmode: mode });
     // No background location requests. Origin is included only after the user selected/confirmed one.
-    if (gps || area || lastStop) query.set('origin', origin().coords.join(','));
+    if (gps && Date.now()-gps.at<5*60000) query.set('origin', gps.coords.join(','));
     return `https://www.google.com/maps/dir/?${query}`;
   }
   function distanceLabel(km) { return Number.isFinite(km) ? `직선 ${km < 1 ? `${Math.round(km * 1000)}m` : `${km.toFixed(1)}km`}` : '위치 미등록'; }
@@ -52,7 +53,7 @@
       .map(e => ({ id:e.id, name:e.item.name, coords:e.item.coords, start: V.timeToMinutes(P.state.reservations[e.id].time) ?? e.start, item:e.item }))
       .filter(e => C.coords(e.coords) && e.start >= now.minutes - 30).sort((a,b) => a.start-b.start)[0] || null;
   }
-  function actionLinks(item) { return link(directions(item), '도보 길찾기 ↗') + link(directions(item,'transit'), '대중교통 ↗') + link(mapSearch(item), '영업·대기 확인 ↗'); }
+  function actionLinks(item) { return move(item) + link(mapSearch(item), '영업·대기 확인 ↗'); }
   function feature(kicker, title, description, actions) {
     return `<article class="now-feature"><div class="now-feature-copy"><span class="now-badge">${esc(kicker)}</span><h3>${esc(title)}</h3><p class="now-desc">${esc(description)}</p><div class="now-actions">${actions}</div></div><figure class="now-feature-photo"><img src="assets/dotonbori-night.jpg" alt="도톤보리 운하의 저녁 풍경" loading="lazy"><figcaption>도톤보리</figcaption></figure></article>`;
   }
@@ -71,19 +72,19 @@
     if (disconnectedBookings.length) notices.push(`일정에 날짜가 연결되지 않은 예약 ${disconnectedBookings.length}개 · 내 일정에서 확인하세요.`);
     $('#now-context').textContent = notices.join(' ');
     let html = '';
-    if (gate === 'departure') {
-      html = feature('출발 전', '간사이공항 15:00 도착', '여권·탑승권·입국 QR·숙소 출입 안내를 준비하세요. 이미 도착했다면 동네를 선택하세요.', nav('prep-v3','준비 확인') + nav('hotel-search-v3','숙소·출입 안내') + button('city','도착했어 · 시내 추천', '', true));
-    } else if (gate === 'airport' || (area === 'kix' && now.day === 'mon')) {
+    if (gate === 'airport' || (area === 'kix' && now.day === 'mon')) {
       const kix = { name: 'Kansai International Airport', jp:'関西国際空港' };
-      html = feature('귀국 · 16:00 출발', area === 'kix' ? '이제 탑승 준비.' : '이제 공항으로 갈 시간.', '3명 모두 16:00 출발 기준. 숙소 짐을 챙긴 뒤 공항으로 이동하세요. 항공사 앱에서 출발 터미널·체크인 마감을 확인하고, T2라면 터미널 이동 여유도 남기세요.', link(directions(kix,'transit'),'공항까지 길찾기 ↗',true) + nav('hotel-search-v3','숙소·짐 확인') + link('https://www.kansai-airport.or.jp/en/flight/','KIX 공식 운항정보 ↗'));
+      html = feature('귀국 · 16:00 출발', area === 'kix' ? '이제 탑승 준비.' : '이제 공항으로 갈 시간.', '3명 모두 16:00 출발 기준. 숙소 짐을 챙긴 뒤 공항으로 이동하세요. 항공사 앱에서 출발 터미널·체크인 마감을 확인하고, T2라면 터미널 이동 여유도 남기세요.', move({id:'airport'},'공항 이동·결제 안내') + nav('hotel-search-v3','숙소·짐 확인') + link('https://www.kansai-airport.or.jp/en/flight/','KIX 공식 운항정보 ↗'));
     } else if (gate === 'arrival') {
       const hotel = P.selectedHotel();
-      html = feature('공항 → 숙소', '숙소로 이동', '입국·수하물 수령 후 난바 방면으로 이동하세요. 숙소까지의 경로와 체크인 안내를 확인할 수 있어요.', link(directions(hotel,'transit'),'숙소까지 길찾기 ↗',true) + nav('hotel-search-v3','체크인·출입 안내') + button('city','이미 시내야'));
+      html = feature('공항 → 숙소', '신이마미야에서 내려 숙소로', '난카이 공항급행 ¥970 · 라피트 디지털 일반석 ¥1,410. 신이마미야에서 내려 도보 약 8–12분. 이동 순서와 표 사는 방법을 확인하세요.', move(hotel,'숙소까지 이동·결제 안내') + nav('hotel-search-v3','체크인·출입 안내') + button('city','이미 시내야'));
     } else if (gate === 'finished') {
       html = feature('여행 종료', '저장한 일정과 장소', '9월 5–7일 일정이 끝났어요. 저장한 장소와 기록은 그대로 남습니다. 더 둘러보고 싶다면 밥 지도와 전체 목록에서 고르세요.', nav('food-map-v41','밥 지도') + nav('itinerary-v11','우리 일정 보기'));
+    } else if (!area && !gps && !lastStop && !selected) {
+      html = feature('오사카 도착', '지금 어디에 있어?', '내 위치를 확인하면 가까운 식사와 다음 코스를 골라줄게. 공항이라면 숙소 이동부터 확인해.', button('locate','◎ 내 위치에서 추천','',true) + move(P.selectedHotel(),'공항 → 숙소','kix1') + button('city','난바·시내에 있어'));
     } else if (gate === 'rest' && mood === 'auto') {
       const hotel = P.selectedHotel();
-      html = feature('휴식', '숙소로 돌아가기', '늦은 밤·이른 아침에는 가까운 곳을 이용하세요. 음식점 지도에서 야식과 아침 후보를 찾을 수 있어요.', link(directions(hotel),'숙소 길찾기 ↗',true) + nav('food-map-v41','야식·아침 찾기'));
+      html = feature('휴식', '숙소로 돌아가기', '늦은 밤·이른 아침에는 가까운 곳을 이용하세요. 음식점 지도에서 야식과 아침 후보를 찾을 수 있어요.', move(hotel,'내 위치 → 숙소') + nav('food-map-v41','야식·아침 찾기'));
     } else if (anchor && anchor.start - now.minutes <= C.travel(o.coords,anchor.coords) + 35) {
       html = feature('다음 예약', `${V.minutesToTime(anchor.start)} ${anchor.name}`, '예약 시간이 가까워요. 다른 곳을 끼우기보다 지금 이동하고 티켓·예약내역을 확인하세요. 예약 시각은 일정에 직접 저장한 값을 사용합니다.', actionLinks(anchor.item) + nav('itinerary-v11','예약 확인'));
     } else if (selected && P.allItems.has(selected) && !['done','skipped'].includes(progress(selected))) {
@@ -181,7 +182,7 @@
           const facts=C.foodFacts(r.item,P.foodGroups);
           pin.bindTooltip(menuLabel(r.item),{permanent:true,direction:'right',offset:[14,0],className:'food-map-label',opacity:1});
           pin.closeTooltip();
-          pin.bindPopup(`<div class="food-popup"><strong>${esc(r.item.name)}</strong><p>${esc(facts.cuisine)} · ${esc(distanceLabel(r.km))}</p><p class="food-popup-menu">${esc(facts.menu)}</p>${ratingMarkup(r.item)}<div class="now-actions">${button('choose','여기로 갈래',r.item.id,true)}${link(directions(r.item),'길찾기 ↗')}</div></div>`,{maxWidth:310,minWidth:230,autoPanPaddingTopLeft:[12,12],autoPanPaddingBottomRight:[12,12]});
+          pin.bindPopup(`<div class="food-popup"><strong>${esc(r.item.name)}</strong><p>${esc(facts.cuisine)} · ${esc(distanceLabel(r.km))}</p><p class="food-popup-menu">${esc(facts.menu)}</p>${ratingMarkup(r.item)}<div class="now-actions">${button('choose','여기로 갈래',r.item.id,true)}${move(r.item,'이동 안내')}</div></div>`,{maxWidth:310,minWidth:230,autoPanPaddingTopLeft:[12,12],autoPanPaddingBottomRight:[12,12]});
           pin.on('click',()=> { foodSelected=r.item.id; renderFood(false,false); });
           markers.set(r.item.id,pin);
         });
@@ -227,7 +228,6 @@
     if (action==='choose' && item) {
       closeMap();
       selected=id;
-      if (!area && C.coords(item.coords)) { area=Object.keys(C.AREAS).filter(k=>k!=='kix').sort((a,b)=>C.distance(item.coords,C.AREAS[a].coords)-C.distance(item.coords,C.AREAS[b].coords))[0]; $('#now-area').value=area; }
       remember(); openPanel('today-v41'); renderDecision(true); return;
     }
     if (action==='unselect') selected='';
@@ -252,10 +252,11 @@
   $('#food-query').addEventListener('input',()=> { clearTimeout(searchTimer); searchTimer=setTimeout(()=> {listLimit=8;foodSelected='';renderFood();},180); });
   document.addEventListener('osaka:panel',event=> { if(event.detail.id!=='food-map-v41') closeMap(); if(event.detail.id==='food-map-v41') setTimeout(()=>renderFood(true),60); if(event.detail.id==='today-v41') renderDecision(); });
   ['osaka:shared-applied','osaka:state-changed'].forEach(name=>document.addEventListener(name,()=> {renderDecision();renderFood();}));
+  document.addEventListener('osaka:located',event=>{gps={coords:event.detail.coords,at:event.detail.at};lastStop=null;area=C.distance(gps.coords,C.AREAS.kix.coords)<4?'kix':Object.keys(C.AREAS).filter(k=>k!=='kix').sort((a,b)=>C.distance(gps.coords,C.AREAS[a].coords)-C.distance(gps.coords,C.AREAS[b].coords))[0];$('#now-area').value=area;$('#food-area').value=area;foodOrigin=gps.coords;foodOriginName='확인한 내 위치';$('#now-location-status').textContent='이동 화면에서 확인한 내 위치 기준';remember();renderDecision(true);});
   const foreground=()=> {if(!document.hidden) {renderDecision();renderFood();}};
   document.addEventListener('visibilitychange',foreground); window.addEventListener('pageshow',foreground); window.addEventListener('online',foreground); window.addEventListener('offline',foreground);
   setInterval(()=> {if(!document.hidden && `${C.clock().date}:${C.clock().time}`!==lastMinute) renderDecision();},30000);
   // Narrow read-only diagnostics; no location or personally identifying fields.
-  window.OsakaToday = { version:43, refresh:()=> {renderDecision(true);renderFood();}, status:()=> ({day:now.day,time:now.time,mode:C.gate(now,area),selected,foodCount:foodRows().length,mapReady:!!map,mapExpanded:mapDialog.open}) };
+  window.OsakaToday = { version:44, refresh:()=> {renderDecision(true);renderFood();}, status:()=> ({day:now.day,time:now.time,mode:C.gate(now,area),selected,foodCount:foodRows().length,mapReady:!!map,mapExpanded:mapDialog.open}) };
   renderDecision(); if(!$('#food-map-v41').hidden) renderFood(true);
 })();

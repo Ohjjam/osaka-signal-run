@@ -38,8 +38,7 @@
   function gate(c, area) {
     if (c.date > '2026-09-07' || (c.day === 'mon' && c.minutes >= 960)) return 'finished';
     if (c.day === 'mon' && (c.minutes >= 720 || area === 'kix')) return 'airport';
-    if (c.date < '2026-09-05' || (c.day === 'sat' && c.minutes < 900 && !area)) return 'departure';
-    if ((c.day === 'sat' && c.minutes >= 900 && c.minutes < 1020 && !area) || area === 'kix') return 'arrival';
+    if (area === 'kix') return 'arrival';
     if (c.minutes < 420 || c.minutes >= 1410) return 'rest';
     return 'explore';
   }
