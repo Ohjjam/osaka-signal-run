@@ -25,9 +25,9 @@
       const next=route.stops[i+1];
       if(next)s.transit[`${targetDay}:${stop.id}:${next.id}`]=stop.leg;
     }
-    if(targetDay==='sun') {
-      s.mustVisit=[...new Set([...s.mustVisit,'kaiyukan'])];
-      s.wishlist=[...new Set([...s.wishlist,'kaiyukan'])];
+    if(D.requiredByDay?.[targetDay]) {
+      s.mustVisit=[...new Set([...s.mustVisit,...D.requiredByDay[targetDay]])];
+      s.wishlist=[...new Set([...s.wishlist,...D.requiredByDay[targetDay]])];
     }
   }
   async function apply(targets, automatic=false) {
@@ -66,7 +66,7 @@
   }
   function stopMarkup(s,i,route) {
     const item=P.allItems.get(s.id)||{},detail=D.details?.[s.id]||{};
-    const logistics=/hotel45|checkout45|locker45|train45|queue45/.test(s.id);
+    const logistics=/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49/.test(s.id);
     const why=detail.why||item.whyGo||item.description||item.note||'이 지역 안에서 묶어 이동 부담을 줄이는 정차입니다.';
     const order=detail.order||item.menu||'';
     const url=detail.source||item.official||item.menuUrl;
@@ -75,7 +75,7 @@
     const destination=next?P.allItems.get(next.id):null;
     const directions=next?'https://www.google.com/maps/dir/?'+new URLSearchParams({api:'1',origin:item.coords?.join(',')||item.name,destination:destination?.coords?.join(',')||destination?.name||next.id,travelmode:leg?.travelmode||'transit'}):'';
     const transport=leg?`<aside class="curated-leg48"><strong>↓ ${esc(leg.mode)} · 약 ${s.leg}분</strong><p>${esc(leg.route)}</p><a href="${esc(directions)}" target="_blank" rel="noopener">${leg.travelmode==='walking'?'도보':'대중교통'} 길찾기 ↗</a></aside>`:'';
-    return `<li><time>${s.time}</time><div><strong>${esc(item.name||s.id)}</strong>${s.slot?`<b>${meals[s.slot]}</b>`:''}<small>${s.duration}분${s.id==='kaiyukan'?' · 필수 관람':''}${i<route.stops.length-1?` · 다음 이동 약 ${s.leg}분`:''}</small><p class="curated-stop-why"><em>${logistics?'이 순서인 이유':'어떤 곳?'}</em>${esc(why)}</p>${order?`<p class="curated-order"><em>${item.category==='food'?'추천 주문':'꼭 볼 것'}</em>${esc(order)}</p>`:''}${s.note?`<p class="curated-stop-tip">${esc(s.note)}</p>`:''}<details class="curated-stop-more"><summary>현장 팁·지도${url?'·출처':''}</summary><p>${esc(detail.tip||item.caution||'체류시간에는 예상 대기가 포함됩니다. 줄이 길면 뒤의 선택 일정을 줄이고, 운영 여부는 방문 전에 확인하세요.')}</p><a href="${esc(map)}" target="_blank" rel="noopener">장소 지도 ↗</a>${url?` · <a href="${esc(url)}" target="_blank" rel="noopener">메뉴·장소 정보 ↗</a>`:''}</details>${transport}</div></li>`;
+    return `<li><time>${s.time}</time><div><strong>${esc(item.name||s.id)}</strong>${s.slot?`<b>${meals[s.slot]}</b>`:''}<small>${s.duration}분${(D.requiredByDay?.[day]||[]).includes(s.id)?' · 필수':''}${i<route.stops.length-1?` · 다음 이동 약 ${s.leg}분`:''}</small><p class="curated-stop-why"><em>${logistics?'이 순서인 이유':'어떤 곳?'}</em>${esc(why)}</p>${order?`<p class="curated-order"><em>${item.category==='food'?'추천 주문':'꼭 볼 것'}</em>${esc(order)}</p>`:''}${s.note?`<p class="curated-stop-tip">${esc(s.note)}</p>`:''}<details class="curated-stop-more"><summary>현장 팁·지도${url?'·출처':''}</summary><p>${esc(detail.tip||item.caution||'체류시간에는 예상 대기가 포함됩니다. 줄이 길면 뒤의 선택 일정을 줄이고, 운영 여부는 방문 전에 확인하세요.')}</p><a href="${esc(map)}" target="_blank" rel="noopener">장소 지도 ↗</a>${url?` · <a href="${esc(url)}" target="_blank" rel="noopener">메뉴·장소 정보 ↗</a>`:''}</details>${transport}</div></li>`;
   }
   function render() {
     const root=document.getElementById('curated45'); if(!root)return;
@@ -84,9 +84,9 @@
     const cover=route.stops.map(s=>P.allItems.get(s.id)).find(p=>p?.image&&!p.planningOnly&&p.category==='attraction')||P.allItems.get(route.stops[1]?.id);
     const applied=JSON.stringify(P.state.plans[day])===JSON.stringify(route.stops.map(s=>s.id)) && route.stops.every(s=>P.state.itemStarts[`${day}:${s.id}`]===s.time);
     root.innerHTML=`<header><div><span class="curated-eyebrow">SEPT 05—07 / THREE DAYS</span><h3>이번 여행 추천 루트</h3></div><button type="button" data-curated-all ${busy?'disabled':''}>선택한 3일 적용</button></header>
-      <nav class="curated-days" aria-label="추천 루트 요일">${days.map(d=>`<button type="button" data-curated-day="${d}" aria-pressed="${d===day}">${labels[d]}<small>${d==='sat'?'17시 숙소 → 라멘':d==='sun'?'가이유칸 꼭':'10시 체크아웃 → 공항'}</small></button>`).join('')}</nav>
+      <nav class="curated-days" aria-label="추천 루트 요일">${days.map(d=>`<button type="button" data-curated-day="${d}" aria-pressed="${d===day}">${labels[d]}<small>${d==='sat'?'17시 숙소 → 라멘소':d==='sun'?'오사카성 + 스시':'수족관 → 공항 직행'}</small></button>`).join('')}</nav>
       <p class="curated-choice-count">${D.days[day].length}가지 코스 · 취향과 체력에 맞춰 고르기</p>
-      <div class="curated-options">${D.days[day].map((r,i)=>`<button type="button" data-curated-option="${i}" aria-pressed="${selected[day]===i}"><small>${esc(r.tag)} · ${r.stops[0].time}–${window.OsakaVNextCore.minutesToTime(window.OsakaVNextCore.timeToMinutes(r.stops.at(-1).time)+r.stops.at(-1).duration)}</small><strong>${esc(r.label)}</strong><span>${r.stops.filter(s=>!(/hotel45|checkout45|locker45|train45|queue45/.test(s.id))).length}곳 · ${r.stops.filter(s=>s.slot).length}번 먹거리</span></button>`).join('')}</div>
+      <div class="curated-options">${D.days[day].map((r,i)=>`<button type="button" data-curated-option="${i}" aria-pressed="${selected[day]===i}"><small>${esc(r.tag)} · ${r.stops[0].time}–${window.OsakaVNextCore.minutesToTime(window.OsakaVNextCore.timeToMinutes(r.stops.at(-1).time)+r.stops.at(-1).duration)}</small><strong>${esc(r.label)}</strong><span>${r.stops.filter(s=>!(/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49/.test(s.id))).length}곳 · ${r.stops.filter(s=>s.slot).length}번 먹거리</span></button>`).join('')}</div>
       ${cover?.image?`<figure class="curated-cover"><img src="${esc(cover.image)}" alt="${esc(cover.name)} 참고 이미지" loading="lazy"><figcaption>${esc(route.label)} · 장소 분위기 참고</figcaption></figure>`:''}
       <p class="curated-why">${esc(route.why)}</p>
       ${aqua?`<p class="curated-ticket">필수 · 가이유칸 ${aqua.time} 입장 목표 / 아직 예매된 일정이 아닙니다. <a href="https://www.kaiyukan.com/info/ticket/kaiyukan/" target="_blank" rel="noopener">공식 시간 지정권 확인 ↗</a></p>`:''}
