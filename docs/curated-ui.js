@@ -85,7 +85,7 @@
     const applied=JSON.stringify(P.state.plans[day])===JSON.stringify(route.stops.map(s=>s.id)) && route.stops.every(s=>P.state.itemStarts[`${day}:${s.id}`]===s.time);
     root.innerHTML=`<header><div><span class="curated-eyebrow">SEPT 05—07 / THREE DAYS</span><h3>이번 여행 추천 루트</h3></div><button type="button" data-curated-all ${busy?'disabled':''}>선택한 3일 적용</button></header>
       <nav class="curated-days" aria-label="추천 루트 요일">${days.map(d=>`<button type="button" data-curated-day="${d}" aria-pressed="${d===day}">${labels[d]}<small>${d==='sat'?'17시 숙소 → 라멘소':d==='sun'?'성·텐마 스시·북쪽':'수족관 → 공항 직행'}</small></button>`).join('')}</nav>
-      <p class="curated-choice-count">${D.days[day].length}가지 코스 · 취향과 체력에 맞춰 고르기</p>
+      <p class="curated-choice-count">${day==='sun'?'공통: 오사카성·하루코마 스시 / 이후 장소·저녁 식당이 서로 다른 3가지 코스':D.days[day].length+'가지 코스 · 취향과 체력에 맞춰 고르기'}</p>
       <div class="curated-options">${D.days[day].map((r,i)=>`<button type="button" data-curated-option="${i}" aria-pressed="${selected[day]===i}"><small>${esc(r.tag)} · ${r.stops[0].time}–${window.OsakaVNextCore.minutesToTime(window.OsakaVNextCore.timeToMinutes(r.stops.at(-1).time)+r.stops.at(-1).duration)}</small><strong>${esc(r.label)}</strong><span>${r.stops.filter(s=>!(/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49/.test(s.id))).length}곳 · ${r.stops.filter(s=>s.slot).length}번 먹거리</span></button>`).join('')}</div>
       ${cover?.image?`<figure class="curated-cover"><img src="${esc(cover.image)}" alt="${esc(cover.name)} 참고 이미지" loading="lazy"><figcaption>${esc(route.label)} · 장소 분위기 참고</figcaption></figure>`:''}
       <p class="curated-why">${esc(route.why)}</p>

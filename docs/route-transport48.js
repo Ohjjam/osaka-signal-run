@@ -1,7 +1,7 @@
 (function(){
  'use strict';
  const known=new Set(Object.values(window.OSAKA_CURATED_V45.days).flatMap(routes=>routes.flatMap(r=>r.stops.map(s=>s.id))));
- const zones={hotel:['leave-hotel45','back-hotel45','rest-hotel45','breakfast45','checkout45','hotel-anchor48'],bay:['bay-locker49','bay-airport49','kaiyukan','tempo-lunch45','tempo-wheel45','tempozan'],tenma:['harukoma','tenjin50'],nakazaki:['nakazaki50'],river:['nakanoshima50'],umeda:['sky','kiji','umeda-break45'],tennoji:['harukas-v5','abeno-dinner45'],shinsekai:['shinsekai','daruma-v3'],castle:['castle']};
+ const zones={hotel:['leave-hotel45','back-hotel45','rest-hotel45','breakfast45','checkout45','hotel-anchor48'],bay:['bay-locker49','bay-airport49','kaiyukan','tempo-lunch45','tempo-wheel45','tempozan'],tenma:['harukoma','tenjin50','temmangu51','tenma-cafe51','toriki51'],art:['art51','karato51'],nakazaki:['nakazaki50'],river:['nakanoshima50'],umeda:['sky','kiji','umeda-break45'],tennoji:['harukas-v5','abeno-dinner45'],shinsekai:['shinsekai','daruma-v3'],castle:['castle']};
  const zone=id=>Object.keys(zones).find(z=>zones[z].includes(id))||'namba';
  const metro=route=>({mode:'지하철 + 도보',travelmode:'transit',route,source:'https://subway-tr.osakametro.co.jp/station_guide/index.php'});
  function describe(from,to,minutes){
@@ -9,7 +9,12 @@
    if(to==='airport48')return{mode:'난카이 전철 + 도보',travelmode:'transit',route:'난카이 난바역 → 공항급행 또는 라피트 → 간사이공항역 → 출국 터미널. 라피트는 별도 특급권 필요; T2면 셔틀 시간 추가.',minutes,source:'https://www.kansai-airport.or.jp/en/access/train'};
    if((!known.has(from)&&from!=='hotel-anchor48')||!known.has(to))return null;
    const a=zone(from),b=zone(to);let result;
-   if(a==='castle'&&b==='tenma')result={mode:'JR + 도보',travelmode:'transit',route:'천수각 → 도보로 오사카조코엔역 → JR 오사카환상선 교바시·덴마 방면 → 덴마역 → 하루코마 본점까지 도보. 역까지 걷기·대기 포함 60분.',source:'https://www.westjr.co.jp/travel-information/en/plan-your-trip/routes-schedule/'};
+   if(a==='tenma'&&b==='art')result={mode:'JR + 도보',travelmode:'transit',route:'덴마역 → JR 오사카환상선 오사카·후쿠시마 방면 → 후쿠시마역 → 남쪽 나카노시마 미술관까지 도보. 보행·대기 포함 60분 계획.'};
+   else if(a==='art'&&b==='art')result={mode:'건물 내 도보',travelmode:'walking',route:'전시실에서 같은 미술관 1층 레스토랑으로 이동. 엘리베이터·입장 대기 포함.'};
+   else if(a==='art'&&b==='river')result={mode:'도보',travelmode:'walking',route:'미술관 → 강변을 따라 동쪽 요도야바시·중앙공회당 방향으로 도보. 신호 대기 포함 약30분.'};
+   else if(a==='river'&&b==='hotel')result=metro('중앙공회당 → 요도야바시역 → 미도스지선 남행 → 다이코쿠초역 → 숙소까지 도보.');
+   else if(a==='tenma'&&b==='hotel')result=metro('미나미모리마치역 → 사카이스지선 덴가차야 방면 → 도부츠엔마에역 환승 → 미도스지선 북행 다이코쿠초역 → 숙소까지 도보.');
+   else if(a==='castle'&&b==='tenma')result={mode:'JR + 도보',travelmode:'transit',route:'천수각 → 도보로 오사카조코엔역 → JR 오사카환상선 교바시·덴마 방면 → 덴마역 → 하루코마 본점까지 도보. 역까지 걷기·대기 포함 60분.',source:'https://www.westjr.co.jp/travel-information/en/plan-your-trip/routes-schedule/'};
    else if(a==='tenma'&&b==='umeda')result={mode:'JR + 도보',travelmode:'transit',route:'덴마역 → JR 오사카환상선 오사카역 방면 → 오사카역 → 목적지까지 도보. 스카이빌딩은 역에서 걷는 시간 추가.'};
    else if(a==='tenma'&&b==='river')result=metro('오기마치역 → 사카이스지선 덴가차야 방면 → 기타하마역 → 나카노시마 강변·공회당까지 도보.');
    else if(a==='river'&&b==='umeda')result=metro('강변 → 요도야바시역 → 미도스지선 북행 → 우메다역 → 목적지까지 도보.');
