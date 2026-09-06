@@ -11,8 +11,8 @@
       partySize: 3,
       dates: { sat: '2026-09-05', sun: '2026-09-06', mon: '2026-09-07' },
       arrival: 'KIX 15:00',
-      departure: 'KIX 16:00',
-      mondayCityCutoff: '13:00'
+      departure: 'KIX 18:00',
+      mondayCityCutoff: '15:00'
     },
     events: [
       {

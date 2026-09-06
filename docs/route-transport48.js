@@ -2,7 +2,7 @@
  'use strict';
  const airportDepartures=window.OSAKA_CURATED_V45.airportDepartures||{};
  const known=new Set(Object.values(window.OSAKA_CURATED_V45.days).flatMap(routes=>routes.flatMap(r=>r.stops.map(s=>s.id))));
- const zones={hotel:['leave-hotel45','back-hotel45','rest-hotel45','breakfast45','checkout45','hotel-anchor48'],bay:['bay-locker49','bay-airport49','kaiyukan','tempo-lunch45','tempo-wheel45','tempozan','bay-dinner53'],tenma:['harukoma','tenjin50','temmangu51','tenma-cafe51','toriki51'],art:['art51','karato51'],nakazaki:['nakazaki50'],river:['nakanoshima50'],umeda:['sky','kiji','umeda-break45','lucua53','umeda-locker53','umeda-airport53'],fukushima:['fukushima-locker53','fukushima-airport53'],sumiyoshi:['sumiyoshi-locker53','sumiyoshi53','sumiyoshi-airport53'],rinku:['rinku-locker53','rinku53','rinku-lunch53','rinku-airport53','rinku-pause54','rinku-airport54'],shinimamiya:['shinimamiya-locker54','shinimamiya-airport54','shinimamiya-pickup54','donki-mega54'],tennoji:['harukas-v5','abeno-dinner45'],shinsekai:['shinsekai','daruma-v3'],castle:['castle']};
+ const zones={hotel:['leave-hotel45','back-hotel45','rest-hotel45','breakfast45','checkout45','hotel-anchor48'],bay:['bay-locker49','bay-airport49','kaiyukan','tempo-lunch45','tempo-wheel45','tempozan','bay-dinner53'],tenma:['harukoma','tenjin50','temmangu51','tenma-cafe51','toriki51'],art:['art51','karato51'],nakazaki:['nakazaki50'],river:['nakanoshima50'],umeda:['sky','kiji','umeda-break45','lucua53','umeda-locker53','umeda-airport53'],fukushima:['fukushima-locker53','fukushima-airport53'],sumiyoshi:['sumiyoshi-locker53','sumiyoshi53','sumiyoshi-airport53'],rinku:['rinku-locker53','rinku53','rinku-lunch53','rinku-airport53','rinku-pause54','rinku-airport54'],shinimamiya:['shinimamiya-locker54','shinimamiya-airport54','shinimamiya-pickup54','donki-mega54','omo-lunch55','daruma-lunch55'],tennoji:['harukas-v5','abeno-dinner45'],shinsekai:['shinsekai','daruma-v3'],castle:['castle']};
  const zone=id=>Object.keys(zones).find(z=>zones[z].includes(id))||'namba';
  const metro=route=>({mode:'지하철 + 도보',travelmode:'transit',route,source:'https://subway-tr.osakametro.co.jp/station_guide/index.php'});
  function describe(from,to,minutes){
@@ -12,11 +12,11 @@
    if((!known.has(from)&&from!=='hotel-anchor48')||!known.has(to))return null;
    const a=zone(from),b=zone(to);let result;
    if(a==='hotel'&&b==='shinimamiya')result={mode:'도보',travelmode:'walking',route:'숙소 → 신이마미야역 로커까지 도보. JR·난카이 출구가 다르므로 보관 위치를 사진으로 남기기.'};
-   else if(a==='shinimamiya'&&b==='shinimamiya')result={mode:'도보',travelmode:'walking',route:'신이마미야역 로커 ↔ MEGA 돈키호테 신세카이점 2층. 신호·매장 출입·역 내부 보행 여유15분. 구입 물건과 원래 짐을 함께 챙기기.'};
+   else if(a==='shinimamiya'&&b==='shinimamiya')result={mode:'도보',travelmode:'walking',route:'신이마미야역·MEGA 돈키 신세카이점·OMO7 카페·다루마 사이 도보. 목적지 건물·층과 횡단보도를 확인하고 보행 여유15분. 공항행 전 원래 로커에서 짐 회수.'};
    else if(a==='shinimamiya'&&b==='sumiyoshi')result={mode:'난카이 보통 + 도보',travelmode:'transit',route:'난카이 신이마미야역 → 본선 남행 보통열차 → 스미요시타이샤역 → 신사까지 도보. 공항급행·고야선은 이 역에 서지 않음.'};
    else if(a==='sumiyoshi'&&b==='shinimamiya')result={mode:'난카이 보통 + 도보',travelmode:'transit',route:'신사 → 스미요시타이샤역 → 난바 방면 보통열차 → 신이마미야역 → MEGA 돈키호테 신세카이점까지 도보. 대기·매장 출입 포함45분.'};
-   else if(a==='shinimamiya'&&b==='rinku')result={mode:'난카이 공항급행 + 도보',travelmode:'transit',route:'짐 회수 → 난카이 신이마미야역 → 간사이공항행 공항급행 → 린쿠타운역 → 린쿠공원 가까운 바다 쪽까지 도보. 대기·보행 포함60분, 지연되면 공항까지 계속 탑승.'};
-   else if(from==='rinku-pause54'&&to==='rinku-airport54')result={mode:'도보',travelmode:'walking',route:'린쿠공원에서 린쿠타운역으로 짐을 가지고 복귀. 13시까지 공항행 승강장으로 이동.'};
+   else if(a==='shinimamiya'&&b==='rinku')result={mode:'난카이 공항급행 + 도보',travelmode:'transit',route:'짐 회수 → 난카이 신이마미야역 → 간사이공항행 공항급행 → 린쿠타운역 → 린쿠 아웃렛 로커까지 도보. 대기·보행 포함60분, 지연되면 공항까지 계속 탑승.'};
+   else if(from==='rinku-pause54'&&to==='rinku-airport54')result={mode:'도보',travelmode:'walking',route:'린쿠공원에서 린쿠타운역으로 짐을 가지고 복귀. 15시까지 공항행 승강장으로 이동.'};
    else if(a==='hotel'&&b==='sumiyoshi')result={mode:'난카이 보통 + 도보',travelmode:'transit',route:'숙소 → 신이마미야역까지 도보 → 난카이 본선 남행 보통열차 → 스미요시타이샤역. 고야선·공항급행은 이 역에 서지 않으므로 본선 보통열차 확인.'};
    else if(a==='hotel'&&b==='umeda')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → 도보로 JR 오사카역 로커. 역·몰 내부 보행 포함45분.');
    else if(a==='hotel'&&b==='fukushima')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → JR 오사카역 환승 → 오사카환상선 후쿠시마·니시쿠조 방면 한 정거장 후쿠시마역. 보행·환승 포함45분.');

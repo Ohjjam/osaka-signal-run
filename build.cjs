@@ -1,23 +1,11 @@
-// Static publication build: keep both entry URLs and cache keys consistent.
-const fs=require('node:fs'),path=require('node:path');
-const root=path.join(__dirname,'docs');
-let html=fs.readFileSync(path.join(root,'guide.html'),'utf8');
-const revised=['planner-v3.js','today.js'];
-for(const name of ['curated-ui.js','curated.css','vnext.js','route-transport48.js','curated-required49.js'])html=html.replace(new RegExp(name.replace('.','\\.')+'\\?v=\\d+','g'),name+'?v=54');
-for(const name of revised)html=html.replace(new RegExp(name.replace('.','\\.')+'\\?v=\\d+','g'),name+'?v=45');
+// Static publication build: synchronize entries and cache revisions for changed modules.
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const root=path.join(__dirname,'docs'),version=55;
+const revised=['experience.js','app.js','curated-ui.js','curated.css','curated-required49.js','route-transport48.js','vnext.js','vnext-core.js','osaka-vnext-data.js','planner-v3.js','today.js','today-core.js','move-core.js'];
+function revise(text){for(const name of revised)text=text.replace(new RegExp('(?<![\\w-])'+name.replaceAll('.','\\.')+'(?:\\?v=\\d+)?','g'),name+'?v='+version);return text;}
+const html=revise(fs.readFileSync(path.join(root,'guide.html'),'utf8'));
 fs.writeFileSync(path.join(root,'guide.html'),html);fs.writeFileSync(path.join(root,'index.html'),html);
-let sw=fs.readFileSync(path.join(root,'sw.js'),'utf8').replace(/const CACHE = '[^']+';/,"const CACHE = 'osaka-guide-local-v54';");
-for(const name of ['curated-ui.js','curated.css','vnext.js','route-transport48.js','curated-required49.js'])sw=sw.replace(new RegExp(name.replace('.','\\.')+'\\?v=\\d+','g'),name+'?v=54');
-if(!sw.includes("'./curated-rich47.js?v=47'"))sw=sw.replace("const SHELL = [","const SHELL = [\n  './curated-rich47.js?v=47',");
-if(!sw.includes("'./stay-private.js?v=46'"))sw=sw.replace("const SHELL = [","const SHELL = [\n  './stay-private.js?v=46', './stay-private.css?v=46',");
-for(const name of revised)sw=sw.replace(new RegExp(name.replace('.','\\.')+'\\?v=\\d+','g'),name+'?v=45');
-if(!sw.includes("'./curated-v45.js?v=45'"))sw=sw.replace("const SHELL = [","const SHELL = [\n  './curated-v45.js?v=45',");
-if(!sw.includes("'./move.js?v=44'"))sw=sw.replace("const SHELL = [","const SHELL = [\n  './move.js?v=44', './move-core.js?v=44', './move.css?v=44',");
-if(!sw.includes("'./route-transport48.js?v=54'"))sw=sw.replace("const SHELL = [","const SHELL = [\n  './route-transport48.js?v=54',");
-if(!sw.includes("'./transport48.css?v=54'"))sw=sw.replace("const SHELL = [","const SHELL = [\n  './transport48.css?v=54',");
-if(!sw.includes("'./curated-required49.js?v=54'"))sw=sw.replace('const SHELL = [',"const SHELL = [\n  './curated-required49.js?v=54',");
+let sw=revise(fs.readFileSync(path.join(root,'sw.js'),'utf8')).replace(/const CACHE = '[^']+';/,"const CACHE = 'osaka-guide-local-v"+version+"';");
 fs.writeFileSync(path.join(root,'sw.js'),sw);
-for(const name of ['move.js','move-core.js','today.js','today-core.js','planner-v3.js','vnext.js','curated-ui.js','curated-v45.js','stay-private.js'])new(require('node:vm').Script)(fs.readFileSync(path.join(root,name),'utf8'),{filename:name});
-new(require('node:vm').Script)(fs.readFileSync(path.join(root,'curated-rich47.js'),'utf8'));
-new(require('node:vm').Script)(fs.readFileSync(path.join(root,'curated-required49.js'),'utf8'));
-console.log('Static build complete: matching entries, revision 54, offline shell and JS syntax.');
+for(const name of [...new Set([...revised.filter(n=>n.endsWith('.js')),'move.js','curated-v45.js','curated-rich47.js','stay-private.js'])])new vm.Script(fs.readFileSync(path.join(root,name),'utf8'),{filename:name});
+console.log('Static build complete: matching entries, revision '+version+', offline shell and JS syntax.');

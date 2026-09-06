@@ -16,7 +16,7 @@
   const SHARED_EVENTS_URL = 'api/events';
   const DAYS = ['sat', 'sun', 'mon'];
   const dayNames = { sat: '토요일', sun: '일요일', mon: '월요일' };
-  const deadlines = { sat: 23 * 60, sun: 22 * 60, mon: 13 * 60 };
+  const deadlines = { sat: 23 * 60, sun: 22 * 60, mon: 15 * 60 };
   const categoryLabels = { attraction: '관광', food: '음식', goods: '쇼핑', nightlife: '밤' };
 
   const foodGroups = { ...(EXPANSION.foodGroups || { all: '전체', rice: '밥·덮밥', snack: '길거리·간식', noodle: '우동·소바·면', ramen: '라멘·츠케멘', alcohol: '술·이자카야', drink: '커피·차·주스' }), custom: '직접 추가' };
@@ -1241,7 +1241,7 @@
     renderAllPlans();
     renderMap();
     syncMapTabs();
-    flashMessage(crossesMondayCutoff ? `${allItems.get(id).name} 추가 · 13:00 오사카 출발 안전선을 확인하세요.` : `${allItems.get(id).name} → ${dayNames[day]} 추가`);
+    flashMessage(crossesMondayCutoff ? `${allItems.get(id).name} 추가 · 15:00 공항행 이동 안전선을 확인하세요.` : `${allItems.get(id).name} → ${dayNames[day]} 추가`);
     return true;
   }
 

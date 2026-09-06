@@ -362,7 +362,7 @@
       const departureId=metric.entries.at(-1)?.id;
       const departure=window.OSAKA_CURATED_V45?.airportDepartures?.[departureId];
       if (!departure && !metric.entries.some(entry => ['train45','bay-airport49'].includes(entry.id))) points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 짐 회수`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end + 25), legOverride: { mode: '도보·짐 회수', minutes: 25 } });
-      points.push({ id: '', name: '간사이국제공항 도착 목표', coords: [34.4347, 135.2441], kind: 'airport', time: '14:00', legOverride: departure ? {...departure,travelmode:'transit'} : metric.entries.some(entry=>entry.id==='bay-airport49') ? {mode:'지하철 + JR·공항 이동',minutes:120} : { mode: '난카이·공항 이동', minutes: 60 } });
+      points.push({ id: '', name: '간사이국제공항 도착 목표 · 16:00', coords: [34.4347, 135.2441], kind: 'airport', time: '16:00', legOverride: departure ? {...departure,travelmode:'transit'} : metric.entries.some(entry=>entry.id==='bay-airport49') ? {mode:'지하철 + JR·공항 이동',minutes:120} : { mode: '난카이·공항 이동', minutes: 60 } });
     } else if (points.length > 1 && points.at(-1)?.id !== 'back-hotel45') {
       points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 복귀`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end) });
     }
@@ -654,7 +654,7 @@
       schedule(day).entries.forEach(entry => lines.push(`${Core.minutesToTime(entry.start)} ${entry.item.name} · ${entry.duration}분`));
     });
     if (state.wishlist.length) lines.push('', `가고 싶은 곳: ${state.wishlist.map(id => lookupItem(id)?.name).filter(Boolean).join(' · ')}`);
-    lines.push('', `숙소: ${Planner.selectedHotel()?.name || '미정'}`, '월요일 13:00 오사카 출발 안전선');
+    lines.push('', `숙소: ${Planner.selectedHotel()?.name || '미정'}`, '월요일 15:00 공항행 이동 · 16:00 KIX 도착 · 18:00 출발');
     return lines.join('\n');
   }
   function offlinePack() {

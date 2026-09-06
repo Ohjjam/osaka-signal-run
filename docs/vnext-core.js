@@ -7,7 +7,7 @@
 
   const DAYS = ['sat', 'sun', 'mon'];
   const DAY_DATES = { sat: '2026-09-05', sun: '2026-09-06', mon: '2026-09-07' };
-  const DEADLINES = { sat: 23 * 60, sun: 22 * 60, mon: 13 * 60 };
+  const DEADLINES = { sat: 23 * 60, sun: 22 * 60, mon: 15 * 60 };
   const MEAL_SLOTS = {
     breakfast: { label: '아침', start: 7 * 60 + 30, target: 8 * 60 + 30, end: 10 * 60 + 30, order: 0 },
     lunch: { label: '점심', start: 11 * 60, target: 12 * 60, end: 14 * 60, order: 1 },
@@ -97,7 +97,7 @@
       warnings.push(...itemWarnings.map(warning => ({ ...warning, id, name: item.name })));
       return entry;
     });
-    if (clock > DEADLINES[day]) warnings.push({ level: 'danger', code: 'deadline', text: `${day === 'mon' ? '13:00 오사카 출발' : minutesToTime(DEADLINES[day])} 안전선 ${clock - DEADLINES[day]}분 초과` });
+    if (clock > DEADLINES[day]) warnings.push({ level: 'danger', code: 'deadline', text: `${day === 'mon' ? '15:00 공항행 이동' : minutesToTime(DEADLINES[day])} 안전선 ${clock - DEADLINES[day]}분 초과` });
     return { day, entries, start: timeToMinutes(state.starts?.[day]), end: clock, deadline: DEADLINES[day], warnings };
   }
   function directionsUrl(day, state, itemLookup, hotel) {

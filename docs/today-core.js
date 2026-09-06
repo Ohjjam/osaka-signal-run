@@ -36,8 +36,8 @@
     return { id: 'late', label: '야식' };
   }
   function gate(c, area) {
-    if (c.date > '2026-09-07' || (c.day === 'mon' && c.minutes >= 960)) return 'finished';
-    if (c.day === 'mon' && (c.minutes >= 720 || area === 'kix')) return 'airport';
+    if (c.date > '2026-09-07' || (c.day === 'mon' && c.minutes >= 1080)) return 'finished';
+    if (c.day === 'mon' && (c.minutes >= 840 || area === 'kix')) return 'airport';
     if (area === 'kix') return 'arrival';
     if (c.minutes < 420 || c.minutes >= 1410) return 'rest';
     return 'explore';
@@ -83,7 +83,7 @@
       const transfer = travel(origin, item.coords), start = now.minutes + transfer;
       const availability = hours(op, start, duration);
       if (!availability.allowed) return [];
-      if (day === 'mon' && start + duration + travel(item.coords, AREAS.hotel.coords) + 20 > 750) return [];
+      if (day === 'mon' && start + duration + travel(item.coords, AREAS.hotel.coords) + 20 > 870) return [];
       if (anchor && anchor.id !== item.id && start + duration + travel(item.coords, anchor.coords) + 20 > anchor.start) return [];
       let score = 100 - km * 22 + (must.has(item.id) ? 22 : saved.has(item.id) ? 10 : 0) + (planned.has(item.id) ? 12 : 0);
       if (isFood && state.mealSlots?.[item.id] === slot.id) score += 15;

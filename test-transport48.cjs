@@ -12,5 +12,5 @@ assert.match(d('sumiyoshi-airport53','airport48',105).route,/사카이/);
 assert.match(d('umeda-airport53','airport48',90).route,/JR 오사카역/);
 assert.match(d('rinku-airport53','airport48',60).route,/한 정거장/);
 assert.match(d('shinimamiya-airport54','airport48',60).route,/신이마미야/);
-assert.match(d('shinimamiya-pickup54','rinku-pause54',60).route,/린쿠타운/);
+assert.match(d('shinimamiya-pickup54','rinku-locker53',60).route,/린쿠타운/);
 console.log('PASS: '+count+' route legs, concrete transport modes, metro transfers, walking links, indoor queue distinction, airport rail.');

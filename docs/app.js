@@ -194,17 +194,17 @@ const places = {
     name: '짐 회수·난카이 난바', jp: '手荷物回収', area: 'NAMBA', category: '출국 준비', image: placeImage.airport,
     duration: '25~35분', hours: '보관처별', price: '보관별',
     short: '쇼핑을 멈추는 절대 마감선.',
-    story: '마지막 날의 성공은 공항에 가는 결정을 늦추지 않는 데 있다. 13시 무렵 쇼핑을 끊고 짐과 여권, QR 티켓을 다시 확인한다.',
-    tip: '호텔 보관이 최우선. 난카이 난바 n・e・s・t는 09:00~21:00, 현금 불가.',
+    story: '마지막 날의 성공은 공항에 가는 결정을 늦추지 않는 데 있다. 14:30 무렵 쇼핑을 끊고 짐과 여권, QR 티켓을 다시 확인한다.',
+    tip: '실제로 맡긴 보관처에서 짐 회수. 난카이 난바 n・e・s・t는 09:00~21:00, 현금 불가.',
     backup: '짐이 많으면 쇼핑 구간을 줄이고 택시로 난카이 난바 이동.',
     map: 'https://www.google.com/maps/search/?api=1&query=Nankai+Namba+Station', official: 'https://www.nankai.co.jp/en/community/natts/nest/'
   },
   rapitOut: {
     name: '라피트 → KIX', jp: 'なんば → 関西空港', area: 'DEPARTURE', category: '공항 이동', image: placeImage.airport,
     duration: '최단 34분', hours: '열차별', price: '¥1,410~',
-    short: '18시 국제선은 15시 공항 도착을 목표로.',
+    short: '18시 국제선은 16시 공항 도착을 목표로.',
     story: '여행의 마지막 한 시간은 계획의 여백이다. 열차 한 편을 놓쳐도 무너지지 않는 범위에서 좌석을 잡는다.',
-    tip: '13:35~14:00 사이 난바 출발권을 우선 검토. T2는 셔틀 시간을 추가.',
+    tip: '14:30~15:00 공항행 이동을 검토. T2·수하물이 많으면 30분 이상 앞당기고 항공사 수속 마감을 확인.',
     backup: '운행 이상 시 JR 또는 공항 리무진버스 현황 확인.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=Nankai+Namba+Station&destination=Kansai+International+Airport&travelmode=transit', official: 'https://www.nankai.co.jp/en_railway/ticket/rapit'
   },
@@ -735,10 +735,10 @@ document.querySelector('.goods-choice').addEventListener('click', event => {
 });
 
 function calculateDeparture() {
-  const flight = minutesFromTime(document.querySelector('#flight-time').value || '16:00');
+  const flight = minutesFromTime(document.querySelector('#flight-time').value || '18:00');
   const terminalExtra = document.querySelector('#terminal').value === '2' ? 25 : 0;
   const checked = document.querySelector('#checked-bag').checked;
-  const airportLead = checked ? 180 : 150;
+  const airportLead = checked ? 150 : 120;
   const travelAndStation = 60;
   const latest = flight - airportLead - terminalExtra - travelAndStation;
   const earliest = latest - 25;

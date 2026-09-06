@@ -13,6 +13,10 @@ const segment=new URL(C.directions(routes[0].steps[1].to,routes[0].steps[1].from
 const live=new URL(C.directions(hotel,airport));assert.equal(live.searchParams.get('origin'),airport.coords.join(','));
 assert.notEqual(T.gate({date:'2026-09-05',day:'sat',minutes:600},''),'departure');
 assert.equal(T.gate({date:'2026-09-05',day:'sat',minutes:900},'namba'),'explore');
-assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:780},'namba'),'airport');
+assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:780},'namba'),'explore');
+assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:840},'namba'),'airport');
+assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:960},'kix'),'airport');
+assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:1079},'kix'),'airport');
+assert.equal(T.gate({date:'2026-09-07',day:'mon',minutes:1080},'kix'),'finished');
 const back=C.routes({id:'kix-return',...C.stops.kix1},{...hotel,actual:true});assert.equal(back[0].fare,970);assert.match(back[0].steps[1].detail,/和歌山/);
 console.log('PASS: airport variants, T2 shuttle, city walking, unknown origin, bad GPS, exact destination, station origins, arrival mode, return buffer');

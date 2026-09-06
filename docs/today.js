@@ -66,7 +66,7 @@
     const gate = C.gate(now, area === 'kix' ? 'kix' : gps || lastStop ? 'city' : area);
     const notices = [];
     if (!navigator.onLine) notices.push('오프라인 · 저장된 정보로 표시 중. 새 길찾기·지도 로딩은 연결이 필요해요.');
-    if (now.day === 'mon' && now.minutes < 720) notices.push('오늘 귀국 · 16:00 KIX 출발 기준. 12:30 시내 정리, 13:00까지 공항행 이동을 권장해요.');
+    if (now.day === 'mon' && now.minutes < 840) notices.push('오늘 귀국 · 18:00 KIX 출발. 14:30 일정 마무리, 짐 회수 후 15:00 공항행 이동 · 16:00 터미널 도착 목표.');
     if (anchor) notices.push(`예약 ${V.minutesToTime(anchor.start)} ${anchor.name} · 이동 여유를 남겨 추천해요.`);
     const disconnectedBookings = Object.entries(P.state.reservations || {}).filter(([id,r]) => r.status === 'booked' && id !== P.state.hotelId && !P.hotels.some(h=>h.id===id) && !['sat','sun','mon'].some(d => P.state.plans?.[d]?.includes(id)));
     if (disconnectedBookings.length) notices.push(`일정에 날짜가 연결되지 않은 예약 ${disconnectedBookings.length}개 · 내 일정에서 확인하세요.`);
@@ -74,7 +74,7 @@
     let html = '';
     if (gate === 'airport' || (area === 'kix' && now.day === 'mon')) {
       const kix = { name: 'Kansai International Airport', jp:'関西国際空港' };
-      html = feature('귀국 · 16:00 출발', area === 'kix' ? '이제 탑승 준비.' : '이제 공항으로 갈 시간.', '3명 모두 16:00 출발 기준. 숙소 짐을 챙긴 뒤 공항으로 이동하세요. 항공사 앱에서 출발 터미널·체크인 마감을 확인하고, T2라면 터미널 이동 여유도 남기세요.', move({id:'airport'},'공항 이동·결제 안내') + nav('hotel-search-v3','숙소·짐 확인') + link('https://www.kansai-airport.or.jp/en/flight/','KIX 공식 운항정보 ↗'));
+      html = feature('귀국 · 18:00 출발', area === 'kix' ? '이제 탑승 준비.' : now.minutes < 900 ? '공항 이동을 준비하세요.' : '이제 공항으로 갈 시간.', '3명 모두 18:00 출발. 14:30 일정 종료 후 보관한 장소에서 짐 회수, 15:00 공항행 이동 · 16:00 터미널 도착 목표입니다. 항공사 앱에서 출발 터미널·체크인 마감을 확인하고, T2라면 터미널 이동 여유도 남기세요.', move({id:'airport'},'공항 이동·결제 안내') + nav('hotel-search-v3','숙소·짐 확인') + link('https://www.kansai-airport.or.jp/en/flight/','KIX 공식 운항정보 ↗'));
     } else if (gate === 'arrival') {
       const hotel = P.selectedHotel();
       html = feature('공항 → 숙소', '신이마미야에서 내려 숙소로', '난카이 공항급행 ¥970 · 라피트 디지털 일반석 ¥1,410. 신이마미야에서 내려 도보 약 8–12분. 이동 순서와 표 사는 방법을 확인하세요.', move(hotel,'숙소까지 이동·결제 안내') + nav('hotel-search-v3','체크인·출입 안내') + button('city','이미 시내야'));

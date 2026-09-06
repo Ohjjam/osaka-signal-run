@@ -35,7 +35,7 @@
   if(destination.id==='kix-return'&&distance(origin?.coords,stops.shin.coords)!==null&&distance(origin.coords,stops.shin.coords)<2){
    const first=step('난카이 신이마미야역으로','JR이 아니라 난카이 개찰구로 이동하세요. 플랫폼은 역 전광판에서 확인합니다.',origin,stops.shin);
    const end=step('공항역 → 출발 터미널','T1은 연결 통로로 이동합니다. T2 출발이면 에어로플라자 1층에서 무료 셔틀 약 7–9분 + 대기시간을 추가하세요. 항공사 터미널·체크인 마감을 확인하세요.',stops.kix1,destination);
-   return [{id:'express',label:'저렴하게',title:'신이마미야 → 공항급행 → KIX',fare:970,time:'약 60–85분 + 터미널 이동',note:'월요일 16:00 출발 기준 · 13:00까지 공항행 이동 권장 · 체크인 마감은 항공사 기준',steps:[first,step('공항급행 · 関西空港 방면','반드시 목적지가 関西空港(간사이공항)인 열차를 확인하세요. 和歌山市(와카야마시) 방면 열차와 혼동하지 마세요.',stops.shin,stops.kix1,'transit'),end]},
+   return [{id:'express',label:'저렴하게',title:'신이마미야 → 공항급행 → KIX',fare:970,time:'약 60–85분 + 터미널 이동',note:'월요일 18:00 출발 · 15:00 공항행 이동 · 16:00 터미널 도착 목표(T2·많은 짐은 30분 이상 일찍) · 체크인 마감은 항공사 기준',steps:[first,step('공항급행 · 関西空港 방면','반드시 목적지가 関西空港(간사이공항)인 열차를 확인하세요. 和歌山市(와카야마시) 방면 열차와 혼동하지 마세요.',stops.shin,stops.kix1,'transit'),end]},
    {id:'rapit',label:'앉아서',title:'신이마미야 → 라피트 → KIX',fare:1410,time:'약 45–70분 + 터미널 이동',note:'공식 디지털 일반석 · 구매 후 출발역·열차·좌석 지정 필요',steps:[first,step('라피트 · 공항 방면 지정 열차','신이마미야 출발로 열차와 좌석을 지정하세요. QR 승차권이면 전용 QR 개찰구를 이용합니다.',stops.shin,stops.kix1,'transit'),end]}];
   }
   const km=distance(origin?.coords,destination.coords);

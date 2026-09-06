@@ -10,7 +10,7 @@
   const portalCopy = {
     sat: '토요일 15:00 KIX 도착',
     sun: '일요일 종일 일정',
-    mon: '월요일 16:00 KIX 출발'
+    mon: '월요일 18:00 KIX 출발'
   };
 
   const defaults = () => ({
