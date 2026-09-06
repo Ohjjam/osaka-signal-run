@@ -15,6 +15,7 @@ const root=path.join(__dirname,'docs');
    const P=OsakaPlannerV3,C=OsakaVNextCore,D=OSAKA_CURATED_V45,saved=OsakaCurated45.snapshot(),out=[];
    for(const day of C.DAYS)for(const route of D.days[day]){
     OsakaCurated45.assign(day,route);
+    if(day==='sun' && !(route.stops.findIndex(x=>x.id==='harukoma')<route.stops.findIndex(x=>x.id==='castle')))throw Error('Lunch must precede castle');
     const unknown=route.stops.filter(x=>!P.allItems.has(x.id)).map(x=>x.id);
     const metric=C.scheduleFor(day,P.state,id=>P.allItems.get(id),OSAKA_VNEXT_DATA,P.suggestedTransit);
     out.push({day,id:route.id,unknown,end:metric.end,warnings:metric.warnings.filter(w=>w.level==='danger'),first:route.stops[0],excluded:['sun','mon'].includes(day)?route.stops.filter(x=>['dotonbori-night-v3','hozenji-v3','shinsaibashi47','amerikamura-attraction-v5','fukutaro','marufuku','uranamba-v3','denden','shinsekai','daruma-v3','rest-hotel45','daiki-sushi-v4'].includes(x.id)).map(x=>x.id):[],aquarium:route.stops.some(x=>x.id==='kaiyukan'), missing:(D.requiredByDay[day]||[]).filter(id=>!route.stops.some(x=>x.id===id))});

@@ -9,7 +9,12 @@
    if(to==='airport48')return{mode:'난카이 전철 + 도보',travelmode:'transit',route:'난카이 난바역 → 공항급행 또는 라피트 → 간사이공항역 → 출국 터미널. 라피트는 별도 특급권 필요; T2면 셔틀 시간 추가.',minutes,source:'https://www.kansai-airport.or.jp/en/access/train'};
    if((!known.has(from)&&from!=='hotel-anchor48')||!known.has(to))return null;
    const a=zone(from),b=zone(to);let result;
-   if(a==='tenma'&&b==='art')result={mode:'JR + 도보',travelmode:'transit',route:'덴마역 → JR 오사카환상선 오사카·후쿠시마 방면 → 후쿠시마역 → 남쪽 나카노시마 미술관까지 도보. 보행·대기 포함 60분 계획.'};
+   if(a==='hotel'&&b==='tenma')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → JR 오사카역 환승 → 오사카환상선 덴마·교바시 방면 덴마역 → 하루코마 본점 도보.');
+   else if(a==='tenma'&&b==='castle')result={mode:'JR + 도보',travelmode:'transit',route:'덴마역 → JR 오사카환상선 교바시·쓰루하시 방면 → 오사카조코엔역 → 천수각까지 도보. 식사 후 이동·보행 포함60분.'};
+   else if(a==='castle'&&b==='umeda')result={mode:'JR + 도보',travelmode:'transit',route:'천수각 → 오사카조코엔역 → JR 오사카환상선 교바시·덴마 경유 오사카역 → 우메다 쇼핑 구역 도보.'};
+   else if(a==='castle'&&b==='art')result=metro('천수각 → 모리노미야역 → 중앙선 유메시마 방면 혼마치역 → 요쓰바시선 북행 히고바시역 → 나카노시마 미술관까지 도보.');
+   else if(a==='castle'&&to==='temmangu51')result=metro('천수각 → 다니마치4초메역 → 다니마치선 다이니치 방면 미나미모리마치역 → 텐만구까지 도보.');
+   else if(a==='tenma'&&b==='art')result={mode:'JR + 도보',travelmode:'transit',route:'덴마역 → JR 오사카환상선 오사카·후쿠시마 방면 → 후쿠시마역 → 남쪽 나카노시마 미술관까지 도보. 보행·대기 포함 60분 계획.'};
    else if(a==='art'&&b==='art')result={mode:'건물 내 도보',travelmode:'walking',route:'전시실에서 같은 미술관 1층 레스토랑으로 이동. 엘리베이터·입장 대기 포함.'};
    else if(a==='art'&&b==='river')result={mode:'도보',travelmode:'walking',route:'미술관 → 강변을 따라 동쪽 요도야바시·중앙공회당 방향으로 도보. 신호 대기 포함 약30분.'};
    else if(a==='river'&&b==='hotel')result=metro('중앙공회당 → 요도야바시역 → 미도스지선 남행 → 다이코쿠초역 → 숙소까지 도보.');

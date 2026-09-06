@@ -1,21 +1,22 @@
-const CACHE = 'osaka-guide-local-v51';
+const CACHE = 'osaka-guide-local-v52';
 const SHELL = [
+  './transport48.css?v=52',
   './transport48.css?v=51',
   './transport48.css?v=50',
-  './curated-required49.js?v=51',
+  './curated-required49.js?v=52',
   './transport48.css?v=49',
   './transport48.css?v=48',
-  './route-transport48.js?v=51',
+  './route-transport48.js?v=52',
   './curated-rich47.js?v=47',
   './stay-private.js?v=46', './stay-private.css?v=46',
-  './curated-ui.js?v=51', './curated-v45.js?v=45', './curated.css?v=51',
+  './curated-ui.js?v=52', './curated-v45.js?v=45', './curated.css?v=52',
   './move.js?v=44', './move-core.js?v=44', './move.css?v=44',
   './', './guide.html', './local-store.js?v=1', './manifest.webmanifest?v=40',
   './styles.css?v=40', './experience.css?v=40', './planner-v3.css?v=40', './vnext.css?v=40',
   './experience-data.js?v=40', './app.js', './experience.js?v=40',
   './osaka-expansion-v4.js', './osaka-expansion-v5.js', './osaka-chance-expansion-v7.js',
   './osaka-hotels-live-v6.js?v=40', './osaka-photo-manifest-v13.js',
-  './osaka-vnext-data.js?v=40', './vnext-core.js?v=40', './planner-v3.js?v=45', './vnext.js?v=51',
+  './osaka-vnext-data.js?v=40', './vnext-core.js?v=40', './planner-v3.js?v=45', './vnext.js?v=52',
   './today-core.js?v=44', './today.js?v=45', './guide-theme.css?v=42', './today.css?v=43',
   './vendor/leaflet/leaflet.css', './vendor/leaflet/leaflet.js', './assets/hotel-livin-nanbaminami.jpg'
 ];
