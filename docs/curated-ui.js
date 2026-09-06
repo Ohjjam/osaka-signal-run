@@ -67,7 +67,7 @@
   }
   function stopMarkup(s,i,route) {
     const item=P.allItems.get(s.id)||{},detail=D.details?.[s.id]||{};
-    const logistics=/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49|locker53|airport53/.test(s.id);
+    const logistics=/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49|locker53|airport53|locker54|airport54|pickup54/.test(s.id);
     const why=detail.why||item.whyGo||item.description||item.note||'이 지역 안에서 묶어 이동 부담을 줄이는 정차입니다.';
     const order=detail.order||item.menu||'';
     const url=detail.source||item.official||item.menuUrl;
@@ -86,12 +86,12 @@
     const cover=route.stops.map(s=>P.allItems.get(s.id)).find(p=>p?.image&&!p.planningOnly&&p.category==='attraction')||P.allItems.get(route.stops[1]?.id);
     const applied=JSON.stringify(P.state.plans[day])===JSON.stringify(route.stops.map(s=>s.id)) && route.stops.every(s=>P.state.itemStarts[`${day}:${s.id}`]===s.time);
     root.innerHTML=`<header><div><span class="curated-eyebrow">SEPT 05—07 / THREE DAYS</span><h3>이번 여행 추천 루트</h3></div><button type="button" data-curated-remaining ${busy?'disabled':''}>선택한 일·월 적용</button></header>
-      <nav class="curated-days" aria-label="추천 루트 요일">${days.map(d=>`<button type="button" data-curated-day="${d}" aria-pressed="${d===day}">${labels[d]}<small>${d==='sat'?'17시 숙소 → 라멘소':d==='sun'?'스시 → 성 → 수족관':'4가지 반나절 → 공항'}</small></button>`).join('')}</nav>
+      <nav class="curated-days" aria-label="추천 루트 요일">${days.map(d=>`<button type="button" data-curated-day="${d}" aria-pressed="${d===day}">${labels[d]}<small>${d==='sat'?'17시 숙소 → 라멘소':d==='sun'?'스시 → 성 → 수족관':'대형 돈키 필수 → 공항'}</small></button>`).join('')}</nav>
       <p class="curated-choice-count">${day==='sun'?'11시 스시 점심 → 13:30 오사카성 → 16시 가이유칸':D.days[day].length+'가지 코스 · 취향과 체력에 맞춰 고르기'}</p>
-      <div class="curated-options">${D.days[day].map((r,i)=>`<button type="button" data-curated-option="${i}" aria-pressed="${selected[day]===i}"><small>${esc(r.tag)} · ${r.stops[0].time}–${window.OsakaVNextCore.minutesToTime(window.OsakaVNextCore.timeToMinutes(r.stops.at(-1).time)+r.stops.at(-1).duration)}${day==='mon'?' · 공항 포함 15:00까지':''}</small><strong>${esc(r.label)}</strong><span>${r.stops.filter(s=>!(/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49|locker53|airport53/.test(s.id))).length}곳 · ${r.stops.filter(s=>s.slot).length}번 먹거리</span></button>`).join('')}</div>
+      <div class="curated-options">${D.days[day].map((r,i)=>`<button type="button" data-curated-option="${i}" aria-pressed="${selected[day]===i}"><small>${esc(r.tag)} · ${r.stops[0].time}–${window.OsakaVNextCore.minutesToTime(window.OsakaVNextCore.timeToMinutes(r.stops.at(-1).time)+r.stops.at(-1).duration)}${day==='mon'?' · 공항 포함 15:00까지':''}</small><strong>${esc(r.label)}</strong><span>${r.stops.filter(s=>!(/hotel45|checkout45|locker45|train45|queue45|queue49|locker49|airport49|locker53|airport53|locker54|airport54|pickup54/.test(s.id))).length}곳 · ${r.stops.filter(s=>s.slot).length}번 먹거리</span></button>`).join('')}</div>
       ${cover?.image?`<figure class="curated-cover"><img src="${esc(cover.image)}" alt="${esc(cover.name)} 참고 이미지" loading="lazy"><figcaption>${esc(route.label)} · 장소 분위기 참고</figcaption></figure>`:''}
       <p class="curated-why">${esc(route.why)}</p>
-      ${day==='mon'?'<p class="curated-ticket">일요일에 성·가이유칸을 모두 관람하는 기준. <strong>기존 16시 비행편이면 14~15시는 공항 시간</strong>입니다. 비행시간·터미널이 달라졌다면 이 출발 기준도 변경해야 합니다.</p>':''}
+      ${day==='mon'?'<p class="curated-ticket">세 코스 모두 MEGA 돈키호테 신세카이점 필수 · 쇼핑·계산 90~120분. <strong>기존 16시 비행편이면 14~15시는 공항 시간</strong>입니다. 비행시간·터미널이 달라졌다면 이 출발 기준도 변경해야 합니다.</p>':''}
       ${aqua?`<p class="curated-ticket">필수 · 가이유칸 ${aqua.time} 입장 목표 / 아직 예매된 일정이 아닙니다. <a href="https://www.kaiyukan.com/info/ticket/kaiyukan/" target="_blank" rel="noopener">공식 시간 지정권 확인 ↗</a></p>`:''}
       <p class="curated-footnote">구간별 추천 이동수단 · 도보·지하철·JR·난카이 구간을 표시하며 버스 탑승은 없음. 시간은 보행·환승·대기 여유를 포함한 계획값이며 실제 배차·운휴는 길찾기에서 확인.</p>
       <ol class="curated-timeline">${route.stops.map((s,i)=>stopMarkup(s,i,route)).join('')}</ol>

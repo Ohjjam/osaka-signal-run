@@ -3,6 +3,7 @@
 Public travel guide migrated from the existing Osaka dashboard to GitHub Pages.
 Open: https://ohjjam.github.io/osaka-signal-run/
 
+- v54: MEGA Don Quijote Shinsekai is mandatory in every Monday route (90–120 minutes including checkout at registers). Three viable alternatives: shopping focus, shrine then shopping, shopping then a short Rinku seaside stop. Umeda/art alternatives removed from current recommendations to protect the 16:00 flight buffer. Source: official current store page shop_id=356; floor area is explicitly the 2015 opening figure, not a current measurement.
 - v53: Sunday sushi lunch → Osaka Castle → Kaiyukan. Monday four distinct options (Sumiyoshi shrine, Umeda shopping, Nakanoshima art, Rinku seaside/outlet), luggage and area-specific airport trains plus 14–15h airport continuation. Prior 16:00 flight assumption is prominent; actual terminal, check-in deadlines, ticket inventory and luggage availability require confirmation. Apply Sunday+Monday without altering Saturday; existing saved days are never silently overwritten.
 - Map, restaurant menu/rating snapshots, itinerary and travel tips.
 - v45: three curated alternatives per day for Sept 5–7. Saturday 17:00 hotel start and ramen first; Kaiyukan in every Sunday route; Monday checkout/luggage/airport buffers. Ticket slots are targets, not reservations.
@@ -19,4 +20,4 @@ The `docs` folder is the complete static site. `migrate.cjs` records the one-tim
 
 For updates: `node build.cjs`, `node test-local.cjs`, `node test-move.cjs`. `test-move-browser.cjs` is a silent mobile integration check using the bundled Playwright path from `OSAKA_TEST_NODE_MODULES`.
 
-`node test-curated.cjs` silently validates all 11 current schedules, menu/reason content, aquarium timing, route map changes, per-day/all-day apply, undo and reload preservation at mobile width. Set `OSAKA_TEST_NODE_MODULES` to the dependency folder containing Playwright.
+`node test-curated.cjs` silently validates all 10 current schedules, menu/reason content, aquarium timing, route map changes, per-day/all-day apply, undo and reload preservation at mobile width. Set `OSAKA_TEST_NODE_MODULES` to the dependency folder containing Playwright.

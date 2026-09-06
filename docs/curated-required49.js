@@ -78,11 +78,27 @@
   {time:'15:00',title:'탑승구 확인 · 가까이서 대기',text:'탑승권·전광판의 탑승 시작과 마감 시각 확인. 이 시각 이후 새 관광 코스는 넣지 않습니다.'}
  ];
  const flightNote='기존 16:00 KIX 출발편 기준, 14:00 출국 터미널 도착 목표. 실제 항공편·터미널·항공사 마감은 다시 확인. 짐은 체크아웃 때 전부 챙기며 숙소 보관은 가정하지 않음. 시각은 예약된 열차가 아니라 이동 여유를 포함한 계획값.';
+ const shinimamiya=[34.6503,135.5019],mega=[34.6497,135.5056],rinkuStation=[34.4109,135.3006];
+ const donkiSource='https://www.donki.com/store/shop_detail.php?shop_id=356';
+ D.places.push(
+  {...extra('donki-mega54','MEGA 돈키호테 신세카이점',mega,'넓게 쇼핑할 대형 돈키호테. 과자·식품·생활용품·화장품·의류 등을 한 번에 둘러보기.',donkiSource,'shopping'),jp:'MEGAドン・キホーテ新世界店',address:'大阪市浪速区恵美須東3-4-36',duration:120,priceText:'구매 금액 별도',map:'https://www.google.com/maps?cid=2127241197779954162'},
+  log('shinimamiya-locker54','신이마미야역 짐 보관',shinimamiya,'체크아웃한 짐은 역 유료 로커에 보관. 역 이름·출구·로커 위치를 사진으로 남기기. 빈칸·크기는 보장되지 않으며, 없으면 큰 짐 이동이 필요한 신사·린쿠를 생략하고 돈키 집중 코스를 선택.','https://www.nankai.co.jp/traffic/station/shin_imamiya.html'),
+  log('shinimamiya-airport54','신이마미야역 짐 회수 → 공항',shinimamiya,'짐과 쇼핑 봉투를 정리한 뒤 난카이 공항행 승강장으로. 숙소·난바역에 다시 들르지 않음.',rail),
+  log('shinimamiya-pickup54','신이마미야역 짐 회수 → 린쿠',shinimamiya,'돈키 쇼핑 뒤 원래 역 로커에서 짐 회수. 린쿠로 가기 전에 공항행 운행·출발 시각 확인.',rail),
+  extra('rinku-pause54','린쿠공원 · 바닷가 짧은 휴식',[34.4122,135.2952],'쇼핑은 돈키에서 끝내고 공항 맞은편 바닷가에서 잠깐 쉬는 코스. 아웃렛 매장 순례는 넣지 않음.','https://rinku.osaka-park.or.jp/'),
+  log('rinku-airport54','린쿠타운역 → 간사이공항',rinkuStation,'짐을 가지고 역으로 복귀. 13시까지 공항행 승강장으로 이동하고 한 정거장 뒤 하차.',rail)
+ );
+ D.requiredByDay.mon=['donki-mega54'];
+ D.details['donki-mega54']={why:'신이마미야역 인근 MEGA 대형점으로 고정. 식품부터 생활용품·화장품·의류까지 한 매장에서 쇼핑하고 공항으로 바로 이어집니다.',order:'과자·기념품 → 생활용품·화장품 → 의류·잡화 중 필요한 매대부터. 마지막 30분은 계산·포장에 배정. 배고프면 판매 중인 빵·간단한 식품도 확인.',tip:'공식 09:00–다음날05:00, 정기휴무 없음. 신이마미야역·도부츠엔마에역 인근 2층. 면세를 원하면 여권 원본을 챙기고 현장 조건·대기열 확인. 총 90–120분은 예상이며 줄이 길면 신사·린쿠를 줄이고 공항 출발은 지키기. 지도 핀은 근사 위치, 연결된 공식 매장 지도에서 입구 확인.',source:donkiSource};
+ D.details.sumiyoshi53={...D.details.sumiyoshi53,why:'돈키 개점 전 남쪽 신사에서 붉은 다리와 본전을 보는 이른 출발 코스. 큰 짐은 신이마미야역에 둡니다.',tip:'4–9월 공식 참배시간 06–17시. 일반 참배 무료. 신사 구경 후 보통열차로 신이마미야에 돌아와 대형 돈키에 들르기. 10:15 신사 출발 목표; 지연되면 돈키·공항 시간 우선.'};
+ D.details['rinku-pause54']={why:'돈키에서 필요한 쇼핑을 끝낸 뒤 바다 쪽에서 잠깐 쉬기. 공항을 지나쳐 다시 시내로 돌아오는 동선은 없습니다.',order:'역에서 가까운 공원 쪽 바다 풍경만 보고 복귀. 30분 안에 끝내며 아웃렛 쇼핑은 추가하지 않기.',tip:'짐을 직접 가지고 이동하는 코스. 더위·비·무거운 짐·전철 지연이면 린쿠 하차를 생략하고 공항으로 직행. 12:30 공원 출발, 13시 공항행 이동 기준.',source:'https://rinku.osaka-park.or.jp/'};
+ D.airportDepartures['shinimamiya-airport54']={minutes:60,mode:'난카이 공항급행 + 도보',route:'원래 로커에서 짐 회수 → 난카이 신이마미야역 → 간사이공항행 공항급행 → 간사이공항역 → 출국 터미널. 공항급행은 별도 특급권 불필요. 라피트를 선택하면 별도 특급권 필요. 난바·숙소 왕복 없음.',source:rail};
+ D.airportDepartures['rinku-airport54']={minutes:60,mode:'JR·난카이 공항행',route:'린쿠타운역 → JR 또는 난카이 간사이공항행 한 정거장 → 간사이공항역 → 출국 터미널. 60분은 탑승 대기·터미널 보행·여유 포함. 이미 짐을 가지고 있으므로 아웃렛 로커 회수는 없음.',source:rail};
+ D.airportPlan[2].text='세 코스 모두 공항에서 열린 식당의 우동·덮밥 또는 샌드위치로 점심. 수속이 밀리거나 탑승 시작이면 식당 대기·쇼핑을 생략하고 빠른 포장 식사로.';
  D.days.mon=[
-  {id:'mon-shrine53',label:'A · 스미요시 신사 → 공항',tag:'추천 · 일반 참배 무료',why:'어제 본 번화가 대신 붉은 다리와 오래된 신사. 숙소에서 남쪽으로 내려가고 참배 후에도 사카이·공항 방향으로 이어집니다.',note:'큰 캐리어 로커 확보가 조건. 없다면 무거운 짐을 끌고 참배하지 말고 공항으로. 점심은 수속 후 공항에서. '+flightNote,stops:[s('breakfast45','08:15',30,15,'breakfast'),s('checkout45','09:00',30,45),s('sumiyoshi-locker53','10:15',15,15),s('sumiyoshi53','10:45',60,15),s('sumiyoshi-airport53','12:00',15,0)]},
-  {id:'mon-umeda53',label:'B · 우메다 쇼핑 → 공항',tag:'실내 · 패션·생활잡화',why:'루쿠아 한 건물에 쇼핑을 집중. 오사카역에 짐을 맡기고 같은 역에서 JR 공항행을 타므로 호텔 재방문이 없습니다.',note:'쇼핑은 12시 종료. 전날 많이 걸었거나 비가 오면 이 코스. 공항쾌속 이용으로 별도 특급권을 사지 않는 구성. '+flightNote,stops:[s('breakfast45','08:15',30,15,'breakfast'),s('checkout45','09:00',30,45),s('umeda-locker53','10:15',15,15),s('lucua53','10:45',75,15),s('umeda-airport53','12:15',15,0)]},
-  {id:'mon-art53',label:'C · 미술관 전시 → 공항',tag:'9/7 개관 확인 · 1800엔',why:'쇼핑·신사 대신 나카노시마 미술관의 카를 발저 전. 후쿠시마역과 미술관 사이만 걷고 JR로 공항에 갑니다.',note:'다른 코스보다 일찍 체크아웃. 10시 입장·11:15 관람 종료. 로커 확보가 안 되면 전시를 포기하고 공항으로. 입장권은 아직 구매하지 않음. '+flightNote,stops:[s('breakfast45','07:15',30,15,'breakfast'),s('checkout45','08:00',30,45),s('fukushima-locker53','09:15',15,30),s('art51','10:00',75,30),s('fukushima-airport53','11:45',15,0)]},
-  {id:'mon-rinku53',label:'D · 린쿠 바다·아웃렛 → 공항',tag:'공항 근처 · 쇼핑·점심',why:'아침에 공항 방향으로 먼저 이동. 바다 옆 아웃렛에서 쇼핑·점심을 끝내고 한 정거장만 더 가면 공항입니다.',note:'13시까지 짐을 회수하고 공항으로 이동. 쇼핑 75분 안에 결제까지 끝내기. 만실 로커·긴 계산 줄이면 쇼핑을 줄임. '+flightNote,stops:[s('breakfast45','07:15',30,15,'breakfast'),s('checkout45','08:00',30,90),s('rinku-locker53','10:00',15,15),s('rinku53','10:30',75,15),s('rinku-lunch53','12:00',30,15,'lunch'),s('rinku-airport53','12:45',15,0)]}
+  {id:'mon-donki54',label:'A · 대형 돈키 2시간 → 공항',tag:'기본 추천 · 돈키 필수',why:'늦지 않게 체크아웃하고 MEGA 신세카이점에서 쇼핑·계산 2시간. 관광을 더 넣지 않아 짐·쇼핑 봉투가 많아도 이동 부담이 가장 적습니다.',note:'돈키 10:15–12:15, 짐 회수 후 12:45 공항행 이동 목표. 면세 줄은 이 2시간 안에 포함. '+flightNote,stops:[s('breakfast45','08:15',30,15,'breakfast'),s('checkout45','09:00',30,15),s('shinimamiya-locker54','09:45',15,15),s('donki-mega54','10:15',120,15,'','필수. 11:45부터 계산·포장 준비, 12:15 쇼핑 종료.'),s('shinimamiya-airport54','12:30',15,0)]},
+  {id:'mon-shrine-donki54',label:'B · 스미요시 신사 → 대형 돈키',tag:'이른 출발 · 돈키 필수',why:'돈키가 열기 전 신사에 먼저 다녀오고, 신이마미야로 돌아와 대형점 쇼핑 후 바로 공항행. 신사 왕복은 남쪽 난카이 보통열차로 묶고 우메다까지 올라가지 않습니다.',note:'신사 45분 + 돈키 90분. 큰 짐은 신이마미야역에 보관. 로커가 없거나 늦게 출발하면 신사를 생략하고 A 선택. '+flightNote,stops:[s('breakfast45','07:00',30,15,'breakfast'),s('checkout45','07:45',30,15),s('shinimamiya-locker54','08:30',15,45),s('sumiyoshi53','09:30',45,45),s('donki-mega54','11:00',90,15,'','필수. 12시부터 계산·포장, 12:30 쇼핑 종료.'),s('shinimamiya-airport54','12:45',15,0)]},
+  {id:'mon-donki-rinku54',label:'C · 대형 돈키 → 린쿠 바다',tag:'09시 쇼핑 · 돈키 필수',why:'개점에 맞춰 대형 돈키를 먼저 끝내고 공항 방향으로 이동. 린쿠에서는 추가 쇼핑 대신 바다를 30분만 보고 공항에 갑니다.',note:'09–10:30 돈키, 11시까지 신이마미야에서 짐 회수. 12:30 린쿠공원 출발. 쇼핑·전철이 늦어지면 린쿠를 생략하고 공항 직행. '+flightNote,stops:[s('breakfast45','07:00',30,15,'breakfast'),s('checkout45','07:45',30,15),s('shinimamiya-locker54','08:30',15,15),s('donki-mega54','09:00',90,15,'','필수. 10시부터 계산·포장 준비. 개점 전 입장 불가.'),s('shinimamiya-pickup54','10:45',15,60),s('rinku-pause54','12:00',30,15),s('rinku-airport54','12:45',15,0)]}
  ];
  D.details.ramenso49={why:'굵은 면과 산처럼 쌓인 숙주·돼지고기, 마늘을 즐기는 지로계 라멘. 이번 여행의 필수 라멘.',order:'기본 라멘. 대용량이므로 면 적게 요청을 먼저 확인하고 마늘은 취향대로.',tip:'월~토 11–15시/18–23시, 일요일 휴무로 안내. 임시휴무·품절·대기는 별개이며 예약 불가. 지도 핀은 근사 위치이므로 일본어 상호로 입구 확인.',source:'https://tabelog.com/osaka/A2701/A270206/27140375/'};
  D.details['daiki-sushi-v4']={why:'회전 초밥 접시를 보며 참치·흰살생선·연어를 각자 취향대로 골라 먹기 좋은 도톤보리 스시집.',order:'참치·연어·도미 등 흰살생선부터 3명이 다른 접시로 시작. 계절 생선은 당일 메뉴에서 선택.',tip:'공식 11:00–23:00, 주문 마감22:30. 접시별 가격 확인. 90분에는 예상 대기 포함, 줄이 길면 오후 선택 일정 축소.',source:'https://sushi.daiki-suisan.co.jp/shop/12?keyword=7'};
@@ -93,5 +109,5 @@
  Object.assign(D.places.find(p=>p.id==='sumiyoshi53'),{price:0,priceText:'일반 참배 무료'});
  Object.assign(D.places.find(p=>p.id==='bay-dinner53'),{price:1400,priceText:'예산 1000–1800엔 · 현장 가격 확인'});
  Object.assign(D.places.find(p=>p.id==='rinku-lunch53'),{price:1300,priceText:'예산 1000–1600엔 · 현장 가격 확인'});
- D.version=53;
+ D.version=54;
 })();

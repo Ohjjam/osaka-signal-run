@@ -16,15 +16,16 @@ const root=path.join(__dirname,'docs');
    for(const day of C.DAYS)for(const route of D.days[day]){
     OsakaCurated45.assign(day,route);
     if(day==='sun' && !(route.stops.findIndex(x=>x.id==='harukoma')<route.stops.findIndex(x=>x.id==='castle')))throw Error('Lunch must precede castle');
+    if(day==='mon'){const donki=route.stops.filter(x=>x.id==='donki-mega54');if(donki.length!==1||donki[0].duration<90||donki[0].time<'09:00')throw Error('Large Donki required, after opening, at least 90min');}
     const unknown=route.stops.filter(x=>!P.allItems.has(x.id)).map(x=>x.id);
     const metric=C.scheduleFor(day,P.state,id=>P.allItems.get(id),OSAKA_VNEXT_DATA,P.suggestedTransit);
     out.push({day,id:route.id,unknown,end:metric.end,warnings:metric.warnings.filter(w=>w.level==='danger'),first:route.stops[0],excluded:['sun','mon'].includes(day)?route.stops.filter(x=>['dotonbori-night-v3','hozenji-v3','shinsaibashi47','amerikamura-attraction-v5','fukutaro','marufuku','uranamba-v3','denden','shinsekai','daruma-v3','rest-hotel45','daiki-sushi-v4'].includes(x.id)).map(x=>x.id):[],aquarium:route.stops.some(x=>x.id==='kaiyukan'), missing:(D.requiredByDay[day]||[]).filter(id=>!route.stops.some(x=>x.id===id))});
    }
-   const tails=D.days.mon.map(r=>r.stops.map(s=>s.id).filter(id=>!['breakfast45','checkout45'].includes(id)));
+   const tails=D.days.mon.map(r=>r.stops.map(s=>s.id).filter(id=>!['breakfast45','checkout45','donki-mega54','shinimamiya-locker54','shinimamiya-airport54','shinimamiya-pickup54'].includes(id)));
    for(let i=0;i<tails.length;i++)for(let j=i+1;j<tails.length;j++)if(tails[i].some(id=>tails[j].includes(id)))throw Error('Monday options overlap');
    Object.assign(P.state,saved);return out;
   });
-  console.log(JSON.stringify(audit,null,2));assert.equal(audit.length,11);
+  console.log(JSON.stringify(audit,null,2));assert.equal(audit.length,10);
   for(const x of audit){assert.deepEqual(x.unknown,[]);assert.deepEqual(x.warnings,[],JSON.stringify(x));assert.deepEqual(x.missing,[]);assert.deepEqual(x.excluded,[]);if(x.day==='sun')assert.ok(x.aquarium);if(x.day==='mon')assert.ok(!x.aquarium);if(x.day==='mon')assert.ok(x.end<=780);if(x.day==='sat')assert.equal(x.first.time,'17:00');}
   await page.evaluate(()=>OsakaPlannerV3.showGuidePanel('itinerary-v11'));
   assert.equal(await page.locator('[data-curated-day]').count(),3);await page.locator('[data-curated-day="sat"]').click();assert.equal(await page.locator('[data-curated-option]').count(),6);
@@ -44,18 +45,21 @@ const root=path.join(__dirname,'docs');
   assert.equal(await page.evaluate(()=>JSON.stringify(OsakaPlannerV3.state.plans.sat)),satBefore);
   assert.equal(await page.locator('[data-vnext-auto-map-day="sun"]').getAttribute('aria-selected'),'true');
   await page.locator('[data-curated-day="mon"]').click();
-  assert.equal(await page.locator('[data-curated-option]').count(),4);
-  for(let i=0;i<4;i++){
+  assert.equal(await page.locator('[data-curated-option]').count(),3);
+  for(let i=0;i<3;i++){
     await page.locator('[data-curated-option="'+i+'"]').click();
     assert.match(await page.locator('.curated-airport53').innerText(),/14:00/);
+    assert.match(await page.locator('.curated-timeline').first().innerText(),/MEGA 돈키호테 신세카이점/);
     assert.match(await page.locator('.curated-airport53').innerText(),/15:00/);
     await page.locator('[data-curated-apply]').click();
     await page.waitForFunction(()=>!OsakaCurated45.busy);
-    const expected=['사카이','JR 오사카역','JR 후쿠시마역','한 정거장'][i];
+    const expected=['난카이 신이마미야역','난카이 신이마미야역','한 정거장'][i];
     await page.locator('[data-curated-map]').click();
     await page.locator('[data-vnext-auto-leg]').last().click();
     await page.waitForFunction(t=>document.querySelector('#vnext-auto-map-detail')?.textContent.includes(t),expected);
     const mapText=await page.locator('#vnext-auto-leg-list').innerText();
+    assert.ok(mapText.includes('MEGA 돈키호테 신세카이점'));
+    assert.ok(await page.evaluate(()=>OsakaPlannerV3.state.mustVisit.includes('donki-mega54')));
     assert.ok(!/숙소.*짐 회수/.test(mapText));
     assert.ok(!mapText.includes('가이유칸'));
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
@@ -84,6 +88,6 @@ const root=path.join(__dirname,'docs');
   assert.deepEqual(await page.evaluate(()=>OsakaPlannerV3.state.plans.sat),['yasaka']);
   assert.ok(await page.evaluate(()=>OsakaPlannerV3.state.plans.sun.includes('kaiyukan')));
   assert.deepEqual(errors,[]);
-  console.log('PASS: 11 schedules, rich menu/reasons, per-route aquarium time, Sunday castle+sushi+aquarium, four disjoint Monday alternatives and airport continuations, Monday deadline, apply/undo/map/reload, mobile fits, no JS errors.');
+  console.log('PASS: 10 schedules, rich menu/reasons, per-route aquarium time, Sunday castle+sushi+aquarium, three Monday alternatives with mandatory MEGA Donki (90–120min, open hours), airport continuations, Monday deadline, apply/undo/map/reload, mobile fits, no JS errors.');
  } finally {if(browser)await browser.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exitCode=1;});
