@@ -359,8 +359,10 @@
       points.push({ id: entry.id, name: item.name, coords: item.coords, kind: /hotel45|checkout45/.test(entry.id) ? 'hotel' : mealSlot ? 'meal' : 'place', time: Core.minutesToTime(entry.start), mealLabel });
     });
     if (points.length > 1 && day === 'mon') {
-      if (!metric.entries.some(entry => ['train45','bay-airport49'].includes(entry.id))) points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 짐 회수`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end + 25), legOverride: { mode: '도보·짐 회수', minutes: 25 } });
-      points.push({ id: '', name: '간사이국제공항 도착 목표', coords: [34.4347, 135.2441], kind: 'airport', time: '14:00', legOverride: metric.entries.some(entry=>entry.id==='bay-airport49') ? {mode:'지하철 + JR·공항 이동',minutes:120} : { mode: '난카이·공항 이동', minutes: 60 } });
+      const departureId=metric.entries.at(-1)?.id;
+      const departure=window.OSAKA_CURATED_V45?.airportDepartures?.[departureId];
+      if (!departure && !metric.entries.some(entry => ['train45','bay-airport49'].includes(entry.id))) points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 짐 회수`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end + 25), legOverride: { mode: '도보·짐 회수', minutes: 25 } });
+      points.push({ id: '', name: '간사이국제공항 도착 목표', coords: [34.4347, 135.2441], kind: 'airport', time: '14:00', legOverride: departure ? {...departure,travelmode:'transit'} : metric.entries.some(entry=>entry.id==='bay-airport49') ? {mode:'지하철 + JR·공항 이동',minutes:120} : { mode: '난카이·공항 이동', minutes: 60 } });
     } else if (points.length > 1 && points.at(-1)?.id !== 'back-hotel45') {
       points.push({ id: '', name: `${hotel?.name || '난바 숙소'} 복귀`, coords: hotelCoords, kind: 'hotel', time: Core.minutesToTime(metric.end) });
     }

@@ -3,6 +3,7 @@
 Public travel guide migrated from the existing Osaka dashboard to GitHub Pages.
 Open: https://ohjjam.github.io/osaka-signal-run/
 
+- v53: Sunday sushi lunch → Osaka Castle → Kaiyukan. Monday four distinct options (Sumiyoshi shrine, Umeda shopping, Nakanoshima art, Rinku seaside/outlet), luggage and area-specific airport trains plus 14–15h airport continuation. Prior 16:00 flight assumption is prominent; actual terminal, check-in deadlines, ticket inventory and luggage availability require confirmation. Apply Sunday+Monday without altering Saturday; existing saved days are never silently overwritten.
 - Map, restaurant menu/rating snapshots, itinerary and travel tips.
 - v45: three curated alternatives per day for Sept 5–7. Saturday 17:00 hotel start and ramen first; Kaiyukan in every Sunday route; Monday checkout/luggage/airport buffers. Ticket slots are targets, not reservations.
 - v47: six alternatives per day (18 total), including demanding city circuits, street shopping, ramen/teppan meals and departure-day tasting routes. Stop-level explanations, recommended orders, practical tips and source/map links are shown with illustrative existing assets. Aquarium slot time follows the selected route; demand and ticket inventory are not live verified.
@@ -18,4 +19,4 @@ The `docs` folder is the complete static site. `migrate.cjs` records the one-tim
 
 For updates: `node build.cjs`, `node test-local.cjs`, `node test-move.cjs`. `test-move-browser.cjs` is a silent mobile integration check using the bundled Playwright path from `OSAKA_TEST_NODE_MODULES`.
 
-`node test-curated.cjs` silently validates all 18 schedules, menu/reason content, aquarium timing, route map changes, per-day/all-day apply, undo and reload preservation at mobile width. Set `OSAKA_TEST_NODE_MODULES` to the dependency folder containing Playwright.
+`node test-curated.cjs` silently validates all 11 current schedules, menu/reason content, aquarium timing, route map changes, per-day/all-day apply, undo and reload preservation at mobile width. Set `OSAKA_TEST_NODE_MODULES` to the dependency folder containing Playwright.

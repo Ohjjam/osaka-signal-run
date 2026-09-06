@@ -6,5 +6,9 @@ for(const routes of Object.values(ctx.window.OSAKA_CURATED_V45.days))for(const r
 }
 assert.equal(d('breakfast45','kaiyukan',60).travelmode,'transit');assert.match(d('breakfast45','kaiyukan',60).route,/혼마치/);
 assert.match(d('castle','kaiyukan',60).route,/모리노미야/);assert.equal(d('ramenso49','dotonbori-night-v3',15).travelmode,'walking');
-assert.match(d('sky','kiji',20).mode,/건물/);assert.match(d('train45','airport48',60).route,/난카이/);assert.equal(d('unknown','kaiyukan',20),null);
+assert.match(d('art51','fukushima-airport53',30).mode,/도보/);assert.match(d('train45','airport48',60).route,/난카이/);assert.equal(d('unknown','kaiyukan',20),null);
+for(const id of Object.keys(ctx.window.OSAKA_CURATED_V45.airportDepartures)){const leg=d(id,'airport48',0);assert.ok(leg.minutes>0);assert.equal(leg.travelmode,'transit');assert.ok(!leg.route.includes('난바역 →'));}
+assert.match(d('sumiyoshi-airport53','airport48',105).route,/사카이/);
+assert.match(d('umeda-airport53','airport48',90).route,/JR 오사카역/);
+assert.match(d('rinku-airport53','airport48',60).route,/한 정거장/);
 console.log('PASS: '+count+' route legs, concrete transport modes, metro transfers, walking links, indoor queue distinction, airport rail.');

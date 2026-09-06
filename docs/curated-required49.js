@@ -37,20 +37,61 @@
  D.details.art51={why:'전망대·쇼핑 대신 그림을 보는 60분 압축 관람. 2026/7/4–9/27 카를 발저 전 관람.',order:'카를 발저 전 4층 전시. 페르메이르 전은 별도 전시·티켓이므로 이 코스에 포함하지 않음.',tip:'공식 10–17시, 입장16:30까지. 일반1800엔, 날짜·시간 지정제 아님. 아직 티켓 구매 안 됨. 16시 입장 목표, 혼잡·임시 변경 확인.',source:'https://nakka-art.jp/exhibition-post/karlwalser-2026/'};
  D.details.karato51={why:'전시를 본 뒤 같은 건물에서 앉아 저녁을 먹어 이동 부담을 줄이는 선택.',order:'당일 식사 메뉴에서 양식 메인 한 가지씩. 디저트·음료는 별도, 가격·제공 메뉴 확인.',tip:'공식 안내11–21시, 입장마감19:30·주문마감20:30. 대관·휴무 공지와 좌석 확인. 예약된 식사가 아닙니다.',source:'https://musee-karato.com/'};
  D.details.toriki51={why:'전망대나 미술관 없이 로컬 상점가를 즐긴 뒤 닭꼬치로 끝내는 코스 전용 저녁.',order:'모모 키조쿠야키 소금·양념을 나눠 주문하고 츠쿠네 등 닭꼬치 추가. 술은 선택.',tip:'공식17–24시. 北区天神橋3-3-19 2층. 혼잡 시 대기, 가격은 현장 메뉴 확인. 지도 핀은 근사 위치로 건물·층 확인.',source:'https://map.torikizoku.co.jp/detail/74/'};
- const route=(id,label,tag,why,note,transfer,tail)=>{const head=sunStart();head.at(-1).leg=transfer;return{id,label,tag,why,note,stops:[...head,...tail]};};
- D.days.sun=[
-  route('sun-skyline51','A · 쇼핑·고층 야경','도시 풍경 / 전망권 별도','스시 점심과 오사카성 관람 뒤 우메다에 집중. 쇼핑 → 해 질 무렵 공중정원 → 오코노미야키. 미술관·신사·상점가 순례는 넣지 않았습니다.','쇼핑을 좋아하고 대표 야경을 보고 싶으면 A. 날씨가 흐리면 전망대 입장 전 시야 확인. 저녁 키지 대기가 길면 같은 건물 식당가에서 교체.',60,[s('umeda-break45','16:00',60,30),s('sky','17:30',75,20),s('kiji','19:05',90,45,'dinner'),s('back-hotel45','21:20',15,0)]),
-  route('sun-art51','B · 미술 전시·강변 산책','예술·건축 / 전시1800엔','스시 점심 → 오사카성 → 나카노시마로 이동. 카를 발저 전 → 미술관 레스토랑 → 강변·공회당 외관. 우메다 쇼핑과 전망대는 전부 제외했습니다.','그림·건축·조용한 산책을 좋아하면 B. 16시 전시 입장 목표, 16:30 입장 마감·17시 폐관. 지연되면 성 내부 관람을 줄이기. 마감 후에는 전시 입장이 불가하므로 외관·강변만 가능. 월요일 수족관과 다른 실내 관람 경험.',60,[s('art51','16:00',60,15),s('karato51','17:15',75,30,'dinner'),s('nakanoshima50','19:00',60,45),s('back-hotel45','20:45',15,0)]),
-  route('sun-local51','C · 상점가·신사·닭꼬치','로컬 골목 / 유료 명소 없음','스시 점심과 성 관람 후 텐만구부터 북쪽 상점가로 이동해 텐만구 참배·카페·닭꼬치. 쇼핑몰·고층 전망·미술관 대신 동네 골목과 먹거리에 시간을 씁니다.','관광시설 입장료를 줄이고 편하게 먹고 걸으려면 C. 상점가 전체를 완주하지 않고 텐마–미나미모리마치 구간만. 카페는 현장에서 열린 곳을 고릅니다.',60,[s('temmangu51','16:00',30,15),s('tenma-cafe51','16:45',45,15,'snack'),s('tenjin50','17:45',45,15),s('toriki51','18:45',90,45,'dinner'),s('back-hotel45','21:00',15,0)])
- ];
- D.requiredByDay.sun=['castle','harukoma'];
+ D.days.sun=[{id:'sun-castle-bay53',label:'스시 → 오사카성 → 가이유칸',tag:'일요일 두 명소 모두',why:'점심을 먼저 먹고 성에서 서쪽 베이로 한 번 이동. 가이유칸은 오늘 관람하고, 월요일은 다른 동네에 씁니다.',note:'16시 가이유칸 입장 목표는 예약이 아닙니다. 오늘 운영시간·입장권을 확인하세요. 스시 줄이 길면 성 내부 대신 해자·천수각 외관을 보고 수족관 시간을 지키기. 저녁은 덴포잔에서 먹고 숙소로 바로 복귀.',stops:[...sunStart(),s('kaiyukan','16:00',120,15,'','필수. 고래상어 중앙 수조·해파리 구역을 약 2시간 관람.'),s('bay-dinner53','18:15',60,60,'dinner','오코노미야키 또는 우동 한 끼. 현장 영업과 줄을 보고 식당 교체.'),s('back-hotel45','20:15',15,0)]}];
+ D.requiredByDay.sun=['castle','harukoma','kaiyukan'];
+ D.requiredByDay.mon=[];
  D.details.harukoma={why:'텐마의 대중적인 스시집. 11시 스시 점심을 먼저 먹은 뒤 오사카성으로 이동합니다.',order:'참치·흰살생선·새우부터 서로 다른 접시로 시작. 가격은 당일 메뉴판 확인.',tip:'본점: 大阪市北区天神橋5-5-2. 11:00–21:30·화요일 휴무로 안내, 재료 소진 시 종료. 예약 불가. 대기 90분 계획값은 입장 보장이 아닙니다.',source:'https://tabelog.com/osaka/A2701/A270103/27002205/'};
- D.details.nakazaki50={why:'낮은 주택과 작은 카페·빈티지 숍이 이어지는 골목. 오늘 본 미나미 네온과 분위기가 다릅니다.',order:'열린 카페에서 커피·디저트 한 가지. 빈티지 숍은 취향에 맞는 두 곳만.',tip:'카페·가게별 휴무와 영업시간이 다릅니다. 주거지이므로 소음과 사진 촬영을 배려하세요.',source:'https://osaka-info.jp/experience/ja/osaka/spot/203'};
- D.days.mon=[{id:'mon-required49',label:'A · 수족관 집중·공항 직행',tag:'16시 비행 기준 · 한 가지 고정',why:'10시 입장이 가능한 경우의 출국일 압축 코스. 숙소를 일찍 체크아웃하고 짐을 덴포잔에 보관한 뒤 관람합니다. 난바로 짐을 찾으러 돌아가지 않습니다.',note:'9/7 실제 개장시각·10시 입장권 재고는 미확정: 공식 예매에서 반드시 확인. 10시 입장과 캐리어 보관이 확보되어야 이 일정이 성립합니다. 11:30 관람 종료, 12시 출발 고정. 점심은 공항에서. 14시 터미널 도착 목표이며 T2면 셔틀·항공사 마감시간을 추가 확인.',stops:[s('breakfast45','07:15',30,15,'breakfast'),s('checkout45','08:00',30,60),s('bay-locker49','09:30',15,15),s('kaiyukan','10:00',90,15,'','필수 · 오전 입장권 확보 조건. 고래상어 중앙 수조 중심 90분 압축 관람; 늦게 입장해도 공항 출발을 늦추지 않기.'),s('bay-airport49','11:45',15,0)]}];
+ const rail='https://www.kansai-airport.or.jp/en/access/train';
+ const sumiyoshi=[34.6126,135.4904],osaka=[34.7025,135.4954],fukushima=[34.6971,135.4869],rinku=[34.4060,135.2963];
+ const log=(id,name,coords,description,official)=>({...extra(id,name,coords,description,official),planningOnly:true});
+ D.places.push(
+  extra('bay-dinner53','덴포잔 마켓플레이스 저녁',[34.6551,135.4300],'수족관 바로 옆에서 저녁을 해결해 다른 식당가까지 왕복하지 않기.','https://www.kaiyukan.com/thv/marketplace/','food'),
+  log('sumiyoshi-locker53','스미요시타이샤역 짐 보관',sumiyoshi,'역 로커 확인 후 참배. 대형 칸·빈자리는 보장되지 않습니다. 보관 불가이고 큰 짐이라면 참배를 생략하고 남쪽 공항으로 이동.','https://ekinavi-net.jp/ja/kotsu/sumiyoshi-taisha-eki/'),
+  extra('sumiyoshi53','스미요시타이샤 · 붉은 다리와 본전',[34.6128,135.4931],'오사카의 오래된 신사. 둥근 붉은 소리하시와 국보 본전이 유명하고 일반 경내 참배는 무료.','https://www.sumiyoshitaisha.net/'),
+  log('sumiyoshi-airport53','스미요시역 짐 회수 → 남쪽 공항행',sumiyoshi,'12:15까지 짐을 챙겨 출발. 난바로 돌아가지 않고 보통열차로 사카이, 공항급행으로 환승.',rail),
+  log('umeda-locker53','JR 오사카역 짐 보관',osaka,'루쿠아로 가기 전 역 유료 로커. 위치를 사진으로 남기고 출국 전에 같은 로커로 돌아오기. 빈칸·대형 칸 보장 없음.','https://osakastationcity.com/'),
+  extra('lucua53','루쿠아 · 취향 쇼핑 75분',[34.7032,135.4954],'오사카역과 연결된 쇼핑몰. 여러 동네를 돌지 않고 패션·생활잡화 중 필요한 두세 매장만 고르기.','https://www.lucua.jp/information/'),
+  log('umeda-airport53','오사카역 짐 회수 → JR 공항행',osaka,'12:30까지 짐을 회수해 JR 간사이공항행 승강장으로. 난바·숙소에 다시 들르지 않습니다.',rail),
+  log('fukushima-locker53','JR 후쿠시마역 짐 보관',fukushima,'전시 전에 역 로커 확인. 대형 수하물 보관이 안 되면 전시 대신 공항으로 이동. 전시실에 큰 캐리어를 들고 들어갈 수 있다고 가정하지 않기.','https://www.jr-odekake.net/eki/'),
+  log('fukushima-airport53','후쿠시마역 짐 회수 → JR 공항행',fukushima,'12시까지 짐을 챙겨 JR 간사이공항행으로 출발. 숙소나 난바를 거치지 않습니다.',rail),
+  log('rinku-locker53','린쿠 아웃렛 로커에 짐 보관',rinku,'10시 시설 로커에 짐을 맡기고 같은 로커에서 회수. 대형 로커가 있지만 크기·빈자리 보장 없음. 만실이면 쇼핑을 줄이고 공항으로.','https://www.premiumoutlets.co.jp/rinku/service/'),
+  extra('rinku53','린쿠 프리미엄 아웃렛 · 바닷가 쇼핑',[34.4053,135.2956],'공항 맞은편 해안의 아웃렛. 필요한 브랜드 두세 곳과 바다 쪽 풍경에 집중. 할인 매장이 항상 최저가인 것은 아닙니다.','https://www.premiumoutlets.co.jp/rinku/'),
+  extra('rinku-lunch53','린쿠 다이닝 · 빠른 점심',[34.4025,135.2948],'아웃렛 Sea Side 3층 푸드홀. 출국 전 별도 식당 대기를 피하고 각자 한 그릇씩.','https://www.premiumoutlets.co.jp/rinku/brands/','food'),
+  log('rinku-airport53','아웃렛 짐 회수 → 린쿠타운역 → 공항',rinku,'13시까지 짐을 회수하고 도보로 린쿠타운역. JR 또는 난카이 공항행 한 정거장. 터미널까지 여유 포함 60분.',rail)
+ );
+ D.details['bay-dinner53']={why:'가이유칸에서 걸어서 갈 수 있어 밤에 다른 지역 식당까지 우회하지 않습니다.',order:'오코노미야키 또는 우동·덮밥. 1인 1000–1800엔 예산을 잡되 실제 가격·영업은 현장 확인.',tip:'푸드코트·점포별 마감이 다릅니다. 관람이 늦어지면 열린 식당을 확인하고 저녁 장소를 교체.',source:'https://www.kaiyukan.com/thv/marketplace/'};
+ D.details.sumiyoshi53={why:'성·수족관·도톤보리와 다른 고즈넉한 일본 신사. 남쪽으로 내려가며 공항까지 이어지는 저비용 코스.',order:'소리하시 → 본전 참배 → 경내 나무와 석등. 다리가 가파르면 옆 평지로 우회.',tip:'4–9월 공식 참배시간 06–17시. 일반 참배 무료, 부적·기도 별도. 짐 보관 실패 시 무리하지 않기. 열차는 난카이 본선 스미요시타이샤역(보통열차 정차)을 이용.',source:'https://www.sumiyoshitaisha.net/cmn/pdf/sumiyoshitaisha_brochure.pdf'};
+ D.details.lucua53={why:'더위·비를 피하면서 마지막 쇼핑. JR 공항행을 같은 오사카역에서 타므로 쇼핑 후 난바 왕복이 없습니다.',order:'패션 또는 생활잡화에서 우선순위 두세 매장만. 배고프면 식품·베이커리를 소량 포장하고 본 식사는 공항에서.',tip:'루쿠아·루쿠아이레 일반 쇼핑층 10:30 개점. 공항행 시간을 늦추는 식당 대기는 피하기. 캐릭터 굿즈 등 별도 건물·층은 개별 위치 확인.',source:'https://www.lucua.jp/information/'};
+ D.details.art51={why:'에어컨 있는 실내에서 카를 발저의 그림·무대미술을 보는 선택. 9/7 월요일은 공식 특별 개관일.',order:'4층 카를 발저 전. 일본 체류 때 그린 풍경과 무대미술 원화를 중심으로 75분 관람.',tip:'2026/7/4–9/27, 9/7 개관. 10–17시·입장16:30까지, 일반1800엔. 날짜·시간 지정제 아님. 다른 전시는 별도. 큰 짐은 미리 보관; 11:15 관람 종료.',source:'https://nakka-art.jp/exhibition-post/karlwalser-2026/'};
+ D.details.rinku53={why:'오사카 시내로 다시 들어가지 않고 공항 가까이에서 바다와 쇼핑을 즐기기. 이동 불안이 적은 선택.',order:'필요한 운동화·의류 브랜드 두세 곳 → Sea Side 바다 쪽 짧은 산책. 구입은 선택.',tip:'9월 쇼핑 10–20시. 린쿠타운역에서 도보 약6분(짐이 있으면 여유 추가). 출국일에는 긴 면세·결제 줄도 쇼핑 시간에 포함.',source:'https://www.premiumoutlets.co.jp/rinku/access/'};
+ D.details['rinku-lunch53']={why:'같은 시설 안 푸드홀이라 따로 식당을 찾아 멀리 움직이지 않습니다.',order:'당일 열린 점포에서 라멘·우동·덮밥 중 한 그릇. 1인 1000–1600엔 계획 예산, 실제 가격은 현장 메뉴판 확인.',tip:'11시 이후 점포별 영업 확인. 12:30에는 식사를 마치기. 줄이 길면 포장·공항 식사로 바꿔 짐 회수를 늦추지 않기.',source:'https://www.premiumoutlets.co.jp/rinku/brands/'};
+ D.airportDepartures={
+  'sumiyoshi-airport53':{minutes:105,mode:'난카이 보통 → 공항급행',route:'짐 회수 → 스미요시타이샤역 보통열차 남행 → 사카이역에서 간사이공항행 공항급행 환승 → 간사이공항역 → 터미널. 공항급행은 스미요시타이샤에 서지 않음. 난바 왕복 없음. 특급권 없는 보통·공항급행 기준.',source:'https://www.nankai.co.jp/traffic/station/sumiyoshitaisha.html'},
+  'umeda-airport53':{minutes:90,mode:'JR 간사이공항쾌속',route:'짐 회수 → JR 오사카역 → 간사이공항행 간쿠쾌속 → 간사이공항역 → 터미널. 기슈지쾌속 병결 시 앞 4량 공항행인지 전광판 확인. 특급 하루카가 아닌 일반 쾌속 기준.',source:rail},
+  'fukushima-airport53':{minutes:120,mode:'JR 간사이공항쾌속',route:'짐 회수 → JR 후쿠시마역 → 니시쿠조·벤텐초 경유 간사이공항행 간쿠쾌속 → 간사이공항역 → 터미널. 기슈지쾌속과 갈라지는 공항행 차량 확인. 탑승·터미널 여유 포함.',source:rail},
+  'rinku-airport53':{minutes:60,mode:'도보 + JR·난카이',route:'아웃렛 로커에서 짐 회수 → 린쿠타운역까지 도보 → JR 또는 난카이 간사이공항행 한 정거장(열차 약6분) → 출국 터미널. 별도 특급권 없이 이동. 60분은 걷기·대기·터미널 이동까지 포함.',source:'https://www.premiumoutlets.co.jp/rinku/access/'}
+ };
+ D.airportPlan=[
+  {time:'14:00',title:'출국 터미널 도착 · 체크인·짐 부치기',text:'기존 16:00 비행편 기준 목표. 항공사·T1/T2부터 확인하고 수속 우선. T2 이용 또는 항공사가 더 일찍 도착하라고 안내하면 위 코스 종료를 30분 앞당기기.'},
+  {time:'14:30',title:'보안검색·출국심사 우선',text:'수속을 먼저 끝내고 여유가 있을 때만 식사·기념품. 혼잡하면 쇼핑 생략. 항공사 마감 안내가 이 계획보다 우선합니다.'},
+  {time:'14:45',title:'남은 시간에 점심·간식',text:'A·B·C는 공항에서 열린 식당의 우동·덮밥 또는 샌드위치. D는 린쿠에서 먹었으니 음료 정도. 줄이 길거나 탑승 시작이면 생략.'},
+  {time:'15:00',title:'탑승구 확인 · 가까이서 대기',text:'탑승권·전광판의 탑승 시작과 마감 시각 확인. 이 시각 이후 새 관광 코스는 넣지 않습니다.'}
+ ];
+ const flightNote='기존 16:00 KIX 출발편 기준, 14:00 출국 터미널 도착 목표. 실제 항공편·터미널·항공사 마감은 다시 확인. 짐은 체크아웃 때 전부 챙기며 숙소 보관은 가정하지 않음. 시각은 예약된 열차가 아니라 이동 여유를 포함한 계획값.';
+ D.days.mon=[
+  {id:'mon-shrine53',label:'A · 스미요시 신사 → 공항',tag:'추천 · 일반 참배 무료',why:'어제 본 번화가 대신 붉은 다리와 오래된 신사. 숙소에서 남쪽으로 내려가고 참배 후에도 사카이·공항 방향으로 이어집니다.',note:'큰 캐리어 로커 확보가 조건. 없다면 무거운 짐을 끌고 참배하지 말고 공항으로. 점심은 수속 후 공항에서. '+flightNote,stops:[s('breakfast45','08:15',30,15,'breakfast'),s('checkout45','09:00',30,45),s('sumiyoshi-locker53','10:15',15,15),s('sumiyoshi53','10:45',60,15),s('sumiyoshi-airport53','12:00',15,0)]},
+  {id:'mon-umeda53',label:'B · 우메다 쇼핑 → 공항',tag:'실내 · 패션·생활잡화',why:'루쿠아 한 건물에 쇼핑을 집중. 오사카역에 짐을 맡기고 같은 역에서 JR 공항행을 타므로 호텔 재방문이 없습니다.',note:'쇼핑은 12시 종료. 전날 많이 걸었거나 비가 오면 이 코스. 공항쾌속 이용으로 별도 특급권을 사지 않는 구성. '+flightNote,stops:[s('breakfast45','08:15',30,15,'breakfast'),s('checkout45','09:00',30,45),s('umeda-locker53','10:15',15,15),s('lucua53','10:45',75,15),s('umeda-airport53','12:15',15,0)]},
+  {id:'mon-art53',label:'C · 미술관 전시 → 공항',tag:'9/7 개관 확인 · 1800엔',why:'쇼핑·신사 대신 나카노시마 미술관의 카를 발저 전. 후쿠시마역과 미술관 사이만 걷고 JR로 공항에 갑니다.',note:'다른 코스보다 일찍 체크아웃. 10시 입장·11:15 관람 종료. 로커 확보가 안 되면 전시를 포기하고 공항으로. 입장권은 아직 구매하지 않음. '+flightNote,stops:[s('breakfast45','07:15',30,15,'breakfast'),s('checkout45','08:00',30,45),s('fukushima-locker53','09:15',15,30),s('art51','10:00',75,30),s('fukushima-airport53','11:45',15,0)]},
+  {id:'mon-rinku53',label:'D · 린쿠 바다·아웃렛 → 공항',tag:'공항 근처 · 쇼핑·점심',why:'아침에 공항 방향으로 먼저 이동. 바다 옆 아웃렛에서 쇼핑·점심을 끝내고 한 정거장만 더 가면 공항입니다.',note:'13시까지 짐을 회수하고 공항으로 이동. 쇼핑 75분 안에 결제까지 끝내기. 만실 로커·긴 계산 줄이면 쇼핑을 줄임. '+flightNote,stops:[s('breakfast45','07:15',30,15,'breakfast'),s('checkout45','08:00',30,90),s('rinku-locker53','10:00',15,15),s('rinku53','10:30',75,15),s('rinku-lunch53','12:00',30,15,'lunch'),s('rinku-airport53','12:45',15,0)]}
+ ];
  D.details.ramenso49={why:'굵은 면과 산처럼 쌓인 숙주·돼지고기, 마늘을 즐기는 지로계 라멘. 이번 여행의 필수 라멘.',order:'기본 라멘. 대용량이므로 면 적게 요청을 먼저 확인하고 마늘은 취향대로.',tip:'월~토 11–15시/18–23시, 일요일 휴무로 안내. 임시휴무·품절·대기는 별개이며 예약 불가. 지도 핀은 근사 위치이므로 일본어 상호로 입구 확인.',source:'https://tabelog.com/osaka/A2701/A270206/27140375/'};
  D.details['daiki-sushi-v4']={why:'회전 초밥 접시를 보며 참치·흰살생선·연어를 각자 취향대로 골라 먹기 좋은 도톤보리 스시집.',order:'참치·연어·도미 등 흰살생선부터 3명이 다른 접시로 시작. 계절 생선은 당일 메뉴에서 선택.',tip:'공식 11:00–23:00, 주문 마감22:30. 접시별 가격 확인. 90분에는 예상 대기 포함, 줄이 길면 오후 선택 일정 축소.',source:'https://sushi.daiki-suisan.co.jp/shop/12?keyword=7'};
  D.details.castle.order='천수각·해자·석축. 내부 박물관은 입장권과 대기시간을 보고 선택.';
  D.details.castle.tip='역에서 천수각까지 걷는 시간이 있습니다. 15시에는 다음 지역으로 출발, 내부 대기가 길면 공원·외관을 우선.';
- D.details.kaiyukan.tip='이번 월요일은 90분 압축 관람. 10시 입장 가능 여부와 시간 지정권을 먼저 확인. 캐리어 반입 불가, 입장 전 로커 크기와 보관 가능 여부 확인.';
- D.version=52;
+ D.details.kaiyukan.tip='일요일 16시 입장 목표·약 2시간 관람. 오늘 운영시간·시간 지정권부터 확인. 아직 예매 안 됨. 월요일 추천에는 다시 넣지 않습니다.';
+ Object.assign(D.places.find(p=>p.id==='art51'),{price:1800,priceText:'일반 1800엔'});
+ Object.assign(D.places.find(p=>p.id==='sumiyoshi53'),{price:0,priceText:'일반 참배 무료'});
+ Object.assign(D.places.find(p=>p.id==='bay-dinner53'),{price:1400,priceText:'예산 1000–1800엔 · 현장 가격 확인'});
+ Object.assign(D.places.find(p=>p.id==='rinku-lunch53'),{price:1300,priceText:'예산 1000–1600엔 · 현장 가격 확인'});
+ D.version=53;
 })();

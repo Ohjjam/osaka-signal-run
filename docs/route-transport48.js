@@ -1,15 +1,24 @@
 (function(){
  'use strict';
+ const airportDepartures=window.OSAKA_CURATED_V45.airportDepartures||{};
  const known=new Set(Object.values(window.OSAKA_CURATED_V45.days).flatMap(routes=>routes.flatMap(r=>r.stops.map(s=>s.id))));
- const zones={hotel:['leave-hotel45','back-hotel45','rest-hotel45','breakfast45','checkout45','hotel-anchor48'],bay:['bay-locker49','bay-airport49','kaiyukan','tempo-lunch45','tempo-wheel45','tempozan'],tenma:['harukoma','tenjin50','temmangu51','tenma-cafe51','toriki51'],art:['art51','karato51'],nakazaki:['nakazaki50'],river:['nakanoshima50'],umeda:['sky','kiji','umeda-break45'],tennoji:['harukas-v5','abeno-dinner45'],shinsekai:['shinsekai','daruma-v3'],castle:['castle']};
+ const zones={hotel:['leave-hotel45','back-hotel45','rest-hotel45','breakfast45','checkout45','hotel-anchor48'],bay:['bay-locker49','bay-airport49','kaiyukan','tempo-lunch45','tempo-wheel45','tempozan','bay-dinner53'],tenma:['harukoma','tenjin50','temmangu51','tenma-cafe51','toriki51'],art:['art51','karato51'],nakazaki:['nakazaki50'],river:['nakanoshima50'],umeda:['sky','kiji','umeda-break45','lucua53','umeda-locker53','umeda-airport53'],fukushima:['fukushima-locker53','fukushima-airport53'],sumiyoshi:['sumiyoshi-locker53','sumiyoshi53','sumiyoshi-airport53'],rinku:['rinku-locker53','rinku53','rinku-lunch53','rinku-airport53'],tennoji:['harukas-v5','abeno-dinner45'],shinsekai:['shinsekai','daruma-v3'],castle:['castle']};
  const zone=id=>Object.keys(zones).find(z=>zones[z].includes(id))||'namba';
  const metro=route=>({mode:'지하철 + 도보',travelmode:'transit',route,source:'https://subway-tr.osakametro.co.jp/station_guide/index.php'});
  function describe(from,to,minutes){
+   if(to==='airport48'&&airportDepartures[from])return {...airportDepartures[from],travelmode:'transit'};
    if(to==='airport48'&&zone(from)==='bay')return {mode:'지하철 + JR',travelmode:'transit',route:'짐 회수 → 오사카코역 → 중앙선 나가타 방면 → 벤텐초역에서 JR 환승 → 간사이공항행. JR 탑승 전 공항행 차량 확인(기슈지쾌속과 분리 운행 주의). 환승·대기 포함 120분 계획. T2는 셔틀 추가.',minutes,source:'https://www.kansai-airport.or.jp/en/access/train'};
    if(to==='airport48')return{mode:'난카이 전철 + 도보',travelmode:'transit',route:'난카이 난바역 → 공항급행 또는 라피트 → 간사이공항역 → 출국 터미널. 라피트는 별도 특급권 필요; T2면 셔틀 시간 추가.',minutes,source:'https://www.kansai-airport.or.jp/en/access/train'};
    if((!known.has(from)&&from!=='hotel-anchor48')||!known.has(to))return null;
    const a=zone(from),b=zone(to);let result;
-   if(a==='hotel'&&b==='tenma')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → JR 오사카역 환승 → 오사카환상선 덴마·교바시 방면 덴마역 → 하루코마 본점 도보.');
+   if(a==='hotel'&&b==='sumiyoshi')result={mode:'난카이 보통 + 도보',travelmode:'transit',route:'숙소 → 신이마미야역까지 도보 → 난카이 본선 남행 보통열차 → 스미요시타이샤역. 고야선·공항급행은 이 역에 서지 않으므로 본선 보통열차 확인.'};
+   else if(a==='hotel'&&b==='umeda')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → 도보로 JR 오사카역 로커. 역·몰 내부 보행 포함45분.');
+   else if(a==='hotel'&&b==='fukushima')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → JR 오사카역 환승 → 오사카환상선 후쿠시마·니시쿠조 방면 한 정거장 후쿠시마역. 보행·환승 포함45분.');
+   else if(a==='hotel'&&b==='rinku')result={mode:'난카이 공항급행 + 도보',travelmode:'transit',route:'숙소 → 신이마미야역 → 난카이 간사이공항행 공항급행 → 린쿠타운역 → 아웃렛 로커까지 도보. 공항보다 한 정거장 먼저 하차. 라피트 특급권 없이 이동, 90분 여유 포함.'};
+   else if((a==='fukushima'&&b==='art')||(a==='art'&&b==='fukushima'))result={mode:'도보',travelmode:'walking',route:'JR 후쿠시마역 ↔ 남쪽 다마에바시를 건너 나카노시마 미술관. 왕복 같은 길로 짐 회수, 편도 보행·신호 여유30분.'};
+   else if(a==='sumiyoshi'&&b==='sumiyoshi')result={mode:'도보',travelmode:'walking',route:'스미요시타이샤역 ↔ 동쪽 신사 소리하시·본전. 참배 뒤 같은 로커에서 짐을 찾고 남행 열차로 계속 이동.'};
+   else if(a==='rinku'&&b==='rinku')result={mode:'도보',travelmode:'walking',route:'아웃렛 Main Side 로커 → 쇼핑·바다 쪽 Sea Side → 3층 린쿠 다이닝 → 원래 로커. 시설 안 보행·엘리베이터 여유 포함.'};
+   else if(a==='hotel'&&b==='tenma')result=metro('다이코쿠초역 → 미도스지선 북행 우메다역 → JR 오사카역 환승 → 오사카환상선 덴마·교바시 방면 덴마역 → 하루코마 본점 도보.');
    else if(a==='tenma'&&b==='castle')result={mode:'JR + 도보',travelmode:'transit',route:'덴마역 → JR 오사카환상선 교바시·쓰루하시 방면 → 오사카조코엔역 → 천수각까지 도보. 식사 후 이동·보행 포함60분.'};
    else if(a==='castle'&&b==='umeda')result={mode:'JR + 도보',travelmode:'transit',route:'천수각 → 오사카조코엔역 → JR 오사카환상선 교바시·덴마 경유 오사카역 → 우메다 쇼핑 구역 도보.'};
    else if(a==='castle'&&b==='art')result=metro('천수각 → 모리노미야역 → 중앙선 유메시마 방면 혼마치역 → 요쓰바시선 북행 히고바시역 → 나카노시마 미술관까지 도보.');
